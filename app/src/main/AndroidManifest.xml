@@ -10,6 +10,11 @@
         <activity
             android:name="com.example.app.MainActivity"
             android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.mycompany.myapp.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
