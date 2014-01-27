@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.app.MainActivity;
 import com.example.app.R;
@@ -26,11 +27,8 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -103,6 +101,15 @@ public class LoginActivity extends Activity {
             public void onClick(View view) {
                 attemptLogin();
             }
+        });
+
+        TextView view = (TextView) findViewById(R.id.text_forgotPassword);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(LoginActivity.this, "Clicked forgot password", Toast.LENGTH_LONG).show();
+            }
+
         });
     }
 
