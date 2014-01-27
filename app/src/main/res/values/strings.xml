@@ -4,6 +4,6 @@
     <string name="app_name">pearsports-companion</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="api_url">https://pearapi-usc.herokuapp.com</string>
+    <string name="api_url">http://cs477-backend.herokuapp.com</string>
 
 </resources>
