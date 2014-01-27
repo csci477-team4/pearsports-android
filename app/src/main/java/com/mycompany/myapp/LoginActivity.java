@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -18,6 +19,22 @@ import android.widget.TextView;
 
 import com.example.app.MainActivity;
 import com.example.app.R;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -151,12 +168,11 @@ public class LoginActivity extends Activity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
 
-            /*
+
             mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
             showProgress(true);
             mAuthTask = new UserLoginTask();
             mAuthTask.execute((Void) null);
-            */
         }
     }
 
@@ -207,25 +223,64 @@ public class LoginActivity extends Activity {
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost signInRequest = createSignInRequest();
+                HttpResponse response = httpclient.execute(signInRequest);
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
+                if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
+                    String loginToken = getLoginToken(response);
+                    return true;
                 }
+                else{
+                    return false;
+                }
+            } catch (ClientProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            // TODO: register the new account here.
-            return true;
+            return false;
+        }
+
+        private HttpPost createSignInRequest()
+        {
+            HttpPost httpPost = new HttpPost(buildSignInURL());
+            String base64EncodedCredentials = "Basic " + Base64.encodeToString((mEmail + ":" + mPassword).getBytes(),Base64.NO_WRAP);
+            httpPost.setHeader("Authorization",base64EncodedCredentials);
+            return httpPost;
+        }
+
+        private String buildSignInURL()
+        {
+            StringBuilder urlString = new StringBuilder();
+            urlString.append(getResources().getString(R.string.api_url));
+            urlString.append("/");
+            urlString.append(getResources().getString(R.string.signinPrefix));
+            return urlString.toString();
+        }
+
+        private String getLoginToken(HttpResponse response)
+        {
+            try {
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
+                StringBuilder builder = new StringBuilder();
+
+                for (String line = null; (line = reader.readLine()) != null;) {
+                    builder.append(line).append("\n");
+                }
+
+                JSONObject jsonResponse = new JSONObject(builder.toString());
+                return jsonResponse.getString("token");
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
         }
 
         @Override
