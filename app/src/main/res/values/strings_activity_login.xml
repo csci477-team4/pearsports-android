@@ -18,4 +18,5 @@
     <string name="error_field_required">This field is required</string>
 
     <string name="signinPrefix">sign-in</string>
+    <string name="resetPasswordPrefix">password/reset</string>
 </resources>

@@ -25,6 +25,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
@@ -104,10 +105,13 @@ public class LoginActivity extends Activity {
         });
 
         TextView view = (TextView) findViewById(R.id.text_forgotPassword);
+        //TODO: Make it take an "email" parameter
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, "Clicked forgot password", Toast.LENGTH_LONG).show();
+                /*
+                ResetPasswordTask resetTask = new ResetPasswordTask();
+                resetTask.execute(); */
             }
 
         });
@@ -309,4 +313,70 @@ public class LoginActivity extends Activity {
             showProgress(false);
         }
     }
+
+    public class ResetPasswordTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                HttpClient httpclient = new DefaultHttpClient();
+                //TODO: Get rid of hardcoding here...
+                HttpGet resetRequest = createResetRequest("joe@pearsports.com");
+                HttpResponse response = httpclient.execute(resetRequest);
+
+                if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
+                    Toast.makeText(LoginActivity.this, "Password Reset Successfully", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+                else if(response.getStatusLine().getStatusCode() == HttpStatus.SC_NOT_FOUND){
+                    //TODO: Get rid of hardcoding here...
+                    Toast.makeText(LoginActivity.this, "Account Not Found", Toast.LENGTH_LONG).show();
+                    return false;
+                }
+                else{
+                    Toast.makeText(LoginActivity.this, "Unable to Reset Password", Toast.LENGTH_LONG).show();
+                    return false;
+                }
+            } catch (ClientProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return false;
+        }
+
+        private HttpGet createResetRequest(String email)
+        {
+            HttpGet httpGet = new HttpGet(buildResetURL(email));
+            return httpGet;
+        }
+
+        private String buildResetURL(String email)
+        {
+            StringBuilder urlString = new StringBuilder();
+            urlString.append(getResources().getString(R.string.api_url));
+            urlString.append("/");
+            urlString.append(getResources().getString(R.string.resetPasswordPrefix));
+            urlString.append("/");
+            urlString.append(email);
+            return urlString.toString();
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mAuthTask = null;
+            showProgress(false);
+
+            if (success) {
+                finish();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mAuthTask = null;
+            showProgress(false);
+        }
+    }
 }
+
