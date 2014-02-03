@@ -1,4 +1,4 @@
-package com.mycompany.myapp;
+package com.example.app;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -17,9 +17,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.app.MainActivity;
-import com.example.app.R;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
