@@ -173,8 +173,6 @@ public class LoginActivity extends Activity {
             // form field with an error.
             focusView.requestFocus();
         } else {
-            Intent i = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(i);
 
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
@@ -301,6 +299,8 @@ public class LoginActivity extends Activity {
 
             if (success) {
                 finish();
+                Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(i);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
