@@ -1,6 +1,6 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.app.LoginActivity">
+    tools:context="com.example.app.LoginActivity" >
 
     <!-- Login progress -->
     <LinearLayout android:id="@+id/login_status"
@@ -9,7 +9,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical" >
+
         <ProgressBar style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,16 +29,23 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp">
 
         <LinearLayout style="@style/LoginFormContainer"
             android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="164dp"
+                android:layout_height="56dp"
+                android:id="@+id/pear_logo"
+                android:src="@drawable/pear_logo"/>
 
             <EditText
                 android:id="@+id/email"
                 android:singleLine="true"
                 android:maxLines="1"
-                android:layout_width="match_parent"
+                android:layout_width="225dp"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:hint="@string/prompt_email" />
@@ -46,7 +54,7 @@
                 android:id="@+id/password"
                 android:singleLine="true"
                 android:maxLines="1"
-                android:layout_width="match_parent"
+                android:layout_width="225dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_password"
                 android:inputType="textPassword"
@@ -57,11 +65,10 @@
             <Button android:id="@+id/sign_in_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="30dp"
                 android:text="@string/action_sign_in_register"
                 android:paddingLeft="32dp"
-                android:paddingRight="32dp"
-                android:layout_gravity="right" />
+                android:paddingRight="32dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -69,7 +76,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Forgot password?"
                 android:id="@+id/text_forgotPassword"
-                android:layout_gravity="right" />
+                android:layout_marginLeft="5dp"/>
 
         </LinearLayout>
 
