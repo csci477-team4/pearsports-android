@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="pearsports">#00abf1</color>
-    <color name="background">#f3efee</color>
-
+    <color name="pearsports">#00ACEC</color>
+    <color name="pearsports_light">#00C8EC</color>
+    <color name="theme_dark">#414141</color>
+    <color name="theme_medium">#BABBBE</color>
+    <color name="theme_light">#E0E0DF</color>
     <color name="white">#FFFFFF</color>
+
+
     <color name="yellow">#FFFF00</color>
     <color name="fuchsia">#FF00FF</color>
     <color name="red">#FF0000</color>

@@ -30,7 +30,9 @@
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp">
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="15dp"
+        android:fillViewport="false">
 
         <LinearLayout style="@style/LoginFormContainer"
             android:orientation="vertical">
@@ -39,13 +41,13 @@
                 android:layout_width="164dp"
                 android:layout_height="56dp"
                 android:id="@+id/pear_logo"
-                android:src="@drawable/pear_logo"/>
+                android:src="@drawable/pear_logo_black"/>
 
             <EditText
                 android:id="@+id/email"
                 android:singleLine="true"
                 android:maxLines="1"
-                android:layout_width="225dp"
+                android:layout_width="260dp"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:hint="@string/prompt_email" />
@@ -54,7 +56,7 @@
                 android:id="@+id/password"
                 android:singleLine="true"
                 android:maxLines="1"
-                android:layout_width="225dp"
+                android:layout_width="260dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_password"
                 android:inputType="textPassword"
@@ -63,12 +65,13 @@
                 android:imeOptions="actionUnspecified" />
 
             <Button android:id="@+id/sign_in_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_width="255dp"
+                android:layout_height="45dp"
                 android:text="@string/action_sign_in_register"
                 android:paddingLeft="32dp"
-                android:paddingRight="32dp" />
+                android:paddingRight="32dp"
+                android:background="@drawable/button"
+                style="@style/button_text"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -76,7 +79,8 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Forgot password?"
                 android:id="@+id/text_forgotPassword"
-                android:layout_marginLeft="5dp"/>
+                android:layout_marginLeft="5dp"
+                style="@style/gray_text"/>
 
         </LinearLayout>
 
