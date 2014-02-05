@@ -25,6 +25,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,15 +40,6 @@ import java.io.InputStreamReader;
  */
 public class LoginActivity extends Activity {
     /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello",
-            "bar@example.com:world"
-    };
-
-    /**
      * The default email to populate the email field with.
      */
     public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
@@ -59,6 +52,7 @@ public class LoginActivity extends Activity {
     // Values for email and password at the time of the login attempt.
     private String mEmail;
     private String mPassword;
+    private String mToken;
 
     // UI references.
     private EditText mEmailView;
@@ -102,15 +96,11 @@ public class LoginActivity extends Activity {
         });
 
         TextView view = (TextView) findViewById(R.id.text_forgotPassword);
-        //TODO: Make it take an "email" parameter
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                ResetPasswordTask resetTask = new ResetPasswordTask();
-                resetTask.execute(); */
+                attemptReset();
             }
-
         });
     }
 
@@ -222,6 +212,30 @@ public class LoginActivity extends Activity {
         }
     }
 
+    public void attemptReset()
+    {
+        mEmailView.setError(null);
+        mPasswordView.setError(null);
+
+        mEmail = mEmailView.getText().toString();
+
+        boolean cancel = false;
+        View focusView = null;
+
+        if (TextUtils.isEmpty(mEmail)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            cancel = true;
+        } else if (!mEmail.contains("@")) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            cancel = true;
+        }
+
+
+        if (!cancel) {
+            ResetPasswordTask resetTask = new ResetPasswordTask();
+            resetTask.execute();
+        }
+    }
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -231,12 +245,24 @@ public class LoginActivity extends Activity {
         protected Boolean doInBackground(Void... params) {
             try {
                 HttpClient httpclient = new DefaultHttpClient();
+                HttpParams httpParameters = httpclient.getParams();
+                HttpConnectionParams.setConnectionTimeout(httpParameters, 5000);
+                HttpConnectionParams.setSoTimeout(httpParameters, 10000);
+
                 HttpPost signInRequest = createSignInRequest();
                 HttpResponse response = httpclient.execute(signInRequest);
 
                 if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
                     String loginToken = getLoginToken(response);
-                    return true;
+                    mToken = loginToken;
+
+                    if(loginToken != null){
+                        mToken = loginToken;
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
                 }
                 else{
                     return false;
@@ -278,7 +304,8 @@ public class LoginActivity extends Activity {
                     builder.append(line).append("\n");
                 }
 
-                JSONObject jsonResponse = new JSONObject(builder.toString());
+                JSONObject temp = new JSONObject(builder.toString());
+                JSONObject jsonResponse = temp.getJSONObject("trainer_info");
                 return jsonResponse.getString("token");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -296,6 +323,7 @@ public class LoginActivity extends Activity {
 
             if (success) {
                 finish();
+                Toast.makeText(LoginActivity.this, mToken, Toast.LENGTH_LONG).show();
                 Intent i = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(i);
             } else {
@@ -312,25 +340,21 @@ public class LoginActivity extends Activity {
     }
 
     public class ResetPasswordTask extends AsyncTask<Void, Void, Boolean> {
+        private HttpResponse finalResponse;
+
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
                 HttpClient httpclient = new DefaultHttpClient();
-                //TODO: Get rid of hardcoding here...
-                HttpGet resetRequest = createResetRequest("joe@pearsports.com");
+                HttpGet resetRequest = createResetRequest(mEmail);
                 HttpResponse response = httpclient.execute(resetRequest);
+                finalResponse = response;
 
-                if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
-                    Toast.makeText(LoginActivity.this, "Password Reset Successfully", Toast.LENGTH_LONG).show();
+                if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
+                {
                     return true;
                 }
-                else if(response.getStatusLine().getStatusCode() == HttpStatus.SC_NOT_FOUND){
-                    //TODO: Get rid of hardcoding here...
-                    Toast.makeText(LoginActivity.this, "Account Not Found", Toast.LENGTH_LONG).show();
-                    return false;
-                }
                 else{
-                    Toast.makeText(LoginActivity.this, "Unable to Reset Password", Toast.LENGTH_LONG).show();
                     return false;
                 }
             } catch (ClientProtocolException e) {
@@ -362,10 +386,15 @@ public class LoginActivity extends Activity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-            showProgress(false);
 
             if (success) {
-                finish();
+                Toast.makeText(LoginActivity.this, "Password Reset Email Sent", Toast.LENGTH_LONG).show();
+            }
+            else if(finalResponse != null && finalResponse.getStatusLine().getStatusCode() == HttpStatus.SC_NOT_FOUND){
+                Toast.makeText(LoginActivity.this, "Account Not Found", Toast.LENGTH_LONG).show();
+            }
+            else{
+                Toast.makeText(LoginActivity.this, "Unable to Reset Password", Toast.LENGTH_LONG).show();
             }
         }
 
@@ -376,4 +405,3 @@ public class LoginActivity extends Activity {
         }
     }
 }
-
