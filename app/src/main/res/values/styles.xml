@@ -30,4 +30,11 @@
         <item name="android:textColor" >#7a7a7a</item>
     </style>
 
+    <style name="huge_text" >
+        <item name="android:textColor" >#0078a5</item>
+        <item name="android:textStyle" >bold</item>
+        <item name="android:textSize" >45dp</item>
+        <item name="android:textAllCaps" >true</item>
+    </style>
+
 </resources>

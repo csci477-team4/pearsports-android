@@ -6,5 +6,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="api_url">http://cs477-backend.herokuapp.com</string>
+    <string name="title_activity_splash_screen">Pear Sports Companion App</string>
 
 </resources>
