@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Strings related to text -->
+    <string name="title_activity_text">TextActivity</string>
+    <string name="send_button">Send</string>
+    <string name="text_hint">Send a text message.</string>
+    <string name="sendTextPrefix">send/text</string>
+</resources>
