@@ -22,6 +22,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 public class TextActivity extends Activity {
 
@@ -30,9 +31,13 @@ public class TextActivity extends Activity {
      */
     private SendTextMessageTask mSendTask = null;
 
+    //Message to be sent.
     private String mSendMessage;
+    private long mTimestamp;
+    private String mToUser;
+    private static TextActivity instance;
 
-    //UI References
+    //UI References.
     private EditText mTextContent;
 
     @Override
@@ -53,6 +58,8 @@ public class TextActivity extends Activity {
                 handleSendText();
             }
         });
+
+        instance = this;
     }
 
 
@@ -63,6 +70,12 @@ public class TextActivity extends Activity {
         getMenuInflater().inflate(R.menu.text, menu);
         return true;
     }
+
+    public static TextActivity getInstance(){
+        return instance;
+    }
+
+    public long getTimestamp(){ return this.mTimestamp; }
 
     /**
      * Stores text message in local SQLite DB and then sends call to server to update the messages
@@ -76,11 +89,32 @@ public class TextActivity extends Activity {
         // Reset errors.
         mTextContent.setError(null);
 
+        //Message validity checks.
+        if(mTextContent.getText().toString().isEmpty()){
+            Toast.makeText(TextActivity.this, R.string.empty_message, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(mTextContent.getText().length() > 280){
+            Toast.makeText(TextActivity.this, R.string.too_long_message, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         //Store value of message.
         mSendMessage = mTextContent.getText().toString();
+
+        //Store selected user.  TODO: Don't hardcode this anymore.  Get it from front-end.
+        mToUser = "Jean-Ralphio Saperstein";
+
+        //Put this message in local DB. TODO: Build database.
+
+
+        //Clear the text field and start sync task with backend.
+        mTextContent.setText(null);
+        mTimestamp = Calendar.getInstance().getTimeInMillis();
         mSendTask = new SendTextMessageTask();
         mSendTask.execute((Void) null);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -110,6 +144,7 @@ public class TextActivity extends Activity {
     }
 
     public class SendTextMessageTask extends AsyncTask<Void, Void, Boolean> {
+
         private HttpResponse finalResponse;
 
         @Override
@@ -151,7 +186,11 @@ public class TextActivity extends Activity {
             urlString.append("/");
             urlString.append(token);
             urlString.append("/");
+            urlString.append(mToUser);
+            urlString.append("/");
             urlString.append(mSendMessage);
+            urlString.append("/");
+            urlString.append(mTimestamp);
             return urlString.toString();
         }
 
