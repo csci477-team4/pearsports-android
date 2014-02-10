@@ -14,6 +14,9 @@ import android.os.Build;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.app.Database.Message;
+import com.example.app.Database.MessageDataSource;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
@@ -40,6 +43,10 @@ public class TextActivity extends Activity {
     //UI References.
     private EditText mTextContent;
 
+    //Database references.
+    private MessageDataSource datasource;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,22 +67,26 @@ public class TextActivity extends Activity {
         });
 
         instance = this;
+        datasource = new MessageDataSource(this);
+        datasource.open();
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.text, menu);
         return true;
     }
 
-    public static TextActivity getInstance(){
+    public static TextActivity getInstance() {
         return instance;
     }
 
-    public long getTimestamp(){ return this.mTimestamp; }
+    public long getTimestamp() {
+        return this.mTimestamp;
+    }
 
     /**
      * Stores text message in local SQLite DB and then sends call to server to update the messages
@@ -90,11 +101,11 @@ public class TextActivity extends Activity {
         mTextContent.setError(null);
 
         //Message validity checks.
-        if(mTextContent.getText().toString().isEmpty()){
+        if (mTextContent.getText().toString().isEmpty()) {
             Toast.makeText(TextActivity.this, R.string.empty_message, Toast.LENGTH_SHORT).show();
             return;
         }
-        if(mTextContent.getText().length() > 280){
+        if (mTextContent.getText().length() > 280) {
             Toast.makeText(TextActivity.this, R.string.too_long_message, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -105,14 +116,21 @@ public class TextActivity extends Activity {
         //Store selected user.  TODO: Don't hardcode this anymore.  Get it from front-end.
         mToUser = "Jean-Ralphio Saperstein";
 
-        //Put this message in local DB. TODO: Build database.
+        //Store timestamp.
+        mTimestamp = Calendar.getInstance().getTimeInMillis();
 
+        //Put this message in local DB. TODO: Build database.
+        putMessageInDB(mToUser, mSendMessage, mTimestamp);
 
         //Clear the text field and start sync task with backend.
         mTextContent.setText(null);
-        mTimestamp = Calendar.getInstance().getTimeInMillis();
         mSendTask = new SendTextMessageTask();
         mSendTask.execute((Void) null);
+    }
+
+    public void putMessageInDB(String to, String text, long timestamp){
+        Message message = null;
+        message = datasource.createMessage(to, text, timestamp);
     }
 
     @Override
@@ -127,6 +145,18 @@ public class TextActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        datasource.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        datasource.close();
+        super.onPause();
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -137,7 +167,7 @@ public class TextActivity extends Activity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+                                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_text, container, false);
             return rootView;
         }
@@ -155,11 +185,9 @@ public class TextActivity extends Activity {
                 HttpResponse response = httpclient.execute(sendTextRequest);
                 finalResponse = response;
 
-                if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
-                {
+                if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                     return true;
-                }
-                else{
+                } else {
                     return false;
                 }
             } catch (ClientProtocolException e) {
@@ -171,14 +199,12 @@ public class TextActivity extends Activity {
             return false;
         }
 
-        private HttpGet createSendTextRequest(String token)
-        {
+        private HttpGet createSendTextRequest(String token) {
             HttpGet httpGet = new HttpGet(buildSendTextURL(token));
             return httpGet;
         }
 
-        private String buildSendTextURL(String token)
-        {
+        private String buildSendTextURL(String token) {
             StringBuilder urlString = new StringBuilder();
             urlString.append(getResources().getString(R.string.api_url));
             urlString.append("/");
@@ -200,11 +226,9 @@ public class TextActivity extends Activity {
 
             if (success) {
                 //Toast.makeText(LoginActivity.this, "Password Reset Email Sent", Toast.LENGTH_LONG).show();
-            }
-            else if(finalResponse != null && finalResponse.getStatusLine().getStatusCode() == HttpStatus.SC_NOT_FOUND){
+            } else if (finalResponse != null && finalResponse.getStatusLine().getStatusCode() == HttpStatus.SC_NOT_FOUND) {
                 //Toast.makeText(LoginActivity.this, "Account Not Found", Toast.LENGTH_LONG).show();
-            }
-            else{
+            } else {
                 //Toast.makeText(LoginActivity.this, "Unable to Reset Password", Toast.LENGTH_LONG).show();
             }
         }

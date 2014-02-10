@@ -11,7 +11,10 @@ import android.database.sqlite.SQLiteDatabase;
 
 /**
  * Class that will serve as Data Access Object.  Maintains connection to DB
- * and supports adding/retrieving all messages.
+ * and supports adding/retrieving all messages.  Useful for the front-end side
+ * to have easy methods of access for the database.  Create an instance of this class,
+ * then call a getMessages function type to return a list of relevant database messages
+ * in List which can be used in conjunction with an ArrayAdapter for display.
  */
 
 public class MessageDataSource {
@@ -34,6 +37,12 @@ public class MessageDataSource {
         dbHelper.close();
     }
 
+    /**
+     * @param uID       Username of user to be sent to or received from.
+     * @param message   Message text.
+     * @param timestamp Time message was sent.(From user or trainer.)
+     * @return Reference of created message, can be used to delete from DB.
+     */
     public Message createMessage(String uID, String message, long timestamp) {
         ContentValues values = new ContentValues();
         values.put(MessageDB.COLUMN_MESSAGE, message);

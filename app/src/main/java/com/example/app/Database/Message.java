@@ -36,7 +36,7 @@ public class Message {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return message;
     }
 

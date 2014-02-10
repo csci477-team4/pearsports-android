@@ -11,7 +11,7 @@ import android.util.Log;
  * should be able to access and display messages from the database by specifying a unique
  * user-id, which serves as our primary-key.
  */
-public class MessageDB extends SQLiteOpenHelper{
+public class MessageDB extends SQLiteOpenHelper {
 
     public static final String TABLE_MESSAGES = "messages";
     public static final String COLUMN_UID = "_uID";
