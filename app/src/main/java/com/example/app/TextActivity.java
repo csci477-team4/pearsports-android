@@ -1,7 +1,6 @@
 package com.example.app;
 
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -21,10 +19,16 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 
 public class TextActivity extends Activity {
@@ -44,7 +48,7 @@ public class TextActivity extends Activity {
     private EditText mTextContent;
 
     //Database references.
-    private MessageDataSource datasource;
+    private MessageDataSource mDatasource;
 
 
     @Override
@@ -67,8 +71,8 @@ public class TextActivity extends Activity {
         });
 
         instance = this;
-        datasource = new MessageDataSource(this);
-        datasource.open();
+        mDatasource = new MessageDataSource(this);
+        mDatasource.open();
     }
 
 
@@ -110,16 +114,12 @@ public class TextActivity extends Activity {
             return;
         }
 
-        //Store value of message.
+        //Store values.  TODO: Don't hardcode this anymore.  Get it from front-end.
         mSendMessage = mTextContent.getText().toString();
-
-        //Store selected user.  TODO: Don't hardcode this anymore.  Get it from front-end.
         mToUser = "Jean-Ralphio Saperstein";
-
-        //Store timestamp.
         mTimestamp = Calendar.getInstance().getTimeInMillis();
 
-        //Put this message in local DB. TODO: Build database.
+        //Put this message in local DB.
         putMessageInDB(mToUser, mSendMessage, mTimestamp);
 
         //Clear the text field and start sync task with backend.
@@ -128,9 +128,9 @@ public class TextActivity extends Activity {
         mSendTask.execute((Void) null);
     }
 
-    public void putMessageInDB(String to, String text, long timestamp){
+    public void putMessageInDB(String to, String text, long timestamp) {
         Message message = null;
-        message = datasource.createMessage(to, text, timestamp);
+        message = mDatasource.createMessage(to, text, timestamp);
     }
 
     @Override
@@ -147,13 +147,13 @@ public class TextActivity extends Activity {
 
     @Override
     protected void onResume() {
-        datasource.open();
+        mDatasource.open();
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        datasource.close();
+        mDatasource.close();
         super.onPause();
     }
 
@@ -175,49 +175,67 @@ public class TextActivity extends Activity {
 
     public class SendTextMessageTask extends AsyncTask<Void, Void, Boolean> {
 
-        private HttpResponse finalResponse;
-
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpGet sendTextRequest = createSendTextRequest(LoginActivity.getInstance().getToken());
+                HttpParams httpParameters = httpclient.getParams();
+                HttpConnectionParams.setConnectionTimeout(httpParameters, 5000);
+                HttpConnectionParams.setSoTimeout(httpParameters, 10000);
+
+                HttpPost sendTextRequest = createSendTextRequest();
                 HttpResponse response = httpclient.execute(sendTextRequest);
-                finalResponse = response;
 
                 if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                     return true;
-                } else {
-                    return false;
                 }
             } catch (ClientProtocolException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             return false;
         }
 
-        private HttpGet createSendTextRequest(String token) {
-            HttpGet httpGet = new HttpGet(buildSendTextURL(token));
-            return httpGet;
+        private HttpPost createSendTextRequest() {
+            HttpPost httpPost = new HttpPost(buildSendTextURL());
+            JSONObject jo = buildSendJSON();
+
+            // Prepare JSON to send by setting the entity
+            try {
+                httpPost.setEntity(new StringEntity(jo.toString(), "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+            // Set up the header types needed to properly transfer JSON
+            httpPost.setHeader("Content-Type", "application/json");
+            httpPost.setHeader("Accept-Encoding", "application/json");
+            httpPost.setHeader("Accept-Language", "en-US");
+            return httpPost;
         }
 
-        private String buildSendTextURL(String token) {
+        private String buildSendTextURL() {
             StringBuilder urlString = new StringBuilder();
             urlString.append(getResources().getString(R.string.api_url));
             urlString.append("/");
             urlString.append(getResources().getString(R.string.sendTextPrefix));
-            urlString.append("/");
-            urlString.append(token);
-            urlString.append("/");
-            urlString.append(mToUser);
-            urlString.append("/");
-            urlString.append(mSendMessage);
-            urlString.append("/");
-            urlString.append(mTimestamp);
             return urlString.toString();
+        }
+
+        private JSONObject buildSendJSON() {
+            String token = LoginActivity.getInstance().getToken();
+            JSONObject jo = new JSONObject();
+            try {
+                jo.put("action", "send");
+                jo.put("from", token);
+                jo.put("to", mToUser);
+                jo.put("message", mSendMessage);
+                jo.put("timestamp", mTimestamp);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            return jo;
         }
 
         @Override
@@ -225,11 +243,7 @@ public class TextActivity extends Activity {
             mSendTask = null;
 
             if (success) {
-                //Toast.makeText(LoginActivity.this, "Password Reset Email Sent", Toast.LENGTH_LONG).show();
-            } else if (finalResponse != null && finalResponse.getStatusLine().getStatusCode() == HttpStatus.SC_NOT_FOUND) {
-                //Toast.makeText(LoginActivity.this, "Account Not Found", Toast.LENGTH_LONG).show();
-            } else {
-                //Toast.makeText(LoginActivity.this, "Unable to Reset Password", Toast.LENGTH_LONG).show();
+                finish();
             }
         }
 
