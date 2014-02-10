@@ -8,6 +8,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
+import org.json.JSONObject;
+import org.json.JSONArray;
 
 /**
  * Class that will serve as Data Access Object.  Maintains connection to DB
@@ -24,9 +28,15 @@ public class MessageDataSource {
     private MessageDB dbHelper;
     private String[] allColumns = {MessageDB.COLUMN_UID,
             MessageDB.COLUMN_MESSAGE, MessageDB.COLUMN_TIMESTAMP};
+    private long lastTimeStamp;
 
     public MessageDataSource(Context context) {
         dbHelper = new MessageDB(context);
+        lastTimeStamp = 0;
+    }
+
+    public long getLastTimeStamp(){
+        return lastTimeStamp;
     }
 
     public void open() throws SQLException {
@@ -57,6 +67,7 @@ public class MessageDataSource {
         cursor.moveToFirst();
         Message newMessage = cursorToMessage(cursor);
         cursor.close();
+        lastTimeStamp = timestamp;
         return newMessage;
     }
 
@@ -114,6 +125,19 @@ public class MessageDataSource {
         return messages;
     }
 
+    public void updateDatabaseFromJSON(String jsonArrayString){
+        try {
+            JSONArray jsonArray = new JSONArray(jsonArrayString);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                createMessage(jsonObject.getString("from"), jsonObject.getString("message"),
+                Long.parseLong(jsonObject.getString("timestamp")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private Message cursorToMessage(Cursor cursor) {
         Message message = new Message();

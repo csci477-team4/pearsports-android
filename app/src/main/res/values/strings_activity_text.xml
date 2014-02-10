@@ -5,6 +5,7 @@
     <string name="send_button">Send</string>
     <string name="text_hint">Send a text message.</string>
     <string name="sendTextPrefix">send/text</string>
+    <string name="syncRequestPrefix">sync/text</string>
     <string name="empty_message">Invalid Message.</string>
     <string name="too_long_message">Message is too long.</string>
 

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,10 +16,13 @@ import android.widget.Toast;
 import com.example.app.Database.Message;
 import com.example.app.Database.MessageDataSource;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -26,8 +30,12 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONArray;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 
@@ -37,6 +45,7 @@ public class TextActivity extends Activity {
      * Keep track of the send text task to ensure we can cancel it if requested.
      */
     private SendTextMessageTask mSendTask = null;
+    private SyncDatabaseTask mSyncTask = null;
 
     //Message to be sent.
     private String mSendMessage;
@@ -73,6 +82,12 @@ public class TextActivity extends Activity {
         instance = this;
         mDatasource = new MessageDataSource(this);
         mDatasource.open();
+
+        //Since we just created, we'll refresh.
+        if(mSyncTask == null){
+            mSyncTask = new SyncDatabaseTask();
+            mSyncTask.doInBackground((Void) null);
+        }
     }
 
 
@@ -129,8 +144,7 @@ public class TextActivity extends Activity {
     }
 
     public void putMessageInDB(String to, String text, long timestamp) {
-        Message message = null;
-        message = mDatasource.createMessage(to, text, timestamp);
+        mDatasource.createMessage(to, text, timestamp);
     }
 
     @Override
@@ -254,4 +268,83 @@ public class TextActivity extends Activity {
         }
     }
 
+    /**
+     *
+     * Should use the following lines whenever you will want the server to send sync information to
+     * the application.  After checking if the task is null:
+     * mSyncTask = new SyncDatabaseTask();
+     * mSyncTask.execute((Void) null);
+     *
+     * The database will then be updated with new messages from the backend.
+     */
+    public class SyncDatabaseTask extends AsyncTask<Void, Void, Boolean> {
+        String readJSONArray;
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            StringBuilder builder = new StringBuilder();
+            HttpClient client = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(buildSyncURL());
+            try {
+                HttpResponse response = client.execute(httpGet);
+                StatusLine statusLine = response.getStatusLine();
+                int statusCode = statusLine.getStatusCode();
+                if (statusCode == 200) {
+                    //Grab JSON from backend.
+                    HttpEntity entity = response.getEntity();
+                    InputStream content = entity.getContent();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        builder.append(line);
+                    }
+                    //Pass JSON to array for parsing
+                    readJSONArray = builder.toString();
+                    mDatasource.updateDatabaseFromJSON(readJSONArray);
+                    return true;
+                } else {
+                    //Something went wrong
+                    Toast.makeText(TextActivity.this, "Dev error bad statusCode", Toast.LENGTH_LONG).show();
+                    return false;
+                }
+            } catch (ClientProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+
+        /**
+         * Server should use the passed last time stamp to determine what messages to send back in a
+         * JSON array.
+         *
+         * @return URL string.
+         */
+        private String buildSyncURL() {
+            StringBuilder urlString = new StringBuilder();
+            urlString.append(getResources().getString(R.string.api_url));
+            urlString.append("/");
+            urlString.append(getResources().getString(R.string.syncRequestPrefix));
+            urlString.append("/");
+            urlString.append(mDatasource.getLastTimeStamp());
+            return urlString.toString();
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mSyncTask = null;
+
+            if (success) {
+                finish();
+        }
+        }
+
+        @Override
+        protected void onCancelled(){
+            mSyncTask = null;
+        }
+    }
 }
+
+
