@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.app.dummy.DummyContent;
+import com.example.app.trainee.TraineeContent;
 
 /**
  * A fragment representing a single Trainee detail screen.
@@ -23,9 +23,9 @@ public class TraineeDetailFragment extends Fragment {
     public static final String ARG_ITEM_ID = "item_id";
 
     /**
-     * The dummy content this fragment is presenting.
+     * The dummy name this fragment is presenting.
      */
-    private DummyContent.DummyItem mItem;
+    private TraineeContent.TraineeItem mItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -39,10 +39,10 @@ public class TraineeDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
+            // Load the dummy name specified by the fragment
             // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            // to load name from a name provider.
+            mItem = TraineeContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
         }
     }
 
@@ -51,9 +51,9 @@ public class TraineeDetailFragment extends Fragment {
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_trainee_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
+        // Show the dummy name as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.trainee_detail)).setText(mItem.content);
+            ((TextView) rootView.findViewById(R.id.trainee_detail)).setText(mItem.name);
         }
 
         return rootView;
