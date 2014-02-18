@@ -1,5 +1,6 @@
 package com.example.app;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -29,6 +30,8 @@ public class TraineeListActivity extends FragmentActivity
      * device.
      */
     private boolean mTwoPane;
+
+    private ProgressDialog progressDialogue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,4 +81,5 @@ public class TraineeListActivity extends FragmentActivity
             startActivity(detailIntent);
         }
     }
+
 }

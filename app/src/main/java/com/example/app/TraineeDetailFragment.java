@@ -42,7 +42,7 @@ public class TraineeDetailFragment extends Fragment {
             // Load the dummy name specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load name from a name provider.
-            mItem = TraineeContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            mItem = TraineeContent.TRAINEE_MAP.get(getArguments().getString(ARG_ITEM_ID));
         }
     }
 

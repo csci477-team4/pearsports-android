@@ -16,12 +16,12 @@ public class TraineeContent {
     /**
      * An array of sample (dummy) items.
      */
-    public static List<TraineeItem> ITEMS = new ArrayList<TraineeItem>();
+    public static List<TraineeItem> TRAINEES = new ArrayList<TraineeItem>();
 
     /**
      * A map of sample (dummy) items, by ID.
      */
-    public static Map<String, TraineeItem> ITEM_MAP = new HashMap<String, TraineeItem>();
+    public static Map<String, TraineeItem> TRAINEE_MAP = new HashMap<String, TraineeItem>();
 
     static {
         // Add 3 sample items.
@@ -30,9 +30,9 @@ public class TraineeContent {
         addItem(new TraineeItem("3", "Name 3"));
     }
 
-    private static void addItem(TraineeItem item) {
-        ITEMS.add(item);
-        ITEM_MAP.put(item.id, item);
+    public static void addItem(TraineeItem item) {
+        TRAINEES.add(item);
+        TRAINEE_MAP.put(item.id, item);
     }
 
     /**
