@@ -163,7 +163,6 @@ public class TraineeListFragment extends ListFragment {
 
     private class GetTraineeList extends AsyncTask<Void,Void,Boolean>
     {
-
         @Override
         protected Boolean doInBackground(Void... params) {
             APIHandler handler = new APIHandler();

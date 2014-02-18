@@ -26,10 +26,23 @@ public class APIHandler {
     public static final int POST = 456;
     public static final int GET = 654;
 
+    /**
+     *
+     * @param path - e.g. "trainee_list" or "sign-in"
+     * @param method - APIHandler.GET or APIHandler.POST
+     * @return
+     */
     public String sendAPIRequest(String path, int method) {
         return this.sendAPIRequest(path, method, null);
     }
 
+    /**
+     *
+     * @param path - e.g. "trainee_list" or "sign-in"
+     * @param method - APIHandler.GET or APIHandler.POST
+     * @param params - List of key-value pairs
+     * @return
+     */
     public String sendAPIRequest(String path, int method,
                                  List<NameValuePair> params) {
         try {
@@ -71,6 +84,14 @@ public class APIHandler {
         return response;
     }
 
+    /**
+     *
+     * @param path - e.g. "trainee_list" or "sign-in"
+     * @param method - APIHandler.GET or APIHandler.POST
+     * @param email
+     * @param password
+     * @return
+     */
     public String sendAPIRequestWithAuth(String path, int method,
     String email, String password) {
         try {
@@ -104,6 +125,11 @@ public class APIHandler {
         return response;
     }
 
+    /**
+     *
+     * @param path - e.g. "trainee_list" or "sign-in"
+     * @return
+     */
     public static String buildURL(String path)
     {
         StringBuilder url = new StringBuilder();
