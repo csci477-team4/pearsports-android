@@ -28,8 +28,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.app.TextActivity"
-            android:label="@string/title_activity_text" >
+            android:name="com.example.app.MessageActivity"
+            android:label="@string/title_activity_message" >
         </activity>
     </application>
 
