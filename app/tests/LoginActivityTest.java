@@ -11,7 +11,7 @@ import com.example.app.LoginActivity;
  */
 public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginActivity> {
 
-    private LoginActivity activity;
+    private LoginActivity mActivity;
     private TextView textView1;
 
     public LoginActivityTest() {
@@ -20,8 +20,12 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
 
     protected void setUp() throws Exception {
         super.setUp();
-        activity = (LoginActivity) getActivity();
-        textView1 = (TextView) activity.findViewById(R.id.main_text);
+
+        setActivityInitialTouchMode(false);
+
+        mActivity = (LoginActivity) getActivity();
+
+        textView1 = (TextView) mActivity.findViewById(R.id.main_text);
     }
 
     @SmallTest
