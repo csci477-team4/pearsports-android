@@ -12,11 +12,11 @@ import android.widget.ListView;
 import com.example.app.trainee.TraineeContent;
 
 import org.apache.http.NameValuePair;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -47,8 +47,8 @@ public class TraineeListFragment extends ListFragment {
      */
     private int mActivatedPosition = ListView.INVALID_POSITION;
 
-    private JSONArray trainees = null;
-
+    private JSONObject trainees = null;
+    private JSONObject trainee_info = null;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -175,12 +175,14 @@ public class TraineeListFragment extends ListFragment {
             if (jsonStr != null) {
                 try {
                     JSONObject jsonObj = new JSONObject(jsonStr);
+                    trainees = jsonObj.getJSONObject("trainee_list");
 
-                    trainees = jsonObj.getJSONArray("trainee_list");
-
-                    for (int i = 0; i < trainees.length(); i++) {
-                        Log.d("Trainee: ", "==> " + trainees.get(i).toString());
-                        TraineeContent.addItem(new TraineeContent.TraineeItem(trainees.get(i).toString(), trainees.get(i).toString()));
+                    for (Iterator<String> keys = trainees.keys(); keys.hasNext();) {
+                        String id = keys.next();
+                        trainee_info = trainees.getJSONObject(id); // map of trainee info
+                        Log.d("Trainee ID: ", "==> " + id);
+                        Log.d("Trainee Name: ", "==> " + trainee_info.get("screen_name").toString());
+                        TraineeContent.addItem(new TraineeContent.TraineeItem(id, trainee_info.get("screen_name").toString()));
                     }
 
                 } catch (JSONException e) {

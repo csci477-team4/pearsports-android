@@ -23,12 +23,12 @@ public class TraineeContent {
      */
     public static Map<String, TraineeItem> TRAINEE_MAP = new HashMap<String, TraineeItem>();
 
-    static {
+    /*static {
         // Add 3 sample items.
         addItem(new TraineeItem("1", "Name 1"));
         addItem(new TraineeItem("2", "Name 2"));
         addItem(new TraineeItem("3", "Name 3"));
-    }
+    }*/
 
     public static void addItem(TraineeItem item) {
         TRAINEES.add(item);
