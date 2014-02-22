@@ -83,10 +83,8 @@ public class TraineeListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        TraineeContent.resetContent();
         new GetTraineeList().execute();
-
-        // TODO: replace with a real list adapter.
-
     }
 
     @Override
@@ -148,6 +146,14 @@ public class TraineeListFragment extends ListFragment {
         getListView().setChoiceMode(activateOnItemClick
                 ? ListView.CHOICE_MODE_SINGLE
                 : ListView.CHOICE_MODE_NONE);
+    }
+
+    /**
+     * Manual refresh
+     */
+    public void refresh() {
+        TraineeContent.resetContent();
+        new GetTraineeList().execute();
     }
 
     private void setActivatedPosition(int position) {
