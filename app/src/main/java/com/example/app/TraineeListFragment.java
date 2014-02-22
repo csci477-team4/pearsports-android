@@ -174,13 +174,12 @@ public class TraineeListFragment extends ListFragment {
             APIHandler handler = new APIHandler();
             List<NameValuePair> parameters = new ArrayList<NameValuePair>();
             //parameters.add(new BasicNameValuePair(LoginActivity.EMAIL, LoginActivity.PASSWORD));
-            String jsonStr = handler.sendAPIRequestWithAuth("trainee_list", handler.GET, LoginActivity.EMAIL, LoginActivity.PASSWORD);
+            JSONObject jsonObj = handler.sendAPIRequestWithAuth("trainee_list", handler.GET, LoginActivity.EMAIL, LoginActivity.PASSWORD);
 
-            Log.d("Response: ", ">>> " + jsonStr);
+            Log.d("Response: ", ">>> " + jsonObj);
 
-            if (jsonStr != null) {
+            if (jsonObj != null) {
                 try {
-                    JSONObject jsonObj = new JSONObject(jsonStr);
                     trainees = jsonObj.getJSONObject("trainee_list");
 
                     for (Iterator<String> keys = trainees.keys(); keys.hasNext();) {
