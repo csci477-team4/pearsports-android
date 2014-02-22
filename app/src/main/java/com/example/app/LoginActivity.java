@@ -53,7 +53,6 @@ public class LoginActivity extends Activity {
     private String mEmail;
     private String mPassword;
     private String mToken;
-    private static LoginActivity instance;
 
     // UI references.
     private EditText mEmailView;
@@ -103,8 +102,6 @@ public class LoginActivity extends Activity {
                 attemptReset();
             }
         });
-
-        instance = this;
     }
 
 
@@ -113,14 +110,6 @@ public class LoginActivity extends Activity {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.login, menu);
         return true;
-    }
-
-    public static LoginActivity getInstance(){
-        return instance;
-    }
-
-    public String getToken(){
-        return this.mToken;
     }
 
     /**
