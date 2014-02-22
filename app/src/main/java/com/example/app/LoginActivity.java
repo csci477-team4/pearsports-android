@@ -50,10 +50,9 @@ public class LoginActivity extends Activity {
     private UserLoginTask mAuthTask = null;
 
     // Values for email and password at the time of the login attempt.
-    private String mEmail;
-    private String mPassword;
+    public static String EMAIL;
+    public static String PASSWORD;
     private String mToken;
-    private static LoginActivity instance;
 
     // UI references.
     private EditText mEmailView;
@@ -69,9 +68,9 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
 
         // Set up the login form.
-        mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
+        EMAIL = getIntent().getStringExtra(EXTRA_EMAIL);
         mEmailView = (EditText) findViewById(R.id.email);
-        mEmailView.setText(mEmail);
+        mEmailView.setText(EMAIL);
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -103,8 +102,6 @@ public class LoginActivity extends Activity {
                 attemptReset();
             }
         });
-
-        instance = this;
     }
 
 
@@ -113,14 +110,6 @@ public class LoginActivity extends Activity {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.login, menu);
         return true;
-    }
-
-    public static LoginActivity getInstance(){
-        return instance;
-    }
-
-    public String getToken(){
-        return this.mToken;
     }
 
     /**
@@ -138,29 +127,29 @@ public class LoginActivity extends Activity {
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        mEmail = mEmailView.getText().toString();
-        mPassword = mPasswordView.getText().toString();
+        EMAIL = mEmailView.getText().toString();
+        PASSWORD = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password.
-        if (TextUtils.isEmpty(mPassword)) {
+        if (TextUtils.isEmpty(PASSWORD)) {
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             cancel = true;
-        } else if (mPassword.length() < 4) {
+        } else if (PASSWORD.length() < 4) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
         }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(mEmail)) {
+        if (TextUtils.isEmpty(EMAIL)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!mEmail.contains("@")) {
+        } else if (!EMAIL.contains("@")) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
@@ -228,15 +217,15 @@ public class LoginActivity extends Activity {
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
-        mEmail = mEmailView.getText().toString();
+        EMAIL = mEmailView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        if (TextUtils.isEmpty(mEmail)) {
+        if (TextUtils.isEmpty(EMAIL)) {
             mEmailView.setError(getString(R.string.error_field_required));
             cancel = true;
-        } else if (!mEmail.contains("@")) {
+        } else if (!EMAIL.contains("@")) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             cancel = true;
         }
@@ -246,6 +235,10 @@ public class LoginActivity extends Activity {
             ResetPasswordTask resetTask = new ResetPasswordTask();
             resetTask.execute();
         }
+    }
+
+    public String getToken() {
+        return mToken;
     }
     /**
      * Represents an asynchronous login/registration task used to authenticate
@@ -290,7 +283,7 @@ public class LoginActivity extends Activity {
         private HttpPost createSignInRequest()
         {
             HttpPost httpPost = new HttpPost(buildSignInURL());
-            String base64EncodedCredentials = "Basic " + Base64.encodeToString((mEmail + ":" + mPassword).getBytes(),Base64.NO_WRAP);
+            String base64EncodedCredentials = "Basic " + Base64.encodeToString((EMAIL + ":" + PASSWORD).getBytes(),Base64.NO_WRAP);
             httpPost.setHeader("Authorization",base64EncodedCredentials);
             return httpPost;
         }
@@ -335,7 +328,7 @@ public class LoginActivity extends Activity {
             if (success) {
                 finish();
                 Toast.makeText(LoginActivity.this, mToken, Toast.LENGTH_LONG).show();
-                Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                Intent i = new Intent(LoginActivity.this, TraineeListActivity.class);
                 startActivity(i);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
@@ -357,7 +350,7 @@ public class LoginActivity extends Activity {
         protected Boolean doInBackground(Void... params) {
             try {
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpGet resetRequest = createResetRequest(mEmail);
+                HttpGet resetRequest = createResetRequest(EMAIL);
                 HttpResponse response = httpclient.execute(resetRequest);
                 finalResponse = response;
 
