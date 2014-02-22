@@ -11,4 +11,8 @@
     <string name="title_trainee_detail">Trainee Detail</string>
     <string name="title_activity_message">MessageActivity</string>
 
+    <string name="forgot_password">Forgot Password</string>
+    <string name="create_account">Create Account</string>
+    <string name="vertical_divider">|</string>
+
 </resources>
