@@ -5,9 +5,11 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.UnderlineSpan;
@@ -341,6 +343,11 @@ public class LoginActivity extends Activity {
 
             if (success) {
                 finish();
+                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor edit = pref.edit();
+                edit.putString("token", mToken);
+                edit.apply();
+
                 Toast.makeText(LoginActivity.this, mToken, Toast.LENGTH_LONG).show();
                 Intent i = new Intent(LoginActivity.this, TraineeListActivity.class);
                 startActivity(i);
