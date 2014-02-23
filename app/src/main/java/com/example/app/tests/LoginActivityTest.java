@@ -1,4 +1,4 @@
-package com.tests;
+package com.example.app.tests;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.MediumTest;
@@ -33,12 +33,18 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         assertEquals("testing nothing: 1=1", 1, 1);
     }
 
-    @MediumTest
+    /*@MediumTest
     public void testWelcomeText() {
         assertNotNull(textView1);
         String str1 = textView1.getText().toString();
         assertNotNull(str1);
         assertEquals("check text1", str1, "Hello world!");
+    }
+*/
+    public void testToFail() throws Exception {
+        final int expected = 1;
+        final int reality = 5;
+        assertEquals(expected, reality);
     }
 
 }
