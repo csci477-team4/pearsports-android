@@ -33,6 +33,8 @@ public class TraineeListActivity extends FragmentActivity
 
     private ProgressDialog progressDialogue;
 
+    private String token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +53,9 @@ public class TraineeListActivity extends FragmentActivity
                     .findFragmentById(R.id.trainee_list))
                     .setActivateOnItemClick(true);
         }
+
+        Intent intent = getIntent();
+        token = intent.getStringExtra("token");
 
         // TODO: If exposing deep links into your app, handle intents here.
     }
@@ -78,6 +83,7 @@ public class TraineeListActivity extends FragmentActivity
             // for the selected item ID.
             Intent detailIntent = new Intent(this, TraineeDetailActivity.class);
             detailIntent.putExtra(TraineeDetailFragment.ARG_ITEM_ID, id);
+            detailIntent.putExtra("token",token);
             startActivity(detailIntent);
         }
     }

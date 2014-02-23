@@ -1,9 +1,62 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/trainee_detail"
-    style="?android:attr/textAppearanceLarge"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    android:textIsSelectable="true"
-    tools:context="com.example.app.TraineeDetailFragment" />
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/fragment_trainee_detail_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="40dp"
+        android:paddingTop="40dp"
+        android:fillViewport="false"
+        tools:context="com.example.app.TraineeDetailFragment">
+
+    <TextView
+        android:id="@+id/trainee_detail_text"
+        style="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:textIsSelectable="true"
+        tools:context="com.example.app.TraineeDetailFragment" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="170dp">
+    </FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+    </LinearLayout>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="110dp">
+    </ListView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="115dp"
+            android:layout_height="40dp"
+            android:id="@+id/detail_fragment_text_activity_button"
+            android:clickable="true"
+            android:text="Text"
+            android:enabled="true"
+            android:focusable="true" />
+        <Button
+            android:layout_width="115dp"
+            android:layout_height="40dp"
+            android:id="@+id/detail_fragment_audio_activity_button"
+            android:clickable="true"
+            android:text="Audio"
+            android:focusable="true"
+            android:enabled="true" />
+        <Button
+            android:layout_width="115dp"
+            android:layout_height="40dp"
+            android:id="@+id/detail_fragment_workout_activity_button"
+            android:clickable="true"
+            android:text="Workout"
+            android:focusable="true"
+            android:enabled="true" />
+    </LinearLayout>
+</LinearLayout>

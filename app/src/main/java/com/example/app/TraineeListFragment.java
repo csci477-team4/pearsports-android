@@ -176,7 +176,7 @@ public class TraineeListFragment extends ListFragment {
             //parameters.add(new BasicNameValuePair(LoginActivity.EMAIL, LoginActivity.PASSWORD));
             JSONObject jsonObj = handler.sendAPIRequestWithAuth("trainee_list", handler.GET, LoginActivity.EMAIL, LoginActivity.PASSWORD);
 
-            Log.d("Response: ", ">>> " + jsonObj);
+            //Log.d("Response: ", ">>> " + jsonObj);
 
             if (jsonObj != null) {
                 try {
@@ -185,8 +185,8 @@ public class TraineeListFragment extends ListFragment {
                     for (Iterator<String> keys = trainees.keys(); keys.hasNext();) {
                         String id = keys.next();
                         trainee_info = trainees.getJSONObject(id); // map of trainee info
-                        Log.d("Trainee ID: ", "==> " + id);
-                        Log.d("Trainee Name: ", "==> " + trainee_info.get("screen_name").toString());
+                        //Log.d("Trainee ID: ", "==> " + id);
+                        //Log.d("Trainee Name: ", "==> " + trainee_info.get("screen_name").toString());
                         TraineeContent.addItem(new TraineeContent.TraineeItem(id, trainee_info.get("screen_name").toString()));
                     }
 

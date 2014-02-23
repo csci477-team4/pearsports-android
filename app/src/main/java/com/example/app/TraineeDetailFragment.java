@@ -1,5 +1,6 @@
 package com.example.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -23,9 +24,14 @@ public class TraineeDetailFragment extends Fragment {
     public static final String ARG_ITEM_ID = "item_id";
 
     /**
-     * The dummy name this fragment is presenting.
+     * The name this fragment is presenting.
      */
     private TraineeContent.TraineeItem mItem;
+
+    /**
+     * The trainer's token authentication.
+     */
+    private String token;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -44,6 +50,8 @@ public class TraineeDetailFragment extends Fragment {
             // to load name from a name provider.
             mItem = TraineeContent.TRAINEE_MAP.get(getArguments().getString(ARG_ITEM_ID));
         }
+        Intent intent = getActivity().getIntent();
+        token = intent.getStringExtra("token");
     }
 
     @Override
@@ -51,11 +59,39 @@ public class TraineeDetailFragment extends Fragment {
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_trainee_detail, container, false);
 
-        // Show the dummy name as text in a TextView.
+        // Show the name as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.trainee_detail)).setText(mItem.name);
+            ((TextView) rootView.findViewById(R.id.trainee_detail_text)).setText(mItem.name);
         }
 
+        rootView.findViewById(R.id.detail_fragment_text_activity_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), MessageActivity.class);
+                i.putExtra("token",token);
+                startActivity(i);
+            }
+        });
+
+        rootView.findViewById(R.id.detail_fragment_audio_activity_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: Change SplashScreenActivity
+                Intent i = new Intent(getActivity(), SplashScreenActivity.class);
+                i.putExtra("token",token);
+                startActivity(i);
+            }
+        });
+
+        rootView.findViewById(R.id.detail_fragment_workout_activity_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: Change MainActivity
+                Intent i = new Intent(getActivity(), MainActivity.class);
+                i.putExtra("token",token);
+                startActivity(i);
+            }
+        });
         return rootView;
     }
 }
