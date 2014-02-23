@@ -38,7 +38,8 @@
         android:paddingLeft="20dp"
         android:fontFamily="Avenir"
         android:textColor="#ffffff"
-        android:shadowColor="@color/black" />
+        android:shadowColor="@color/black"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"

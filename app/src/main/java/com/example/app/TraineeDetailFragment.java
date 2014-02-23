@@ -61,6 +61,9 @@ public class TraineeDetailFragment extends Fragment {
         // Show the name as text in a TextView.
         if (mItem != null) {
             ((TextView) rootView.findViewById(R.id.trainee_detail_text)).setText(mItem.name);
+            ((TextView) rootView.findViewById(R.id.age_text)).setText("Age: " + mItem.getInfoMap().get("age"));
+            ((TextView) rootView.findViewById(R.id.height_text)).setText("Height: " + mItem.getInfoMap().get("height"));
+            ((TextView) rootView.findViewById(R.id.weight_text)).setText("Weight: " + mItem.getInfoMap().get("weight"));
         }
 
         rootView.findViewById(R.id.detail_fragment_text_activity_button).setOnClickListener(new View.OnClickListener() {
