@@ -1,8 +1,10 @@
 package com.example.app;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.View;
@@ -49,6 +51,7 @@ public class TraineeListFragment extends ListFragment {
 
     private JSONObject trainees = null;
     private JSONObject trainee_info = null;
+    private String token;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -82,9 +85,9 @@ public class TraineeListFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        TraineeContent.resetContent();
-        new GetTraineeList().execute();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        token = preferences.getString("token",null);
+        refresh();
     }
 
     @Override
@@ -153,7 +156,7 @@ public class TraineeListFragment extends ListFragment {
      */
     public void refresh() {
         TraineeContent.resetContent();
-        new GetTraineeList().execute();
+        new GetTraineeList().execute(token);
     }
 
     private void setActivatedPosition(int position) {
@@ -166,15 +169,14 @@ public class TraineeListFragment extends ListFragment {
         mActivatedPosition = position;
     }
 
-
-    private class GetTraineeList extends AsyncTask<Void,Void,Boolean>
+    private class GetTraineeList extends AsyncTask<String,Void,Boolean>
     {
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected Boolean doInBackground(String... params) {
             APIHandler handler = new APIHandler();
             List<NameValuePair> parameters = new ArrayList<NameValuePair>();
             //parameters.add(new BasicNameValuePair(LoginActivity.EMAIL, LoginActivity.PASSWORD));
-            JSONObject jsonObj = handler.sendAPIRequestWithAuth("trainee_list", handler.GET, LoginActivity.EMAIL, LoginActivity.PASSWORD);
+            JSONObject jsonObj = handler.sendAPIRequestWithAuth("trainee_list", handler.GET, token, "");
 
             //Log.d("Response: ", ">>> " + jsonObj);
 
@@ -211,6 +213,6 @@ public class TraineeListFragment extends ListFragment {
                 setListAdapter(adapter);
             }
         }
-
     }
+
 }

@@ -48,10 +48,9 @@ public class TraineeDetailFragment extends Fragment {
             // Load the dummy name specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load name from a name provider.
+            //mItem is a TraineeItem
             mItem = TraineeContent.TRAINEE_MAP.get(getArguments().getString(ARG_ITEM_ID));
         }
-        Intent intent = getActivity().getIntent();
-        token = intent.getStringExtra("token");
     }
 
     @Override
@@ -68,7 +67,8 @@ public class TraineeDetailFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getActivity(), MessageActivity.class);
-                i.putExtra("token",token);
+                i.putExtra("trainee_id",mItem.id);
+                i.putExtra("name", mItem.name);
                 startActivity(i);
             }
         });
@@ -78,7 +78,8 @@ public class TraineeDetailFragment extends Fragment {
             public void onClick(View view) {
                 //TODO: Change SplashScreenActivity
                 Intent i = new Intent(getActivity(), SplashScreenActivity.class);
-                i.putExtra("token",token);
+                i.putExtra("trainee_id",mItem.id);
+                i.putExtra("name", mItem.name);
                 startActivity(i);
             }
         });
@@ -88,10 +89,15 @@ public class TraineeDetailFragment extends Fragment {
             public void onClick(View view) {
                 //TODO: Change MainActivity
                 Intent i = new Intent(getActivity(), MainActivity.class);
-                i.putExtra("token",token);
+                i.putExtra("trainee_id",mItem.id);
+                i.putExtra("name", mItem.name);
                 startActivity(i);
             }
         });
         return rootView;
     }
+
+
+
+
 }
