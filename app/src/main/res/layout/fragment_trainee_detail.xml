@@ -28,7 +28,8 @@
     </LinearLayout>
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="110dp">
+        android:layout_height="110dp"
+        android:id="@+id/personal_info_listview">
     </ListView>
     <LinearLayout
         android:layout_width="match_parent"

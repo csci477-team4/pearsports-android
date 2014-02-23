@@ -40,6 +40,12 @@ public class TraineeContent {
     public static class TraineeItem {
         public String id;
         public String name;
+        public String email;
+        public String dob;
+        public String gender;
+        public int age;
+        public float height; //what metrics are being used for this?
+        public float weight;
 
         public TraineeItem(String id, String name) {
             this.id = id;

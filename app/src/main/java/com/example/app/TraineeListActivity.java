@@ -83,9 +83,12 @@ public class TraineeListActivity extends FragmentActivity
             // for the selected item ID.
             Intent detailIntent = new Intent(this, TraineeDetailActivity.class);
             detailIntent.putExtra(TraineeDetailFragment.ARG_ITEM_ID, id);
-            detailIntent.putExtra("token",token);
             startActivity(detailIntent);
         }
+    }
+
+    protected String getToken() {
+        return token;
     }
 
 }
