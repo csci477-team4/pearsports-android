@@ -29,6 +29,11 @@ public class TraineeDetailFragment extends Fragment {
     private TraineeContent.TraineeItem mItem;
 
     /**
+     * The trainer's token authentication.
+     */
+    private String token;
+
+    /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
@@ -45,6 +50,8 @@ public class TraineeDetailFragment extends Fragment {
             // to load name from a name provider.
             mItem = TraineeContent.TRAINEE_MAP.get(getArguments().getString(ARG_ITEM_ID));
         }
+        Intent intent = getActivity().getIntent();
+        token = intent.getStringExtra("token");
     }
 
     @Override
@@ -61,6 +68,7 @@ public class TraineeDetailFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getActivity(), MessageActivity.class);
+                i.putExtra("token",token);
                 startActivity(i);
             }
         });
@@ -70,6 +78,7 @@ public class TraineeDetailFragment extends Fragment {
             public void onClick(View view) {
                 //TODO: Change SplashScreenActivity
                 Intent i = new Intent(getActivity(), SplashScreenActivity.class);
+                i.putExtra("token",token);
                 startActivity(i);
             }
         });
@@ -79,6 +88,7 @@ public class TraineeDetailFragment extends Fragment {
             public void onClick(View view) {
                 //TODO: Change MainActivity
                 Intent i = new Intent(getActivity(), MainActivity.class);
+                i.putExtra("token",token);
                 startActivity(i);
             }
         });
