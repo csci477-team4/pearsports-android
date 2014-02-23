@@ -3,7 +3,6 @@ package com.example.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,8 +60,7 @@ public class TraineeDetailFragment extends Fragment {
         rootView.findViewById(R.id.detail_fragment_text_activity_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("Text onClick", "Text button clicked!!");
-                Intent i = new Intent(getActivity(), MainActivity.class);
+                Intent i = new Intent(getActivity(), MessageActivity.class);
                 startActivity(i);
             }
         });
@@ -70,6 +68,7 @@ public class TraineeDetailFragment extends Fragment {
         rootView.findViewById(R.id.detail_fragment_audio_activity_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODO: Change SplashScreenActivity
                 Intent i = new Intent(getActivity(), SplashScreenActivity.class);
                 startActivity(i);
             }
@@ -78,6 +77,7 @@ public class TraineeDetailFragment extends Fragment {
         rootView.findViewById(R.id.detail_fragment_workout_activity_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODO: Change MainActivity
                 Intent i = new Intent(getActivity(), MainActivity.class);
                 startActivity(i);
             }
