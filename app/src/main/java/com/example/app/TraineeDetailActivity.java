@@ -43,10 +43,10 @@ public class TraineeDetailActivity extends FragmentActivity {
             TraineeDetailFragment fragment = new TraineeDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.trainee_detail_container, fragment)
+                    .add(R.id.activity_trainee_detail_layout, fragment)
                     .commit();
         }
-    }
+}
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

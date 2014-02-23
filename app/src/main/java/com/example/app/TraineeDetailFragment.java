@@ -1,7 +1,9 @@
 package com.example.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +25,7 @@ public class TraineeDetailFragment extends Fragment {
     public static final String ARG_ITEM_ID = "item_id";
 
     /**
-     * The dummy name this fragment is presenting.
+     * The name this fragment is presenting.
      */
     private TraineeContent.TraineeItem mItem;
 
@@ -51,11 +53,35 @@ public class TraineeDetailFragment extends Fragment {
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_trainee_detail, container, false);
 
-        // Show the dummy name as text in a TextView.
+        // Show the name as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.trainee_detail)).setText(mItem.name);
+            ((TextView) rootView.findViewById(R.id.trainee_detail_text)).setText(mItem.name);
         }
 
+        rootView.findViewById(R.id.detail_fragment_text_activity_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("Text onClick", "Text button clicked!!");
+                Intent i = new Intent(getActivity(), MainActivity.class);
+                startActivity(i);
+            }
+        });
+
+        rootView.findViewById(R.id.detail_fragment_audio_activity_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), SplashScreenActivity.class);
+                startActivity(i);
+            }
+        });
+
+        rootView.findViewById(R.id.detail_fragment_workout_activity_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), MainActivity.class);
+                startActivity(i);
+            }
+        });
         return rootView;
     }
 }

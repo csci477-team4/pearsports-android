@@ -343,6 +343,7 @@ public class LoginActivity extends Activity {
                 finish();
                 Toast.makeText(LoginActivity.this, mToken, Toast.LENGTH_LONG).show();
                 Intent i = new Intent(LoginActivity.this, TraineeListActivity.class);
+                i.putExtra("token", mToken);
                 startActivity(i);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
