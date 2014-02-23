@@ -2,7 +2,6 @@ package com.example.app;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -31,37 +29,6 @@ public class SplashScreenActivity extends Activity {
             public void run() {
                 startMyActivity();
             }}, 10000);
-
-        /*
-        fragView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                startMyActivity();
-                return true;
-            }
-        }); */
-
-        /*
-    findViewById(R.id.text_what).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SplashScreenActivity.this.startMyActivity();
-            }
-        });
-
-        findViewById(R.id.text_pushes).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SplashScreenActivity.this.startMyActivity();
-            }
-        });
-
-        findViewById(R.id.text_you).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SplashScreenActivity.this.startMyActivity();
-            }
-        });*/
     }
 
     public void startMyActivity()
@@ -83,7 +50,7 @@ public class SplashScreenActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.splash_screen, menu);
+        //getMenuInflater().inflate(R.menu.splash_screen, menu);
         return true;
     }
 
