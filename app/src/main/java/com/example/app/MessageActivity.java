@@ -1,18 +1,13 @@
 package com.example.app;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-
-import java.util.ArrayList;
-import java.util.Random;
-
 import android.app.ListActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class MessageActivity extends ListActivity {
 
@@ -29,21 +24,20 @@ public class MessageActivity extends ListActivity {
 
         text = (EditText) this.findViewById(R.id.text);
 
-        sender = "Arnold Schwarzenegger";
+        sender = "Andre Carter";
         this.setTitle(sender);
         messages = new ArrayList<Message>();
 
-        messages.add(new Message("Hello", false));
-        messages.add(new Message("Hi!", true));
-        messages.add(new Message("Wassup??", false));
-        messages.add(new Message("nothing much, working on speech bubbles.", true));
-        messages.add(new Message("you say!", true));
-        messages.add(new Message("oh thats great. how are you showing them", false));
+        messages.add(new Message("Hey Andre, how was your workout yesterday?", true));
+        messages.add(new Message("It was really tough. I almost couldn't finish that last mile.", false));
+        messages.add(new Message("But I see you did a great job keeping to the heart rate zones!", true));
+        messages.add(new Message("Yeah?", true));
+        messages.add(new Message("Absolutely!", false));
 
 
         adapter = new MessageAdapter(this, messages);
         setListAdapter(adapter);
-        addNewMessage(new Message("mmm, well, using 9 patches png to show them.", true));
+        addNewMessage(new Message("Why don't we try some bike cardio tomorrow?", false));
     }
 
     public void sendMessage(View v) {
@@ -86,7 +80,7 @@ public class MessageActivity extends ListActivity {
         @Override
         public void onProgressUpdate(String... v) {
 
-            if (messages.get(messages.size() - 1).isStatusMessage)//check wether we have already added a status message
+            if (messages.get(messages.size() - 1).isStatusMessage)//check whether we have already added a status message
             {
                 messages.get(messages.size() - 1).setMessage(v[0]); //update the status for that
                 adapter.notifyDataSetChanged();
@@ -103,7 +97,7 @@ public class MessageActivity extends ListActivity {
                 messages.remove(messages.size() - 1);
             }
 
-            addNewMessage(new Message(text, false)); // add the orignal message from server.
+            addNewMessage(new Message(text, false)); // add the original message from server.
         }
 
 
