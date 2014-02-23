@@ -59,13 +59,13 @@ public class MessageAdapter extends BaseAdapter{
         }
         else
         {
-            //Check whether message is mine to show green background and align to right
+            //Check whether message is mine to show right speech bubble and align to right
             if(message.isMine())
             {
                 holder.message.setBackgroundResource(R.drawable.speech_bubble_right);
                 lp.gravity = Gravity.RIGHT;
             }
-            //If not mine then it is from sender to show orange background and align to left
+            //If not mine then it is from sender to show left speech bubble and align to left
             else
             {
                 holder.message.setBackgroundResource(R.drawable.speech_bubble_left);

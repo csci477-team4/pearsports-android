@@ -28,16 +28,17 @@ public class MessageActivity extends ListActivity {
         this.setTitle(sender);
         messages = new ArrayList<Message>();
 
-        messages.add(new Message("Hey Andre, how was your workout yesterday?", true));
-        messages.add(new Message("It was really tough. I almost couldn't finish that last mile.", false));
-        messages.add(new Message("But I see you did a great job keeping to the heart rate zones!", true));
-        messages.add(new Message("Yeah?", true));
-        messages.add(new Message("Absolutely!", false));
+        messages.add(new Message("How was your workout yesterday?", true));
+        messages.add(new Message("It was really tough.", false));
+        messages.add(new Message("You did a great job!", true));
+        messages.add(new Message("You stayed in the zones pretty well.", true));
+        messages.add(new Message("Yeah?", false));
+        messages.add(new Message("Absolutely!", true));
 
 
         adapter = new MessageAdapter(this, messages);
         setListAdapter(adapter);
-        addNewMessage(new Message("Why don't we try some bike cardio tomorrow?", false));
+        addNewMessage(new Message("What should I try tomorrow?", false));
     }
 
     public void sendMessage(View v) {
