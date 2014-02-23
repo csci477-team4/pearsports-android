@@ -55,7 +55,7 @@ public class MessageAdapter extends BaseAdapter{
         {
             holder.message.setBackgroundDrawable(null);
             lp.gravity = Gravity.LEFT;
-            holder.message.setTextColor(R.color.textFieldColor);
+            holder.message.setTextColor(R.color.textColor);
         }
         else
         {
