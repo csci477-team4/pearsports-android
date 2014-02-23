@@ -1,5 +1,7 @@
 package com.example.app.trainee;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,21 +42,58 @@ public class TraineeContent {
     public static class TraineeItem {
         public String id;
         public String name;
-        public String email;
-        public String dob;
-        public String gender;
-        public int age;
-        public float height; //what metrics are being used for this?
-        public float weight;
+
+        private HashMap<String,String> traineeInfo;
+        public Stats stats;
 
         public TraineeItem(String id, String name) {
             this.id = id;
             this.name = name;
+
+            traineeInfo = new HashMap<String, String>(8);
+            traineeInfo.put("id", id);
+            traineeInfo.put("name", name);
+            traineeInfo.put("email", null);
+            traineeInfo.put("dob", null);
+            traineeInfo.put("gender", null);
+            traineeInfo.put("age", null);
+            traineeInfo.put("height", null);
+            traineeInfo.put("weight", null);
+
+            stats = new Stats();
         }
 
         @Override
         public String toString() {
             return name;
         }
+
+        public HashMap<String,String> getInfoMap(){
+            return traineeInfo;
+        }
+
+        public void printInfo() {
+            Log.d("TRAINEE INFO: ", traineeInfo.toString());
+        }
+
+
+        /**
+         * ...working on how to best store this... :(
+         */
+        public class Stats {
+            public float distance;
+            public float duration;
+            public float calories;
+            public int workout_count;
+            public float distance_km;
+            public float distance_mi;
+            public String duration_formatted;
+            public String object;
+            public String object_md5;
+
+            public Stats() { }
+        }
+
+
     }
 }
