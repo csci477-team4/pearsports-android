@@ -25,7 +25,7 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
 
         mActivity = (LoginActivity) getActivity();
 
-        textView1 = (TextView) mActivity.findViewById(R.id.main_text);
+       // textView1 = (TextView) mActivity.findViewById(R.id.main_text);
     }
 
     @SmallTest
