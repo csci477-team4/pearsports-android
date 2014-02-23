@@ -1,10 +1,7 @@
 package com.example.app;
 
 
-import java.util.ArrayList;
-
 import android.content.Context;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 
 public class MessageAdapter extends BaseAdapter{
@@ -56,20 +55,20 @@ public class MessageAdapter extends BaseAdapter{
         {
             holder.message.setBackgroundDrawable(null);
             lp.gravity = Gravity.LEFT;
-            holder.message.setTextColor(R.color.textFieldColor);
+            holder.message.setTextColor(R.color.textColor);
         }
         else
         {
-            //Check whether message is mine to show green background and align to right
+            //Check whether message is mine to show right speech bubble and align to right
             if(message.isMine())
             {
-                holder.message.setBackgroundResource(R.drawable.speech_bubble_green);
+                holder.message.setBackgroundResource(R.drawable.speech_bubble_right);
                 lp.gravity = Gravity.RIGHT;
             }
-            //If not mine then it is from sender to show orange background and align to left
+            //If not mine then it is from sender to show left speech bubble and align to left
             else
             {
-                holder.message.setBackgroundResource(R.drawable.speech_bubble_orange);
+                holder.message.setBackgroundResource(R.drawable.speech_bubble_left);
                 lp.gravity = Gravity.LEFT;
             }
             holder.message.setLayoutParams(lp);
