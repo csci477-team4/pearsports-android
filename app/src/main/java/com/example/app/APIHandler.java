@@ -105,6 +105,68 @@ public class APIHandler {
      * @param method - APIHandler.GET or APIHandler.POST
      * @param key - username or token
      * @param value - password. if blank, assumes key is token
+     * @param params - List of key-value pairs, other parameters
+     * @return
+     */
+    public JSONObject sendAPIRequestWithAuth(String path, int method,
+           String key, String value, List<NameValuePair> params){
+        JSONObject jsonObject = null;
+        try {
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            HttpParams httpParameters = httpClient.getParams();
+            HttpConnectionParams.setConnectionTimeout(httpParameters, 5000);
+            HttpConnectionParams.setSoTimeout(httpParameters, 10000);
+            HttpEntity httpEntity = null;
+            HttpResponse httpResponse = null;
+            String url = buildURL(path);
+
+            if (method == POST) {
+                HttpPost httpPost = new HttpPost(url);
+                String base64EncodedCredentials = "Basic " + Base64.encodeToString((key + ":" + value).getBytes(), Base64.NO_WRAP);
+                httpPost.setHeader("Authorization",base64EncodedCredentials);
+                if (params != null) {
+                    httpPost.setEntity(new UrlEncodedFormEntity(params));
+                }
+                httpResponse = httpClient.execute(httpPost);
+
+            } else if (method == GET) {
+                if (params != null) {
+                    String paramString = URLEncodedUtils
+                            .format(params, "utf-8");
+                    url += "?" + paramString;
+                }
+                HttpGet httpGet = new HttpGet(url);
+                String base64EncodedCredentials = "Basic " + Base64.encodeToString((key + ":" + value).getBytes(), Base64.NO_WRAP);
+                httpGet.setHeader("Authorization",base64EncodedCredentials);
+                httpResponse = httpClient.execute(httpGet);
+            }
+            httpEntity = httpResponse.getEntity();
+            response = EntityUtils.toString(httpEntity);
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (response != null) {
+            try {
+                jsonObject = new JSONObject(response);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return jsonObject;
+    }
+
+    /**
+     *
+     * @param path - e.g. "trainee_list" or "sign-in"
+     * @param method - APIHandler.GET or APIHandler.POST
+     * @param key - username or token
+     * @param value - password. if blank, assumes key is token
      * @return
      */
     public JSONObject sendAPIRequestWithAuth(String path, int method,
