@@ -27,13 +27,74 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="27\nWorkouts"
+            android:id="@+id/workout_text"
+            android:textColor="#ffffff"
+            android:layout_gravity="center"
+            android:fontFamily="Avenir"
+            android:textAlignment="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="9.6\nMiles"
+            android:id="@+id/miles_text"
+            android:textColor="#ffffff"
+            android:layout_gravity="center"
+            android:fontFamily="Avenir"
+            android:textAlignment="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="128\nMinutes"
+            android:id="@+id/minutes_text"
+            android:textColor="#ffffff"
+            android:layout_gravity="center"
+            android:fontFamily="Avenir"
+            android:textAlignment="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="848\nCalories"
+            android:id="@+id/calories_text"
+            android:textColor="#ffffff"
+            android:layout_gravity="center"
+            android:fontFamily="Avenir"
+            android:textAlignment="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAppearance="?android:attr/textAppearanceListItem"
         android:text="Personal Information"
         android:paddingLeft="20dp"
         android:fontFamily="Avenir"
@@ -44,7 +105,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
         android:text="Age: "
         android:id="@+id/age_text"
         android:paddingLeft="20dp"
@@ -54,7 +115,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
         android:text="Height: "
         android:id="@+id/height_text"
         android:paddingLeft="20dp"
@@ -64,7 +125,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
         android:text="Weight: "
         android:id="@+id/weight_text"
         android:paddingLeft="20dp"
@@ -76,7 +137,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center">
         <Button
             android:layout_width="118dp"
             android:layout_height="40dp"

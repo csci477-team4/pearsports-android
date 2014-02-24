@@ -19,7 +19,7 @@ public class TraineeContent {
     public static List<TraineeItem> TRAINEES = new ArrayList<TraineeItem>();
 
     /**
-     * Maps trainee ID to name
+     * Maps String trainee_id to TraineeItem
      */
     public static Map<String, TraineeItem> TRAINEE_MAP = new HashMap<String, TraineeItem>();
 
@@ -44,7 +44,7 @@ public class TraineeContent {
         public String name;
 
         private HashMap<String,String> traineeInfo;
-        public Stats stats;
+        private Stats stats;
 
         public TraineeItem(String id, String name) {
             this.id = id;
@@ -72,26 +72,42 @@ public class TraineeContent {
             return traineeInfo;
         }
 
+        public HashMap<String,String> getStatsMap() {
+            return stats.getStatsMap();
+        }
+
         public void printInfo() {
             Log.d("TRAINEE INFO: ", traineeInfo.toString());
         }
 
+        public void printStats() {
+            Log.d("TRAINEE STATS: ", stats.getStatsMap().toString());
+        }
 
         /**
          * ...working on how to best store this... :(
+         *  Strings for now...
          */
-        public class Stats {
-            public float distance;
-            public float duration;
-            public float calories;
-            public int workout_count;
-            public float distance_km;
-            public float distance_mi;
-            public String duration_formatted;
-            public String object;
-            public String object_md5;
+        private class Stats {
 
-            public Stats() { }
+            private HashMap<String,String> statsMap;
+
+            public Stats() {
+                statsMap = new HashMap<String, String>(9);
+                statsMap.put("distance",null);
+                statsMap.put("duration",null);
+                statsMap.put("calories",null);
+                statsMap.put("workout_count",null);
+                statsMap.put("distance_km",null);
+                statsMap.put("distance_mi",null);
+                statsMap.put("duration_formatted",null);
+                statsMap.put("object",null);
+                statsMap.put("object_md5",null);
+            }
+
+            public HashMap<String,String> getStatsMap() {
+                return statsMap;
+            }
         }
 
 

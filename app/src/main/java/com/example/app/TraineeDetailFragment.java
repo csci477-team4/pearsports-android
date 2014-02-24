@@ -64,6 +64,11 @@ public class TraineeDetailFragment extends Fragment {
             ((TextView) rootView.findViewById(R.id.age_text)).setText("Age: " + mItem.getInfoMap().get("age"));
             ((TextView) rootView.findViewById(R.id.height_text)).setText("Height: " + mItem.getInfoMap().get("height"));
             ((TextView) rootView.findViewById(R.id.weight_text)).setText("Weight: " + mItem.getInfoMap().get("weight"));
+
+            ((TextView) rootView.findViewById(R.id.workout_text)).setText(mItem.getStatsMap().get("workout_count") + "\nWorkouts");
+            ((TextView) rootView.findViewById(R.id.calories_text)).setText(mItem.getStatsMap().get("calories") + "\nCalories");
+            ((TextView) rootView.findViewById(R.id.miles_text)).setText(mItem.getStatsMap().get("distance_mi") + "\nMiles");
+            ((TextView) rootView.findViewById(R.id.minutes_text)).setText(mItem.getStatsMap().get("duration_formatted") + "\nTime");
         }
 
         rootView.findViewById(R.id.detail_fragment_text_activity_button).setOnClickListener(new View.OnClickListener() {
