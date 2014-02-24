@@ -1,9 +1,7 @@
 package com.example.app;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,19 +87,11 @@ public class TraineeDetailFragment extends Fragment {
         rootView.findViewById(R.id.detail_fragment_workout_activity_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-                SharedPreferences.Editor edit = pref.edit();
-                edit.remove("token");
-                edit.apply();
-
-                Intent i = new Intent(getActivity(), LoginActivity.class);
-                startActivity(i);
-
                 //TODO: Change MainActivity
-//                Intent i = new Intent(getActivity(), MainActivity.class);
-//                i.putExtra("trainee_id",mItem.id);
-//                i.putExtra("name", mItem.name);
-//                startActivity(i);
+                Intent i = new Intent(getActivity(), MainActivity.class);
+                i.putExtra("trainee_id",mItem.id);
+                i.putExtra("name", mItem.name);
+                startActivity(i);
             }
         });
         return rootView;
