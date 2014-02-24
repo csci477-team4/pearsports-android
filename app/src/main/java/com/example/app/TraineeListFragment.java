@@ -14,10 +14,12 @@ import android.widget.ListView;
 import com.example.app.trainee.TraineeContent;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -49,8 +51,10 @@ public class TraineeListFragment extends ListFragment {
      */
     private int mActivatedPosition = ListView.INVALID_POSITION;
 
-    private JSONObject trainees = null;
+    private JSONObject trainee_list = null;
     private JSONObject trainee_info = null;
+    private JSONObject trainee_stats_list = null;
+    private JSONObject trainee_stats = null;
     private String token;
 
     /**
@@ -157,6 +161,7 @@ public class TraineeListFragment extends ListFragment {
     public void refresh() {
         TraineeContent.resetContent();
         new GetTraineeList().execute(token);
+        new GetStats().execute();
     }
 
     private void setActivatedPosition(int position) {
@@ -174,7 +179,7 @@ public class TraineeListFragment extends ListFragment {
         @Override
         protected Boolean doInBackground(String... params) {
             APIHandler handler = new APIHandler();
-            List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+            //List<NameValuePair> parameters = new ArrayList<NameValuePair>();
             //parameters.add(new BasicNameValuePair(LoginActivity.EMAIL, LoginActivity.PASSWORD));
             JSONObject jsonObj = handler.sendAPIRequestWithAuth("trainee_list", handler.GET, token, "");
 
@@ -182,14 +187,73 @@ public class TraineeListFragment extends ListFragment {
 
             if (jsonObj != null) {
                 try {
-                    trainees = jsonObj.getJSONObject("trainee_list");
+                    trainee_list = jsonObj.getJSONObject("trainee_list");
 
-                    for (Iterator<String> keys = trainees.keys(); keys.hasNext();) {
+                    for (Iterator<String> keys = trainee_list.keys(); keys.hasNext();) {
                         String id = keys.next();
-                        trainee_info = trainees.getJSONObject(id); // map of trainee info
-                        //Log.d("Trainee ID: ", "==> " + id);
-                        //Log.d("Trainee Name: ", "==> " + trainee_info.get("screen_name").toString());
-                        TraineeContent.addItem(new TraineeContent.TraineeItem(id, trainee_info.get("screen_name").toString()));
+                        trainee_info = trainee_list.getJSONObject(id); // map of trainee info
+                        TraineeContent.TraineeItem trainee = new TraineeContent.TraineeItem(id, trainee_info.get("screen_name").toString());
+
+                        HashMap<String,String> info = trainee.getInfoMap();
+                        info.put("email",trainee_info.get("email").toString());
+                        info.put("dob",trainee_info.get("dob").toString());
+                        info.put("gender",trainee_info.get("gender").toString());
+                        info.put("age",trainee_info.get("age").toString());
+                        info.put("height",trainee_info.get("height").toString());
+                        info.put("weight",trainee_info.get("weight").toString());
+
+                        TraineeContent.addItem(trainee);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return true;
+            } else {
+                Log.e("APIHandler", "No data from specified URL");
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if(success){
+                ArrayAdapter<TraineeContent.TraineeItem> adapter = new ArrayAdapter<TraineeContent.TraineeItem>(
+                        getActivity(),
+                        android.R.layout.simple_list_item_activated_1,
+                        android.R.id.text1,
+                        TraineeContent.TRAINEES);
+                setListAdapter(adapter);
+            }
+        }
+    }
+
+    private class GetStats extends AsyncTask<Void,Void,Boolean>
+    {
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            APIHandler handler = new APIHandler();
+            List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+            parameters.add(new BasicNameValuePair("all","True"));
+            JSONObject statsJSON = handler.sendAPIRequestWithAuth("stats", handler.GET, token, "", parameters);
+
+            //Log.d("Response: ", ">>> " + statsJSON);
+
+            if (statsJSON != null) {
+                try {
+                    trainee_stats_list = statsJSON.getJSONObject("trainee_stats_list");
+
+                    for (Iterator<String> keys = trainee_stats_list.keys(); keys.hasNext();) {
+                        String id = keys.next(); // keys are the trainee_ids
+                        trainee_stats = trainee_stats_list.getJSONObject(id); // map of trainee stats
+                        // TODO: parse stats....
+                        TraineeContent.TraineeItem trainee = TraineeContent.TRAINEE_MAP.get(id);
+                        HashMap<String,String> map = trainee.getStatsMap();
+                        for(Iterator<String> iter = trainee_stats.keys(); iter.hasNext();) {
+                            String statKey = iter.next();
+                            map.put(statKey,trainee_stats.get(statKey).toString());
+                        }
+                        trainee.printStats();
                     }
 
                 } catch (JSONException e) {
