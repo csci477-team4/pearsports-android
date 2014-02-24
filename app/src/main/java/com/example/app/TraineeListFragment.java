@@ -246,14 +246,12 @@ public class TraineeListFragment extends ListFragment {
                     for (Iterator<String> keys = trainee_stats_list.keys(); keys.hasNext();) {
                         String id = keys.next(); // keys are the trainee_ids
                         trainee_stats = trainee_stats_list.getJSONObject(id); // map of trainee stats
-                        // TODO: parse stats....
                         TraineeContent.TraineeItem trainee = TraineeContent.TRAINEE_MAP.get(id);
                         HashMap<String,String> map = trainee.getStatsMap();
                         for(Iterator<String> iter = trainee_stats.keys(); iter.hasNext();) {
                             String statKey = iter.next();
                             map.put(statKey,trainee_stats.get(statKey).toString());
                         }
-                        trainee.printStats();
                     }
 
                 } catch (JSONException e) {
