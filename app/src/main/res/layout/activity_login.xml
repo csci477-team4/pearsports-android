@@ -1,6 +1,6 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.app.LoginActivity" >
+    tools:context="com.example.app.LoginActivity">
 
     <!-- Login progress -->
     <LinearLayout android:id="@+id/login_status"
@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center_horizontal"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <ProgressBar style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
@@ -30,42 +30,47 @@
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="15dp"
-        android:fillViewport="false">
+        android:fillViewport="false"
+        style="@style/background_gray">>
 
         <LinearLayout style="@style/LoginFormContainer"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:weightSum="1">
 
             <ImageView
-                android:layout_width="164dp"
+                android:layout_width="245dp"
                 android:layout_height="56dp"
                 android:id="@+id/pear_logo"
-                android:src="@drawable/pear_logo_black"/>
+                android:src="@drawable/pear_logo_black"
+                android:layout_weight="0.26"
+                android:layout_marginTop="50dp"
+                android:layout_gravity="center_horizontal"/>
 
             <EditText
                 android:id="@+id/email"
                 android:singleLine="true"
                 android:maxLines="1"
-                android:layout_width="260dp"
-                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:inputType="textEmailAddress"
+                android:layout_marginTop="50dp"
                 android:hint="@string/prompt_email" />
 
             <EditText
                 android:id="@+id/password"
                 android:singleLine="true"
                 android:maxLines="1"
-                android:layout_width="260dp"
-                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:hint="@string/prompt_password"
                 android:inputType="textPassword"
+                android:layout_marginTop="5dp"
                 android:imeActionLabel="@string/action_sign_in_short"
                 android:imeActionId="@+id/login"
                 android:imeOptions="actionUnspecified" />
 
             <Button android:id="@+id/sign_in_button"
-                android:layout_width="255dp"
+                android:layout_width="fill_parent"
                 android:layout_height="45dp"
                 android:text="@string/action_sign_in_register"
                 android:paddingLeft="32dp"
@@ -73,16 +78,37 @@
                 android:background="@drawable/button"
                 style="@style/button_text"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Forgot password?"
-                android:id="@+id/text_forgotPassword"
-                android:layout_marginLeft="5dp"
-                style="@style/gray_text"/>
+            <LinearLayout style="@style/LoginFormContainer"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/forgot_password"
+                    android:id="@+id/text_forgotPassword"
+                    android:layout_marginLeft="10dp"
+                    style="@style/gray_text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/vertical_divider"
+                    android:id="@+id/text_divider"
+                    android:layout_marginLeft="15dp"
+                    style="@style/gray_text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/create_account"
+                    android:id="@+id/text_createAccount"
+                    android:layout_marginLeft="15dp"
+                    style="@style/gray_text" />
+
+            </LinearLayout>
         </LinearLayout>
-
     </ScrollView>
 </merge>

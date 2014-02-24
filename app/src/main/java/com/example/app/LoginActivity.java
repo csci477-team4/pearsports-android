@@ -5,10 +5,14 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.UnderlineSpan;
 import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -66,6 +70,18 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
+
+        String forgot = "Forgot Password?";
+        SpannableString content = new SpannableString(forgot);
+        content.setSpan(new UnderlineSpan(), 0, forgot.length(), 0);
+        TextView mForgotPassword = (TextView) findViewById(R.id.text_forgotPassword);
+        mForgotPassword.setText(content);
+
+        String create = "Create Account";
+        SpannableString content2 = new SpannableString(create);
+        content2.setSpan(new UnderlineSpan(), 0, create.length(), 0);
+        TextView mCreateAccount = (TextView) findViewById(R.id.text_createAccount);
+        mCreateAccount.setText(content2);
 
         // Set up the login form.
         EMAIL = getIntent().getStringExtra(EXTRA_EMAIL);
@@ -327,6 +343,11 @@ public class LoginActivity extends Activity {
 
             if (success) {
                 finish();
+                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor edit = pref.edit();
+                edit.putString("token", mToken);
+                edit.apply();
+
                 Toast.makeText(LoginActivity.this, mToken, Toast.LENGTH_LONG).show();
                 Intent i = new Intent(LoginActivity.this, TraineeListActivity.class);
                 startActivity(i);
