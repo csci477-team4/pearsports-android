@@ -23,7 +23,7 @@ public class SplashScreenActivity extends Activity {
         setContentView(R.layout.fragment_splash_screen);
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String token = pref.getString("token", null);
+        token = pref.getString("token", null);
 
         View decorView = getWindow().getDecorView();
         // Hide the status bar.
@@ -47,13 +47,13 @@ public class SplashScreenActivity extends Activity {
             Intent intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+            finish();
         } else {
             Intent intent = new Intent(this, TraineeListActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+            finish();
         }
-
-        finish();
     }
 
     @Override

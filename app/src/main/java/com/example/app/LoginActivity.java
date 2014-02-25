@@ -38,6 +38,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.prefs.Preferences;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -351,9 +352,8 @@ public class LoginActivity extends Activity {
             showProgress(false);
 
             if (success) {
-                finish();
                 SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor edit = pref.edit();
+                SharedPreferences.Editor edit= pref.edit();
                 edit.putString("token", mToken);
                 edit.apply();
 
@@ -361,6 +361,7 @@ public class LoginActivity extends Activity {
                 Intent i = new Intent(LoginActivity.this, TraineeListActivity.class);
                 i.putExtra("token", mToken);
                 startActivity(i);
+                finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
