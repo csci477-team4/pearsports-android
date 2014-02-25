@@ -8,6 +8,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 
 /**
@@ -60,6 +62,24 @@ public class TraineeListActivity extends FragmentActivity
 
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
+
+        ImageView arrow1 = (ImageView) findViewById(R.id.right_arrow1);
+        arrow1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(TraineeListActivity.this, MessageActivity.class);
+                startActivity(i);
+            }
+        });
+
+        ImageView arrow2 = (ImageView) findViewById(R.id.right_arrow2);
+        arrow2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(TraineeListActivity.this, MessageActivity.class);
+                startActivity(i);
+            }
+        });
 
         // TODO: If exposing deep links into your app, handle intents here.
     }

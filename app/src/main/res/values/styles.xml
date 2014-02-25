@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light">
+    <style name="AppTheme" parent="android:Theme.Holo">
         <!-- Customize your theme here. -->
     </style>
 
@@ -35,6 +35,14 @@
         <item name="android:textStyle" >bold</item>
         <item name="android:textSize" >70dp</item>
         <item name="android:textAllCaps" >true</item>
+    </style>
+
+    <style name="ListView">
+        <item name="android:background">@color/pearsports</item>
+        <item name="android:cacheColorHint">@android:color/transparent</item>
+        <item name="android:divider">@android:color/transparent</item>
+        <item name="android:dividerHeight">0dp</item>
+        <item name="android:listSelector">@drawable/trainee_3</item>
     </style>
 
 </resources>

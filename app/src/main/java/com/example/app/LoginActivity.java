@@ -38,7 +38,6 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.prefs.Preferences;
 
 /**
  * Activity which displays a login screen to the user, offering registration as

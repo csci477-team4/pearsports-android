@@ -29,7 +29,7 @@ public class MessageActivity extends ListActivity {
 
         text = (EditText) this.findViewById(R.id.text);
 
-        sender = "Andre Carter";
+        sender = "usc students";
         this.setTitle(sender);
         messages = new ArrayList<Message>();
 
