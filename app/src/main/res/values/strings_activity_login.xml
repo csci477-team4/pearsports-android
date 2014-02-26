@@ -19,4 +19,5 @@
 
     <string name="signinPrefix">sign-in</string>
     <string name="resetPasswordPrefix">password/reset</string>
+    <string name="newAccountPrefix">sign-up</string>
 </resources>
