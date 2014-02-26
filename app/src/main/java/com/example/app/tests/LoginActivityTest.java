@@ -94,6 +94,26 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         assertNull(mActivity.getToken());
 
     }
+
+    @UiThreadTest
+    public void testReset() {
+
+        EditText emailText = (EditText) mLoginForm.findViewById(R.id.email);
+        EditText passwordText = (EditText) mLoginForm.findViewById(R.id.password);
+        emailText.setText("marc@somefakeemail.com");
+        passwordText.setText("");
+        mActivity.attemptLogin();
+
+        // Thread is put to sleep to make sure the UI thread finishes before checking the token.
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        assertNull(mActivity.getToken());
+
+    }
+
 }
 
 
