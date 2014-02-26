@@ -16,13 +16,14 @@
         <item name="android:padding">16dp</item>
     </style>
 
-    <style name="button_text" >
+    <style name="blue_button" >
+        <item name="android:background" >@drawable/button</item>
         <item name="android:layout_width" >fill_parent</item>
         <item name="android:layout_height" >fill_parent</item>
         <item name="android:textColor" >@color/white</item>
         <item name="android:gravity" >center</item>
         <item name="android:layout_margin" >3dp</item>
-        <item name="android:textSize" >20dp</item>
+        <item name="android:textSize" >17dp</item>
         <item name="android:textStyle" >bold</item>
     </style>
 
@@ -35,14 +36,6 @@
         <item name="android:textStyle" >bold</item>
         <item name="android:textSize" >70dp</item>
         <item name="android:textAllCaps" >true</item>
-    </style>
-
-    <style name="ListView">
-        <item name="android:background">@color/pearsports</item>
-        <item name="android:cacheColorHint">@android:color/transparent</item>
-        <item name="android:divider">@android:color/transparent</item>
-        <item name="android:dividerHeight">0dp</item>
-        <item name="android:listSelector">@drawable/trainee_3</item>
     </style>
 
 </resources>

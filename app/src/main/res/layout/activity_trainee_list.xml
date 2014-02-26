@@ -46,7 +46,6 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_weight="2"
-        style="@style/ListView"
         tools:context="com.example.app.TraineeListActivity"
         tools:layout="@android:layout/list_content" />
 
