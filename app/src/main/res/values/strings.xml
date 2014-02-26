@@ -7,13 +7,14 @@
     <string name="logout">Logout</string>
     <string name="api_url">http://cs477-backend.herokuapp.com</string>
     <string name="title_activity_splash_screen">Pear Sports Companion App</string>
-    <string name="title_trainee_list">Trainees</string>
-    <string name="title_trainee_detail">Trainee Detail</string>
-    <string name="title_activity_message">MessageActivity</string>
+    <string name="title_trainee_list">Main Dashboard</string>
+    <string name="title_trainee_detail">Trainee Contact</string>
+    <string name="title_activity_message">Message Stream</string>
     <string name="forgot_password">Forgot Password</string>
     <string name="create_account">Create Account</string>
     <string name="vertical_divider">|</string>
-    <string name="title_activity_workout_history">WorkoutHistoryActivity</string>
+    <string name="title_activity_workout_history">Workout History</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_schedule_workout">Schedule Workout</string>
 
 </resources>

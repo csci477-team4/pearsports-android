@@ -51,6 +51,10 @@
             android:name="com.example.app.WorkoutHistoryActivity"
             android:label="@string/title_activity_workout_history" >
         </activity>
+        <activity
+            android:name="com.example.app.ScheduleWorkoutActivity"
+            android:label="@string/title_activity_schedule_workout" >
+        </activity>
     </application>
 
 </manifest>

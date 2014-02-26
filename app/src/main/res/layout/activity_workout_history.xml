@@ -63,8 +63,8 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
+        android:layout_height="320dp"
+        android:layout_marginTop="115dp"
         android:fillViewport="false">
 
         <LinearLayout
@@ -78,7 +78,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:src="@drawable/running" />
+                android:src="@drawable/running_history" />
 
             <ImageView
                 android:layout_width="fill_parent"
@@ -86,7 +86,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:src="@drawable/swimming" />
+                android:src="@drawable/swimming_history" />
 
             <ImageView
                 android:layout_width="fill_parent"
@@ -94,7 +94,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:src="@drawable/hiking" />
+                android:src="@drawable/hiking_history" />
 
             <ImageView
                 android:layout_width="fill_parent"
@@ -102,7 +102,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:src="@drawable/yoga" />
+                android:src="@drawable/yoga_history" />
 
             <ImageView
                 android:layout_width="fill_parent"
@@ -110,7 +110,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:src="@drawable/rowing" />
+                android:src="@drawable/rowing_history" />
 
             <ImageView
                 android:layout_width="fill_parent"
@@ -118,7 +118,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:src="@drawable/soccer" />
+                android:src="@drawable/soccer_history" />
 
             <ImageView
                 android:layout_width="fill_parent"
@@ -126,7 +126,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:src="@drawable/frisbee" />
+                android:src="@drawable/frisbee_history" />
 
             <ImageView
                 android:layout_width="fill_parent"
@@ -134,14 +134,21 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:src="@drawable/skiing" />
-
-
-
-
+                android:src="@drawable/skiing_history" />
 
         </LinearLayout>
-
     </ScrollView>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:id="@+id/schedule_workout"
+        android:clickable="true"
+        android:text="Schedule New Workout"
+        android:enabled="true"
+        android:focusable="true"
+        style="@style/blue_button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
