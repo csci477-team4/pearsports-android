@@ -85,10 +85,10 @@ public class TraineeDetailFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //TODO: Change SplashScreenActivity
-                Intent i = new Intent(getActivity(), SplashScreenActivity.class);
-                i.putExtra("trainee_id",mItem.id);
-                i.putExtra("name", mItem.name);
-                startActivity(i);
+//                Intent i = new Intent(getActivity(), SplashScreenActivity.class);
+//                i.putExtra("trainee_id",mItem.id);
+//                i.putExtra("name", mItem.name);
+//                startActivity(i);
             }
         });
 
@@ -96,10 +96,10 @@ public class TraineeDetailFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //TODO: Change MainActivity
-                Intent i = new Intent(getActivity(), MainActivity.class);
-                i.putExtra("trainee_id",mItem.id);
-                i.putExtra("name", mItem.name);
-                startActivity(i);
+//                Intent i = new Intent(getActivity(), MainActivity.class);
+//                i.putExtra("trainee_id",mItem.id);
+//                i.putExtra("name", mItem.name);
+//                startActivity(i);
             }
         });
         return rootView;

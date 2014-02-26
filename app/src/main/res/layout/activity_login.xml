@@ -53,6 +53,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:inputType="textEmailAddress"
+                android:textColor="@color/theme_dark"
                 android:layout_marginTop="50dp"
                 android:hint="@string/prompt_email" />
 
@@ -63,6 +64,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:hint="@string/prompt_password"
+                android:textColor="@color/theme_dark"
                 android:inputType="textPassword"
                 android:layout_marginTop="5dp"
                 android:imeActionLabel="@string/action_sign_in_short"
@@ -75,8 +77,7 @@
                 android:text="@string/action_sign_in_register"
                 android:paddingLeft="32dp"
                 android:paddingRight="32dp"
-                android:background="@drawable/button"
-                style="@style/button_text"/>
+                style="@style/blue_button"/>
 
             <LinearLayout style="@style/LoginFormContainer"
                 android:orientation="horizontal">

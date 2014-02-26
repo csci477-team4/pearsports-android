@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light">
+    <style name="AppTheme" parent="android:Theme.Holo">
         <!-- Customize your theme here. -->
     </style>
 
@@ -16,13 +16,14 @@
         <item name="android:padding">16dp</item>
     </style>
 
-    <style name="button_text" >
+    <style name="blue_button" >
+        <item name="android:background" >@drawable/button</item>
         <item name="android:layout_width" >fill_parent</item>
         <item name="android:layout_height" >fill_parent</item>
         <item name="android:textColor" >@color/white</item>
         <item name="android:gravity" >center</item>
         <item name="android:layout_margin" >3dp</item>
-        <item name="android:textSize" >20dp</item>
+        <item name="android:textSize" >17dp</item>
         <item name="android:textStyle" >bold</item>
     </style>
 
@@ -35,6 +36,19 @@
         <item name="android:textStyle" >bold</item>
         <item name="android:textSize" >70dp</item>
         <item name="android:textAllCaps" >true</item>
+    </style>
+
+    <style name="title" >
+        <item name="android:textColor" >@color/white</item>
+        <item name="android:textStyle" >bold</item>
+        <item name="android:textSize" >30dp</item>
+        <item name="android:textAllCaps" >true</item>
+    </style>
+
+    <style name="subtitle" >
+        <item name="android:textColor" >@color/white</item>
+        <item name="android:textStyle" >bold</item>
+        <item name="android:textSize" >25dp</item>
     </style>
 
 </resources>

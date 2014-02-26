@@ -43,6 +43,30 @@
             android:name="com.example.app.MessageActivity"
             android:label="@string/title_activity_message" >
         </activity>
+        <activity
+            android:name="com.example.app.trainee.WorkoutHistoryActivity"
+            android:label="@string/title_activity_workout_history" >
+        </activity>
+        <activity
+            android:name="com.example.app.WorkoutHistoryActivity"
+            android:label="@string/title_activity_workout_history" >
+        </activity>
+        <activity
+            android:name="com.example.app.ScheduleWorkoutActivity"
+            android:label="@string/title_activity_schedule_workout" >
+        </activity>
+        <activity
+            android:name="com.example.app.DifficultyActivity"
+            android:label="@string/title_activity_difficulty" >
+        </activity>
+        <activity
+            android:name="com.example.app.ActivityActivity"
+            android:label="@string/title_activity_" >
+        </activity>
+        <activity
+            android:name="com.example.app.SportActivity"
+            android:label="@string/title_activity_sport" >
+        </activity>
     </application>
 
 </manifest>

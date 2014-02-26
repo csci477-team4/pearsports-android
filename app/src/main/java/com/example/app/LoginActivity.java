@@ -3,6 +3,7 @@ package com.example.app;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -37,7 +38,6 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.prefs.Preferences;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -71,6 +71,15 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
+
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+        // Remember that you should never show the action bar if the
+        // status bar is hidden, so hide that too if necessary.
+        ActionBar actionBar = getActionBar();
+        actionBar.hide();
 
         String forgot = "Forgot Password?";
         SpannableString content = new SpannableString(forgot);
@@ -125,7 +134,6 @@ public class LoginActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.login, menu);
         return true;
     }
 
