@@ -23,21 +23,33 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.prefs.Preferences;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -128,12 +140,19 @@ public class LoginActivity extends Activity {
                 attemptReset();
             }
         });
-    }
 
+        findViewById(R.id.text_createAccount).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attemptCreateNewAccount();
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.login, menu);
         return true;
     }
 
@@ -262,6 +281,31 @@ public class LoginActivity extends Activity {
         }
     }
 
+    public void attemptCreateNewAccount()
+    {
+        mEmailView.setError(null);
+        mPasswordView.setError(null);
+
+        EMAIL = mEmailView.getText().toString();
+
+        boolean cancel = false;
+        View focusView = null;
+
+        if (TextUtils.isEmpty(EMAIL)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            cancel = true;
+        } else if (!EMAIL.contains("@")) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            cancel = true;
+        }
+
+
+        if (!cancel) {
+            CreateAccountTask accountTask = new CreateAccountTask();
+            accountTask.execute();
+        }
+    }
+
     public String getToken() {
         return mToken;
     }
@@ -381,6 +425,10 @@ public class LoginActivity extends Activity {
         protected Boolean doInBackground(Void... params) {
             try {
                 HttpClient httpclient = new DefaultHttpClient();
+                HttpParams httpParameters = httpclient.getParams();
+                HttpConnectionParams.setConnectionTimeout(httpParameters, 5000);
+                HttpConnectionParams.setSoTimeout(httpParameters, 10000);
+
                 HttpGet resetRequest = createResetRequest(EMAIL);
                 HttpResponse response = httpclient.execute(resetRequest);
                 finalResponse = response;
@@ -439,4 +487,49 @@ public class LoginActivity extends Activity {
             showProgress(false);
         }
     }
+
+    public class CreateAccountTask extends AsyncTask<Void, Void, Boolean> {
+        private boolean finalResponse;
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+            nameValuePairs.add(new BasicNameValuePair("email", EMAIL));
+            APIHandler handler = new APIHandler();
+            String prefix = getResources().getString(R.string.newAccountPrefix);
+            JSONObject myObj = handler.sendAPIRequest(prefix,APIHandler.POST,nameValuePairs);
+
+            try {
+                String status = myObj.get("status").toString();
+
+                if(status.equals("200"))
+                {
+                    return true;
+                }
+            } catch (JSONException e) {
+                finalResponse = false;
+            }
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mAuthTask = null;
+
+            if (success) {
+                Toast.makeText(LoginActivity.this, "Request for New Account Sent", Toast.LENGTH_LONG).show();
+            }
+            else{
+                Toast.makeText(LoginActivity.this, "Unable to send a request for a new account", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mAuthTask = null;
+            showProgress(false);
+        }
+    }
 }
+
