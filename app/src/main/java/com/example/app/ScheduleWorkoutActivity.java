@@ -19,7 +19,7 @@ public class ScheduleWorkoutActivity extends Activity {
         pic1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(ScheduleWorkoutActivity.this, WorkoutHistoryActivity.class);
+                Intent i = new Intent(ScheduleWorkoutActivity.this, TraineeListActivity.class);
                 startActivity(i);
                 finish();
             }
