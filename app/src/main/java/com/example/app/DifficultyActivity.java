@@ -1,9 +1,12 @@
 package com.example.app;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 public class DifficultyActivity extends Activity {
 
@@ -11,6 +14,33 @@ public class DifficultyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_difficulty);
+
+        ImageView pic1 = (ImageView) findViewById(R.id.right_arrow1);
+        pic1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(DifficultyActivity.this, ScheduleWorkoutActivity.class);
+                startActivity(i);
+            }
+        });
+
+        ImageView pic2 = (ImageView) findViewById(R.id.right_arrow2);
+        pic2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(DifficultyActivity.this, ScheduleWorkoutActivity.class);
+                startActivity(i);
+            }
+        });
+
+        ImageView pic3 = (ImageView) findViewById(R.id.right_arrow3);
+        pic3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(DifficultyActivity.this, ScheduleWorkoutActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
 

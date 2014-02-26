@@ -1,9 +1,12 @@
 package com.example.app;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 public class ScheduleWorkoutActivity extends Activity {
 
@@ -11,6 +14,16 @@ public class ScheduleWorkoutActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule_workout);
+
+        Button pic1 = (Button) findViewById(R.id.schedule_workout);
+        pic1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ScheduleWorkoutActivity.this, WorkoutHistoryActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
     }
 
 

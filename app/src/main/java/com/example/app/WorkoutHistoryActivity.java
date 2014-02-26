@@ -15,8 +15,8 @@ public class WorkoutHistoryActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_history);
 
-        Button pic1 = (Button) findViewById(R.id.schedule_workout);
-        pic1.setOnClickListener(new View.OnClickListener() {
+        Button b = (Button) findViewById(R.id.schedule_workout);
+        b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(WorkoutHistoryActivity.this, SportActivity.class);
