@@ -63,6 +63,24 @@ public class TraineeListActivity extends FragmentActivity
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
 
+        ImageView pic1 = (ImageView) findViewById(R.id.image_trainee1);
+        pic1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(TraineeListActivity.this, WorkoutHistoryActivity.class);
+                startActivity(i);
+            }
+        });
+
+        ImageView pic2 = (ImageView) findViewById(R.id.image_trainee2);
+        pic2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(TraineeListActivity.this, WorkoutHistoryActivity.class);
+                startActivity(i);
+            }
+        });
+
         ImageView arrow1 = (ImageView) findViewById(R.id.right_arrow1);
         arrow1.setOnClickListener(new View.OnClickListener() {
             @Override
