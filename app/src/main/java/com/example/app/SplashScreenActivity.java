@@ -1,8 +1,8 @@
 package com.example.app;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,7 +11,6 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -26,42 +25,20 @@ public class SplashScreenActivity extends Activity {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         token = pref.getString("token", null);
 
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+        // Remember that you should never show the action bar if the
+        // status bar is hidden, so hide that too if necessary.
+        ActionBar actionBar = getActionBar();
+        actionBar.hide();
+
         Handler handlerTimer = new Handler();
         handlerTimer.postDelayed(new Runnable(){
             public void run() {
                 startMyActivity();
             }}, 10000);
-
-        /*
-        fragView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                startMyActivity();
-                return true;
-            }
-        }); */
-
-        /*
-    findViewById(R.id.text_what).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SplashScreenActivity.this.startMyActivity();
-            }
-        });
-
-        findViewById(R.id.text_pushes).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SplashScreenActivity.this.startMyActivity();
-            }
-        });
-
-        findViewById(R.id.text_you).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SplashScreenActivity.this.startMyActivity();
-            }
-        });*/
     }
 
     public void startMyActivity()
@@ -83,19 +60,12 @@ public class SplashScreenActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.splash_screen, menu);
+        //getMenuInflater().inflate(R.menu.splash_screen, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 

@@ -2,8 +2,14 @@ package com.example.app;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 
 /**
@@ -57,6 +63,42 @@ public class TraineeListActivity extends FragmentActivity
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
 
+        ImageView pic1 = (ImageView) findViewById(R.id.image_trainee1);
+        pic1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(TraineeListActivity.this, WorkoutHistoryActivity.class);
+                startActivity(i);
+            }
+        });
+
+        ImageView pic2 = (ImageView) findViewById(R.id.image_trainee2);
+        pic2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(TraineeListActivity.this, WorkoutHistoryActivity.class);
+                startActivity(i);
+            }
+        });
+
+        ImageView arrow1 = (ImageView) findViewById(R.id.right_arrow1);
+        arrow1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(TraineeListActivity.this, MessageActivity.class);
+                startActivity(i);
+            }
+        });
+
+        ImageView arrow2 = (ImageView) findViewById(R.id.right_arrow2);
+        arrow2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(TraineeListActivity.this, MessageActivity.class);
+                startActivity(i);
+            }
+        });
+
         // TODO: If exposing deep links into your app, handle intents here.
     }
 
@@ -85,6 +127,32 @@ public class TraineeListActivity extends FragmentActivity
             detailIntent.putExtra(TraineeDetailFragment.ARG_ITEM_ID, id);
             startActivity(detailIntent);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_logout) {
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor edit = pref.edit();
+            edit.remove("token");
+            edit.apply();
+
+            Intent i = new Intent(TraineeListActivity.this, LoginActivity.class);
+            startActivity(i);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     protected String getToken() {
