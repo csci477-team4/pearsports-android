@@ -1,29 +1,16 @@
 package com.example.app;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
-public class WorkoutHistoryActivity extends Activity {
+public class SportActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_workout_history);
-
-        Button pic1 = (Button) findViewById(R.id.schedule_workout);
-        pic1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(WorkoutHistoryActivity.this, SportActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
+        setContentView(R.layout.activity_sport);
     }
 
 
@@ -31,7 +18,7 @@ public class WorkoutHistoryActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.workout_history, menu);
+        getMenuInflater().inflate(R.menu.sport, menu);
         return true;
     }
 
