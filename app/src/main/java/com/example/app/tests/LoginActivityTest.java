@@ -1,6 +1,7 @@
 package com.example.app.tests;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.UiThreadTest;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.widget.*;
@@ -14,8 +15,9 @@ import com.example.app.R;
 public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginActivity> {
 
     private LoginActivity mActivity;
-    private ScrollView loginForm;
-    private LinearLayout loginProgress;
+    private ScrollView mLoginForm;
+    private LinearLayout mLoginProgress;
+
 
     public LoginActivityTest() {
         super(LoginActivity.class);
@@ -28,19 +30,19 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
 
         // Start the main activity of the application under test
         mActivity = (LoginActivity) getActivity();
-
         // Get a handle to the Activity object's main UI widget, a Spinner
-        loginForm = (ScrollView) mActivity.findViewById(R.id.login_form);
-        loginProgress = (LinearLayout) mActivity.findViewById(R.id.login_status);
+        mLoginForm = (ScrollView) mActivity.findViewById(R.id.login_form);
+        mLoginProgress = (LinearLayout) mActivity.findViewById(R.id.login_status);
+
     }
 
     @MediumTest
     public void testLoginForm() {
-        assertNotNull(loginForm);
-        ImageView logo = (ImageView) loginForm.findViewById(R.id.pear_logo);
-        EditText emailText = (EditText) loginForm.findViewById(R.id.email);
-        EditText passwordText = (EditText) loginForm.findViewById(R.id.password);
-        Button signInButton = (Button) loginForm.findViewById(R.id.sign_in_button);
+        assertNotNull(mLoginForm);
+        ImageView logo = (ImageView) mLoginForm.findViewById(R.id.pear_logo);
+        EditText emailText = (EditText) mLoginForm.findViewById(R.id.email);
+        EditText passwordText = (EditText) mLoginForm.findViewById(R.id.password);
+        Button signInButton = (Button) mLoginForm.findViewById(R.id.sign_in_button);
 
         assertNotNull(logo);
         assertNotNull(emailText);
@@ -50,17 +52,48 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
 
     @MediumTest
     public void testLoginProgress() {
-        assertNotNull(loginProgress);
-        TextView progressText = (TextView) loginProgress.findViewById(R.id.login_status_message);
-
-       assertNotNull(progressText.getText().toString());
-    }
-
-    @MediumTest
-    public void testTokens() {
-        assertNotNull(loginProgress);
-        TextView progressText = (TextView) loginProgress.findViewById(R.id.login_status_message);
+        assertNotNull(mLoginProgress);
+        TextView progressText = (TextView) mLoginProgress.findViewById(R.id.login_status_message);
 
         assertNotNull(progressText.getText().toString());
     }
+
+    @UiThreadTest
+    public void testValidLogin() {
+        EditText emailText = (EditText) mLoginForm.findViewById(R.id.email);
+        EditText passwordText = (EditText) mLoginForm.findViewById(R.id.password);
+        emailText.setText("marc@somefakeemail.com");
+        passwordText.setText("password1");
+        mActivity.attemptLogin();
+
+        // Thread is put to sleep to make sure the UI thread finishes before checking the token.
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(mActivity.getToken());
+
+    }
+
+    @UiThreadTest
+    public void testInvalidLogin() {
+
+        EditText emailText = (EditText) mLoginForm.findViewById(R.id.email);
+        EditText passwordText = (EditText) mLoginForm.findViewById(R.id.password);
+        emailText.setText("invalidEmail");
+        passwordText.setText("password1");
+        mActivity.attemptLogin();
+
+        // Thread is put to sleep to make sure the UI thread finishes before checking the token.
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        assertNull(mActivity.getToken());
+
+    }
 }
+
+
