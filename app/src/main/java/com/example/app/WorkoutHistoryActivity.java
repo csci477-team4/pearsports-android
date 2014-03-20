@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.app.trainee.TraineeContent;
+import com.example.app.trainee.Workout;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -25,6 +26,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public class WorkoutHistoryActivity extends Activity {
@@ -32,11 +35,10 @@ public class WorkoutHistoryActivity extends Activity {
     private JSONObject workoutsObject = null;
     private JSONObject resultsObject = null;
     private JSONArray workoutArray = null;
-    private JSONArray resultsArray = null;
-
-    private JSONObject trainee_schedule = null;
+    private JSONArray resultArray = null;
     private String traineeID;
     private String token;
+    private TraineeContent.TraineeItem mItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,15 +47,16 @@ public class WorkoutHistoryActivity extends Activity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         token = preferences.getString("token",null);
         traineeID = preferences.getString("trainee_id", null);
+        mItem = TraineeContent.TRAINEE_MAP.get(traineeID);
 
         setContentView(R.layout.activity_workout_history);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ((TextView) findViewById(R.id.workout_history_trainee_name)).setText(TraineeContent.TRAINEE_MAP.get(traineeID).getInfoMap().get("name"));
+        ((TextView) findViewById(R.id.workout_history_trainee_name)).setText(mItem.getInfoMap().get("name"));
 
         ImageView trainee_image = (ImageView) findViewById(R.id.image_trainee);
-        int imageResource = getResources().getIdentifier(TraineeContent.TRAINEE_MAP.get(traineeID).getInfoMap().get("image"), null, getPackageName());
+        int imageResource = getResources().getIdentifier(mItem.getInfoMap().get("image"), null, getPackageName());
         Drawable drawable = getResources().getDrawable(imageResource);
         trainee_image.setImageDrawable(drawable);
 
@@ -120,12 +123,12 @@ public class WorkoutHistoryActivity extends Activity {
         protected Boolean doInBackground(Long... params) {
             List<NameValuePair> parameters = new ArrayList<NameValuePair>();
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            Log.d("Workout Schedule: ", "trainee_id: " + preferences.getString("trainee_id", ""));
+            //Log.d("Workout Schedule: ", "trainee_id: " + preferences.getString("trainee_id", ""));
             parameters.add(new BasicNameValuePair("trainee_id",preferences.getString("trainee_id", "")));
             JSONObject scheduleJSON = APIHandler.sendAPIRequestWithAuth("workout_schedule" +
                     params[0].toString() + "/" + params[1].toString(), APIHandler.GET, token, "", parameters);
 
-            Log.d("Workout Schedule Response: ", ">>> " + scheduleJSON);
+            //Log.d("Workout Schedule Response: ", ">>> " + scheduleJSON);
 
             if (scheduleJSON != null) {
                 try {
@@ -135,19 +138,41 @@ public class WorkoutHistoryActivity extends Activity {
 
                     resultsObject = scheduleJSON.getJSONObject("workout_data").getJSONObject("results");
                     int resultsCount = resultsObject.getInt("count");
-                    resultsArray = resultsObject.getJSONArray("data");
+                    resultArray = resultsObject.getJSONArray("data");
 
-                    /*for (Iterator<String> keys = workoutData.keys(); keys.hasNext();) {
-                        String id = keys.next(); // keys are the trainee_ids
-                        trainee_schedule = workoutData.getJSONObject(id); // map of trainee stats
-                        TraineeContent.TraineeItem trainee = TraineeContent.TRAINEE_MAP.get(id);
-                        HashMap<String,String> map = trainee.getStatsMap();
-                        for(Iterator<String> iter = trainee_schedule.keys(); iter.hasNext();) {
-                            String statKey = iter.next();
-                            map.put(statKey,trainee_schedule.get(statKey).toString());
+
+                    // incomplete workouts
+                    for (int i = 0; i < workoutsCount; i++) {
+                        Workout workout = new Workout();
+                        HashMap<String,String> workoutMap = workout.getWorkoutMap();
+                        JSONObject workoutJSON = workoutArray.getJSONObject(i);
+                        for (Iterator<String> keys = workoutJSON.keys(); keys.hasNext();) {
+                            String key = keys.next();
+                            workoutMap.put(key, workoutJSON.getString(key));
                         }
-                    }*/
+                        mItem.getWorkouts().add(workout);
+                        //workout.printWorkout();
+                    }
 
+                    // completed workouts
+                    for (int i = 0; i < resultsCount; i++) {
+                        Workout workout = new Workout();
+                        HashMap<String,String> workoutMap = workout.getWorkoutMap();
+                        HashMap<String,String> resultMap = workout.getResult().getResultMap();
+                        JSONObject resultJSON = resultArray.getJSONObject(i);
+                        JSONObject workoutJSON = resultJSON.getJSONObject("workout");
+                        for (Iterator<String> keys = workoutJSON.keys(); keys.hasNext();) {
+                            String key = keys.next();
+                            workoutMap.put(key, workoutJSON.getString(key));
+                        }
+                        for (Iterator<String> keys = resultJSON.keys(); keys.hasNext();) {
+                            String key = keys.next();
+                            resultMap.put(key, resultJSON.getString(key));
+                        }
+                        mItem.getWorkouts().add(workout);
+                        //workout.printWorkout();
+                        //workout.getResult().printResult();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

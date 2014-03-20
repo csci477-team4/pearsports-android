@@ -58,13 +58,13 @@ public class TraineeContent implements Serializable {
             traineeInfo = new HashMap<String, String>(8);
             traineeInfo.put("id", id);
             traineeInfo.put("name", name);
-            traineeInfo.put("email", null);
-            traineeInfo.put("dob", null);
-            traineeInfo.put("gender", null);
-            traineeInfo.put("age", null);
-            traineeInfo.put("height", null);
-            traineeInfo.put("weight", null);
-            traineeInfo.put("image",null); // image path
+//            traineeInfo.put("email", null);
+//            traineeInfo.put("dob", null);
+//            traineeInfo.put("gender", null);
+//            traineeInfo.put("age", null);
+//            traineeInfo.put("height", null);
+//            traineeInfo.put("weight", null);
+//            traineeInfo.put("image",null); // image path
 
             stats = new Stats();
             workouts = new ArrayList<Workout>();
@@ -81,6 +81,10 @@ public class TraineeContent implements Serializable {
 
         public HashMap<String,String> getStatsMap() {
             return stats.getStatsMap();
+        }
+
+        public ArrayList<Workout> getWorkouts() {
+            return workouts;
         }
 
         public void printInfo() {
@@ -101,15 +105,15 @@ public class TraineeContent implements Serializable {
 
             public Stats() {
                 statsMap = new HashMap<String, String>(9);
-                statsMap.put("distance",null);
-                statsMap.put("duration",null);
-                statsMap.put("calories",null);
-                statsMap.put("workout_count",null);
-                statsMap.put("distance_km",null);
-                statsMap.put("distance_mi",null);
-                statsMap.put("duration_formatted",null);
-                statsMap.put("object",null);
-                statsMap.put("object_md5",null);
+//                statsMap.put("distance",null);
+//                statsMap.put("duration",null);
+//                statsMap.put("calories",null);
+//                statsMap.put("workout_count",null);
+//                statsMap.put("distance_km",null);
+//                statsMap.put("distance_mi",null);
+//                statsMap.put("duration_formatted",null);
+//                statsMap.put("object",null);
+//                statsMap.put("object_md5",null);
             }
 
             public HashMap<String,String> getStatsMap() {
