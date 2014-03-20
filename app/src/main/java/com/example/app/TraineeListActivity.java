@@ -63,7 +63,7 @@ public class TraineeListActivity extends FragmentActivity
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
 
-        ImageView pic1 = (ImageView) findViewById(R.id.image_trainee1);
+        ImageView pic1 = (ImageView) findViewById(R.id.image_trainee);
         pic1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

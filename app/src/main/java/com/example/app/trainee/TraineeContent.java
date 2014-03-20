@@ -59,6 +59,7 @@ public class TraineeContent {
             traineeInfo.put("age", null);
             traineeInfo.put("height", null);
             traineeInfo.put("weight", null);
+            traineeInfo.put("image",null); // image path
 
             stats = new Stats();
         }

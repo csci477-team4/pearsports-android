@@ -202,6 +202,18 @@ public class TraineeListFragment extends ListFragment {
                         info.put("height",trainee_info.get("height").toString());
                         info.put("weight",trainee_info.get("weight").toString());
 
+                        // TODO: change this - hardcoded.
+                        if (trainee.name.equals("KR")) {
+                            info.put("image","drawable/trainee_1");
+                        } else if (trainee.name.equals("Jamie")) {
+                            info.put("image","drawable/trainee_2");
+                        } else if (trainee.name.equals("Joe R")) {
+                            info.put("image","drawable/trainee_3");
+                        } else if (trainee.name.equals("eric")) {
+                            info.put("image","drawable/trainee_4");
+                        }
+
+
                         TraineeContent.addItem(trainee);
                     }
 

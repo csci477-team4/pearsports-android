@@ -1,11 +1,13 @@
 package com.example.app;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.app.trainee.TraineeContent;
@@ -69,6 +71,12 @@ public class TraineeDetailFragment extends Fragment {
             ((TextView) rootView.findViewById(R.id.calories_text)).setText(mItem.getStatsMap().get("calories") + "\nCalories");
             ((TextView) rootView.findViewById(R.id.miles_text)).setText(mItem.getStatsMap().get("distance_mi") + "\nMiles");
             ((TextView) rootView.findViewById(R.id.minutes_text)).setText(mItem.getStatsMap().get("duration_formatted") + "\nTime");
+
+            ImageView trainee_image = (ImageView) rootView.findViewById(R.id.image_trainee);
+
+            int imageResource = getResources().getIdentifier(mItem.getInfoMap().get("image"), null, getActivity().getPackageName());
+            Drawable drawable = getResources().getDrawable(imageResource);
+            trainee_image.setImageDrawable(drawable);
         }
 
         rootView.findViewById(R.id.detail_fragment_text_activity_button).setOnClickListener(new View.OnClickListener() {
