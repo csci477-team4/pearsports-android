@@ -72,8 +72,8 @@ public class TraineeDetailFragment extends Fragment {
             ((TextView) rootView.findViewById(R.id.miles_text)).setText(mItem.getStatsMap().get("distance_mi") + "\nMiles");
             ((TextView) rootView.findViewById(R.id.minutes_text)).setText(mItem.getStatsMap().get("duration_formatted") + "\nTime");
 
+            // dynamically display the trainee image
             ImageView trainee_image = (ImageView) rootView.findViewById(R.id.image_trainee);
-
             int imageResource = getResources().getIdentifier(mItem.getInfoMap().get("image"), null, getActivity().getPackageName());
             Drawable drawable = getResources().getDrawable(imageResource);
             trainee_image.setImageDrawable(drawable);

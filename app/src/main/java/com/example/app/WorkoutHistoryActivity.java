@@ -3,6 +3,7 @@ package com.example.app;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -12,6 +13,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.example.app.trainee.TraineeContent;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -30,6 +35,7 @@ public class WorkoutHistoryActivity extends Activity {
     private JSONArray resultsArray = null;
 
     private JSONObject trainee_schedule = null;
+    private String traineeID;
     private String token;
 
     @Override
@@ -38,10 +44,18 @@ public class WorkoutHistoryActivity extends Activity {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         token = preferences.getString("token",null);
+        traineeID = preferences.getString("trainee_id", null);
 
         setContentView(R.layout.activity_workout_history);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        ((TextView) findViewById(R.id.workout_history_trainee_name)).setText(TraineeContent.TRAINEE_MAP.get(traineeID).getInfoMap().get("name"));
+
+        ImageView trainee_image = (ImageView) findViewById(R.id.image_trainee);
+        int imageResource = getResources().getIdentifier(TraineeContent.TRAINEE_MAP.get(traineeID).getInfoMap().get("image"), null, getPackageName());
+        Drawable drawable = getResources().getDrawable(imageResource);
+        trainee_image.setImageDrawable(drawable);
 
         Button b = (Button) findViewById(R.id.schedule_workout);
         b.setOnClickListener(new View.OnClickListener() {

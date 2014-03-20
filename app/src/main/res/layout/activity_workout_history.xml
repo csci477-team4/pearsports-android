@@ -36,7 +36,7 @@
             android:paddingLeft="20dp">
 
             <TextView
-                android:id="@+id/trainee_detail_text"
+                android:id="@+id/workout_history_trainee_name"
                 android:textAllCaps="true"
                 android:textSize="30dp"
                 android:layout_width="match_parent"
