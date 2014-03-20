@@ -40,7 +40,7 @@ public class TraineeContent implements Serializable {
     }
 
     /**
-     * A dummy item representing a piece of name.
+     * Trainee
      */
     public static class TraineeItem {
         public String id;

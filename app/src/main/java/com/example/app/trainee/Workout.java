@@ -47,14 +47,6 @@ public class Workout implements Serializable {
      */
     public class Result implements Serializable {
 
-        public String resultAt;
-        public String averageHR;
-        public String calories;
-        public String grade;
-        public String coachNotes;
-        public String hrDataURL;
-        public String dataURL;
-
         public HashMap<String,String> resultMap;
 
         public Result() {

@@ -97,6 +97,11 @@ public class TraineeListActivity extends FragmentActivity
         arrow1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // TODO: this is hardcoded hax to store selected trainee. find a better way.
+                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor edit= pref.edit();
+                edit.putString("trainee_id", TraineeContent.TRAINEES.get(0).id);
+                edit.apply();
                 Intent i = new Intent(TraineeListActivity.this, MessageActivity.class);
                 startActivity(i);
             }
@@ -106,6 +111,11 @@ public class TraineeListActivity extends FragmentActivity
         arrow2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // TODO: this is hardcoded hax to store selected trainee. find a better way.
+                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor edit= pref.edit();
+                edit.putString("trainee_id", TraineeContent.TRAINEES.get(1).id);
+                edit.apply();
                 Intent i = new Intent(TraineeListActivity.this, MessageActivity.class);
                 startActivity(i);
             }
@@ -167,9 +177,4 @@ public class TraineeListActivity extends FragmentActivity
         }
         return super.onOptionsItemSelected(item);
     }
-
-    protected String getToken() {
-        return token;
-    }
-
 }
