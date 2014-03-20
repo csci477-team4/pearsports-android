@@ -178,10 +178,9 @@ public class TraineeListFragment extends ListFragment {
     {
         @Override
         protected Boolean doInBackground(String... params) {
-            APIHandler handler = new APIHandler();
             //List<NameValuePair> parameters = new ArrayList<NameValuePair>();
             //parameters.add(new BasicNameValuePair(LoginActivity.EMAIL, LoginActivity.PASSWORD));
-            JSONObject jsonObj = handler.sendAPIRequestWithAuth("trainee_list", handler.GET, token, "");
+            JSONObject jsonObj = APIHandler.sendAPIRequestWithAuth("trainee_list", APIHandler.GET, token, "");
 
             //Log.d("Response: ", ">>> " + jsonObj);
 
@@ -244,10 +243,9 @@ public class TraineeListFragment extends ListFragment {
     {
         @Override
         protected Boolean doInBackground(Void... params) {
-            APIHandler handler = new APIHandler();
             List<NameValuePair> parameters = new ArrayList<NameValuePair>();
             parameters.add(new BasicNameValuePair("all","True"));
-            JSONObject statsJSON = handler.sendAPIRequestWithAuth("stats", handler.GET, token, "", parameters);
+            JSONObject statsJSON = APIHandler.sendAPIRequestWithAuth("stats", APIHandler.GET, token, "", parameters);
 
             //Log.d("Response: ", ">>> " + statsJSON);
 

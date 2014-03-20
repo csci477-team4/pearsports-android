@@ -2,6 +2,7 @@ package com.example.app.trainee;
 
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,9 @@ import java.util.Map;
  * <p>
  * TODO: Replace all uses of this class before publishing your app.
  */
-public class TraineeContent {
+public class TraineeContent implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * An array of trainee IDs
