@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.app.trainee.TraineeContent;
+
 
 /**
  * An activity representing a list of Trainees. This activity
@@ -67,6 +69,11 @@ public class TraineeListActivity extends FragmentActivity
         pic1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // TODO: this is hardcoded hax to store selected trainee. find a better way.
+                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor edit= pref.edit();
+                edit.putString("trainee_id", TraineeContent.TRAINEES.get(0).id);
+                edit.apply();
                 Intent i = new Intent(TraineeListActivity.this, WorkoutHistoryActivity.class);
                 startActivity(i);
             }
@@ -76,6 +83,11 @@ public class TraineeListActivity extends FragmentActivity
         pic2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // TODO: this is hardcoded hax to store selected trainee. find a better way.
+                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor edit= pref.edit();
+                edit.putString("trainee_id", TraineeContent.TRAINEES.get(1).id);
+                edit.apply();
                 Intent i = new Intent(TraineeListActivity.this, WorkoutHistoryActivity.class);
                 startActivity(i);
             }
@@ -147,6 +159,7 @@ public class TraineeListActivity extends FragmentActivity
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             SharedPreferences.Editor edit = pref.edit();
             edit.remove("token");
+            edit.remove("trainee_id");
             edit.apply();
 
             Intent i = new Intent(TraineeListActivity.this, LoginActivity.class);

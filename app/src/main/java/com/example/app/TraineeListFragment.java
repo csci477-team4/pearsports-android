@@ -129,6 +129,12 @@ public class TraineeListFragment extends ListFragment {
     public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
 
+        // Add the current trainee to trainee_id in shared preferences
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        SharedPreferences.Editor edit= pref.edit();
+        edit.putString("trainee_id", TraineeContent.TRAINEES.get(position).id);
+        edit.apply();
+
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
         mCallbacks.onItemSelected(TraineeContent.TRAINEES.get(position).id);
@@ -277,12 +283,12 @@ public class TraineeListFragment extends ListFragment {
         @Override
         protected void onPostExecute(final Boolean success) {
             if(success){
-                ArrayAdapter<TraineeContent.TraineeItem> adapter = new ArrayAdapter<TraineeContent.TraineeItem>(
-                        getActivity(),
-                        android.R.layout.simple_list_item_activated_1,
-                        android.R.id.text1,
-                        TraineeContent.TRAINEES);
-                setListAdapter(adapter);
+//                ArrayAdapter<TraineeContent.TraineeItem> adapter = new ArrayAdapter<TraineeContent.TraineeItem>(
+//                        getActivity(),
+//                        android.R.layout.simple_list_item_activated_1,
+//                        android.R.id.text1,
+//                        TraineeContent.TRAINEES);
+//                setListAdapter(adapter);
             }
         }
     }

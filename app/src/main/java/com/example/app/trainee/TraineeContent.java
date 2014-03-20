@@ -49,6 +49,8 @@ public class TraineeContent implements Serializable {
         private HashMap<String,String> traineeInfo;
         private Stats stats;
 
+        private ArrayList<Workout> workouts;
+
         public TraineeItem(String id, String name) {
             this.id = id;
             this.name = name;
@@ -65,6 +67,7 @@ public class TraineeContent implements Serializable {
             traineeInfo.put("image",null); // image path
 
             stats = new Stats();
+            workouts = new ArrayList<Workout>();
         }
 
         @Override
