@@ -30,7 +30,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 public class WorkoutHistoryActivity extends Activity {
@@ -151,10 +150,22 @@ public class WorkoutHistoryActivity extends Activity {
                         Workout workout = new Workout();
                         HashMap<String,String> workoutMap = workout.getWorkoutMap();
                         JSONObject workoutJSON = workoutArray.getJSONObject(i);
-                        for (Iterator<String> keys = workoutJSON.keys(); keys.hasNext();) {
-                            String key = keys.next();
-                            workoutMap.put(key, workoutJSON.getString(key));
-                        }
+
+                        workoutMap.put("id", workoutJSON.getString("id"));
+                        workoutMap.put("title", workoutJSON.getString("title"));
+                        workoutMap.put("activity_type", workoutJSON.getString("activity_type"));
+                        workoutMap.put("description_short", workoutJSON.getString("description_short"));
+                        workoutMap.put("duration", workoutJSON.getString("duration"));
+                        workoutMap.put("avg_hr", null);
+                        workoutMap.put("calories", "0");
+                        workoutMap.put("distance", workoutJSON.getString("distance"));
+                        workoutMap.put("scheduled_at", workoutJSON.getString("scheduled_at"));
+                        workoutMap.put("status", workoutJSON.getString("status"));
+
+//                        for (Iterator<String> keys = workoutJSON.keys(); keys.hasNext();) {
+//                            String key = keys.next();
+//                            workoutMap.put(key, workoutJSON.getString(key));
+//                        }
                         mItem.getWorkouts().add(workout);
                         mItem.getWorkoutMap().put(workout.getWorkoutMap().get("id"), workout);
                         //workout.printWorkout();
@@ -164,17 +175,30 @@ public class WorkoutHistoryActivity extends Activity {
                     for (int i = 0; i < resultsCount; i++) {
                         Workout workout = new Workout();
                         HashMap<String,String> workoutMap = workout.getWorkoutMap();
-                        HashMap<String,String> resultMap = workout.getResult().getResultMap();
+//                        HashMap<String,String> resultMap = workout.getResult().getResultMap();
                         JSONObject resultJSON = resultArray.getJSONObject(i);
                         JSONObject workoutJSON = resultJSON.getJSONObject("workout");
-                        for (Iterator<String> keys = workoutJSON.keys(); keys.hasNext();) {
-                            String key = keys.next();
-                            workoutMap.put(key, workoutJSON.getString(key));
-                        }
-                        for (Iterator<String> keys = resultJSON.keys(); keys.hasNext();) {
-                            String key = keys.next();
-                            resultMap.put(key, resultJSON.getString(key));
-                        }
+
+                        workoutMap.put("id", workoutJSON.getString("id"));
+                        workoutMap.put("title", workoutJSON.getString("title"));
+                        workoutMap.put("activity_type", workoutJSON.getString("activity_type"));
+                        workoutMap.put("description_short", workoutJSON.getString("description_short"));
+                        workoutMap.put("duration", resultJSON.getString("duration"));
+                        workoutMap.put("avg_hr", resultJSON.getString("avg_hr"));
+                        workoutMap.put("calories", resultJSON.getString("calories"));
+                        workoutMap.put("distance", resultJSON.getString("distance"));
+                        workoutMap.put("scheduled_at", workoutJSON.getString("scheduled_at"));
+                        workoutMap.put("status", workoutJSON.getString("status"));
+
+//                        for (Iterator<String> keys = workoutJSON.keys(); keys.hasNext();) {
+//                            String key = keys.next();
+//                            workoutMap.put(key, workoutJSON.getString(key));
+//                        }
+//                        for (Iterator<String> keys = resultJSON.keys(); keys.hasNext();) {
+//                            String key = keys.next();
+//                            resultMap.put(key, resultJSON.getString(key));
+//                        }
+
                         mItem.getWorkouts().add(workout);
                         mItem.getWorkoutMap().put(workout.getWorkoutMap().get("id"), workout);
                         //workout.printWorkout();
