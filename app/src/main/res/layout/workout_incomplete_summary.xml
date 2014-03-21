@@ -1,0 +1,66 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="80dp"
+    android:paddingLeft="10dp"
+    android:paddingTop="10dp"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true">
+
+    <LinearLayout
+        android:layout_width="60dp"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/workout_incomplete_activity_icon"
+            android:src="@drawable/hiking"
+            android:layout_gravity="center_horizontal"/>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:id="@+id/workout_incomplete_activity_type"
+            android:text="Activity"
+            android:textColor="@color/white"
+            android:textSize="12dp"
+            android:gravity="center"
+            android:fontFamily="Avenir" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="320dp"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:paddingLeft="10dp">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="24dp"
+            android:id="@+id/workout_incomplete_name"
+            android:text="Workout Name"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:gravity="top"
+            android:textColor="@color/white"
+            android:fontFamily="Avenir" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="14dp"
+            android:id="@+id/workout_incomplete_date_scheduled"
+            android:text="Date Scheduled: "
+            android:textSize="11dp"
+            android:gravity="top"
+            android:textColor="@color/white"
+            android:fontFamily="Avenir" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="36dp"
+            android:id="@+id/workout_incomplete_description"
+            android:text="This is a short workout description for an incomplete workout. Blah blah blah..."
+            android:textSize="10dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
+            android:fontFamily="Avenir"
+            android:paddingRight="5dp" />
+    </LinearLayout>
+</LinearLayout>

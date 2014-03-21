@@ -96,8 +96,7 @@ public class TraineeContent implements Serializable {
         }
 
         /**
-         * ...working on how to best store this... :(
-         *  Strings for now...
+         *
          */
         private class Stats {
 

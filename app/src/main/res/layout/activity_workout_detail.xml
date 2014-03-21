@@ -1,0 +1,156 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@color/theme_medium"
+    tools:context="com.example.app.WorkoutHistoryActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:paddingLeft="20dp">
+
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:id="@+id/workout_detail_activity_icon"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/trainee_1"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:id="@+id/workout_detail_activity_type"
+                android:textSize="20dp"
+                android:text="Activity"
+                android:fontFamily="Avenir"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/workout_detail_name"
+                android:textAllCaps="false"
+                android:textSize="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:textIsSelectable="false"
+                android:text="Workout Title"
+                android:fontFamily="Avenir"
+                android:textColor="@color/white"
+                android:capitalize="words"
+                android:textStyle="bold"
+                android:gravity="left|top" />
+
+            <TextView
+                android:id="@+id/workout_detail_description_short"
+                android:textSize="14dp"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:textIsSelectable="false"
+                android:text="This is a short description of a workout."
+                android:fontFamily="Avenir"
+                android:textColor="@color/white"
+                android:gravity="center_vertical" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:orientation="vertical"
+        android:layout_marginTop="115dp"
+        android:fillViewport="false">
+
+        <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:text="Duration: "
+        android:id="@+id/workout_detail_duration"
+        android:paddingLeft="20dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="5dp"
+        android:fontFamily="Avenir"
+        android:textColor="@color/white"
+            android:textSize="14dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall"
+            android:text="Heart Rate: "
+            android:id="@+id/workout_detail_hr"
+            android:paddingLeft="20dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="5dp"
+            android:fontFamily="Avenir"
+            android:textColor="@color/white"
+            android:textSize="14dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall"
+            android:text="Calories: "
+            android:id="@+id/workout_detail_calories"
+            android:paddingLeft="20dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="5dp"
+            android:fontFamily="Avenir"
+            android:textColor="@color/white"
+            android:textSize="14dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall"
+            android:text="Distance: "
+            android:id="@+id/workout_detail_distance"
+            android:paddingLeft="20dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="5dp"
+            android:fontFamily="Avenir"
+            android:textColor="@color/white"
+            android:textSize="14dp" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="110dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/running_history" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="110dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/swimming_history" />
+    </LinearLayout>
+
+</RelativeLayout>

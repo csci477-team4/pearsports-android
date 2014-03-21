@@ -37,6 +37,10 @@ public class Workout implements Serializable {
 
     public Result getResult() { return result; }
 
+    public boolean isCompleted() {
+        return workoutMap.get("status").toString().equals("completed");
+    }
+
     public void printWorkout() {
         Log.d("WORKOUT: ", workoutMap.toString());
     }

@@ -1,6 +1,7 @@
 package com.example.app;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -9,9 +10,11 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -185,7 +188,33 @@ public class WorkoutHistoryActivity extends Activity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
+            if(success) {
+                // dynamically load in workout views
+                ArrayList<Workout> workouts = mItem.getWorkouts();
+                ViewGroup parent = (ViewGroup) findViewById(R.id.workout_summary_container);
+                for (Workout w : workouts) {
+                    View view = null;
+                    if (w.isCompleted()) {
 
+                        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        view = inflater.inflate(R.layout.workout_completed_summary, null);
+
+                        ((TextView) view.findViewById(R.id.workout_completed_name)).setText(w.getWorkoutMap().get("title"));
+                        ((TextView) view.findViewById(R.id.workout_completed_activity_type)).setText(w.getWorkoutMap().get("activity_type"));
+
+                    } else {
+                        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        view = inflater.inflate(R.layout.workout_incomplete_summary, null);
+
+                        ((TextView) view.findViewById(R.id.workout_incomplete_name)).setText(w.getWorkoutMap().get("title"));
+                        ((TextView) view.findViewById(R.id.workout_incomplete_activity_type)).setText(w.getWorkoutMap().get("activity_type"));
+                        ((TextView) view.findViewById(R.id.workout_incomplete_date_scheduled)).setText("Date Scheduled: " + w.getWorkoutMap().get("scheduled_at"));
+                        ((TextView) view.findViewById(R.id.workout_incomplete_description)).setText(w.getWorkoutMap().get("description_html"));
+
+                    }
+                    parent.addView(view);
+                }
+            }
         }
     }
 
