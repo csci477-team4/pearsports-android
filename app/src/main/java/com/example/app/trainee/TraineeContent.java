@@ -50,11 +50,12 @@ public class TraineeContent implements Serializable {
         private Stats stats;
 
         private ArrayList<Workout> workouts;
+        private HashMap<String,Workout> workoutMap;
 
         public TraineeItem(String id, String name) {
             this.id = id;
             this.name = name;
-
+            workoutMap = new HashMap<String, Workout>();
             traineeInfo = new HashMap<String, String>(8);
             traineeInfo.put("id", id);
             traineeInfo.put("name", name);
@@ -82,6 +83,8 @@ public class TraineeContent implements Serializable {
         public HashMap<String,String> getStatsMap() {
             return stats.getStatsMap();
         }
+
+        public HashMap<String,Workout> getWorkoutMap() { return workoutMap; }
 
         public ArrayList<Workout> getWorkouts() {
             return workouts;

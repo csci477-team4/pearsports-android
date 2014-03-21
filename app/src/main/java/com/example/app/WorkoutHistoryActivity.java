@@ -43,6 +43,8 @@ public class WorkoutHistoryActivity extends Activity {
     private String token;
     private TraineeContent.TraineeItem mItem;
 
+    private Workout workout; // this is for onClick only
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,6 +156,7 @@ public class WorkoutHistoryActivity extends Activity {
                             workoutMap.put(key, workoutJSON.getString(key));
                         }
                         mItem.getWorkouts().add(workout);
+                        mItem.getWorkoutMap().put(workout.getWorkoutMap().get("id"), workout);
                         //workout.printWorkout();
                     }
 
@@ -173,6 +176,7 @@ public class WorkoutHistoryActivity extends Activity {
                             resultMap.put(key, resultJSON.getString(key));
                         }
                         mItem.getWorkouts().add(workout);
+                        mItem.getWorkoutMap().put(workout.getWorkoutMap().get("id"), workout);
                         //workout.printWorkout();
                         //workout.getResult().printResult();
                     }
@@ -193,6 +197,15 @@ public class WorkoutHistoryActivity extends Activity {
                 ArrayList<Workout> workouts = mItem.getWorkouts();
                 ViewGroup parent = (ViewGroup) findViewById(R.id.workout_summary_container);
                 for (Workout w : workouts) {
+                    workout = w;
+                    View.OnClickListener workoutListener = new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(WorkoutHistoryActivity.this,WorkoutDetailActivity.class);
+                            intent.putExtra("workout_id", workout.getWorkoutMap().get("id"));
+                            startActivity(intent);
+                        }
+                    };
                     View view = null;
                     if (w.isCompleted()) {
 
@@ -202,6 +215,8 @@ public class WorkoutHistoryActivity extends Activity {
                         ((TextView) view.findViewById(R.id.workout_completed_name)).setText(w.getWorkoutMap().get("title"));
                         ((TextView) view.findViewById(R.id.workout_completed_activity_type)).setText(w.getWorkoutMap().get("activity_type"));
 
+                        view.setOnClickListener(workoutListener);
+
                     } else {
                         LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         view = inflater.inflate(R.layout.workout_incomplete_summary, null);
@@ -209,8 +224,9 @@ public class WorkoutHistoryActivity extends Activity {
                         ((TextView) view.findViewById(R.id.workout_incomplete_name)).setText(w.getWorkoutMap().get("title"));
                         ((TextView) view.findViewById(R.id.workout_incomplete_activity_type)).setText(w.getWorkoutMap().get("activity_type"));
                         ((TextView) view.findViewById(R.id.workout_incomplete_date_scheduled)).setText("Date Scheduled: " + w.getWorkoutMap().get("scheduled_at"));
-                        ((TextView) view.findViewById(R.id.workout_incomplete_description)).setText(w.getWorkoutMap().get("description_html"));
+                        ((TextView) view.findViewById(R.id.workout_incomplete_description)).setText(w.getWorkoutMap().get("description_short"));
 
+                        view.setOnClickListener(workoutListener);
                     }
                     parent.addView(view);
                 }

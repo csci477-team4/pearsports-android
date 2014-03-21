@@ -62,17 +62,20 @@
                 android:textStyle="bold"
                 android:gravity="left|top" />
 
-            <TextView
-                android:id="@+id/workout_detail_description_short"
-                android:textSize="14dp"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:textIsSelectable="false"
-                android:text="This is a short description of a workout."
-                android:fontFamily="Avenir"
-                android:textColor="@color/white"
-                android:gravity="center_vertical" />
-
+                android:layout_height="60dp">
+                <TextView
+                    android:id="@+id/workout_detail_description_short"
+                    android:textSize="12dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textIsSelectable="false"
+                    android:text="This is a short description of a workout. Blah blah blah... "
+                    android:fontFamily="Avenir"
+                    android:textColor="@color/white"
+                    android:gravity="top" />
+            </ScrollView>
         </LinearLayout>
     </LinearLayout>
 

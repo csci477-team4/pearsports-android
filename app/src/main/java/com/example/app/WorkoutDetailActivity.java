@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.app.trainee.TraineeContent;
+import com.example.app.trainee.Workout;
 
 /**
  * Created by Shay on 3/20/14.
@@ -21,6 +22,8 @@ public class WorkoutDetailActivity extends Activity {
 
     private String traineeID;
     private TraineeContent.TraineeItem mItem;
+    private String workoutID;
+    private Workout workout; // the current workout
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,20 +32,29 @@ public class WorkoutDetailActivity extends Activity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         traineeID = preferences.getString("trainee_id", null);
         mItem = TraineeContent.TRAINEE_MAP.get(traineeID);
+        workoutID = getIntent().getStringExtra("workout_id");
+        workout = mItem.getWorkoutMap().get(workoutID);
 
-        setContentView(R.layout.activity_workout_detail);
+        setContentView(R.layout.activity_workout_detail_completed);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ((TextView) findViewById(R.id.workout_history_trainee_name)).setText(mItem.getInfoMap().get("name"));
+        // if completed
+        ((TextView) findViewById(R.id.workout_detail_name)).setText(workout.getWorkoutMap().get("title"));
+        ((TextView) findViewById(R.id.workout_detail_activity_type)).setText(workout.getWorkoutMap().get("activity_type"));
+        ((TextView) findViewById(R.id.workout_detail_description_short)).setText(workout.getWorkoutMap().get("description_short"));
+        ((TextView) findViewById(R.id.workout_detail_duration)).setText("Duration: " + workout.getWorkoutMap().get("duration"));
+        ((TextView) findViewById(R.id.workout_detail_hr)).setText("Average HR: " + workout.getWorkoutMap().get("avg_hr"));
+        ((TextView) findViewById(R.id.workout_detail_calories)).setText("Calories: " + workout.getWorkoutMap().get("calories"));
+        ((TextView) findViewById(R.id.workout_detail_distance)).setText("Distance: " + workout.getWorkoutMap().get("distance"));
+
 
         // TODO: change this to display the activity icon
-        ImageView trainee_image = (ImageView) findViewById(R.id.image_trainee);
+        ImageView trainee_image = (ImageView) findViewById(R.id.workout_detail_activity_icon);
         int imageResource = getResources().getIdentifier(mItem.getInfoMap().get("image"), null, getPackageName());
         Drawable drawable = getResources().getDrawable(imageResource);
         trainee_image.setImageDrawable(drawable);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
