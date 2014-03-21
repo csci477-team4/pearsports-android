@@ -43,7 +43,7 @@ public class WorkoutHistoryActivity extends Activity {
     private String token;
     private TraineeContent.TraineeItem mItem;
 
-    private Workout workout; // this is for onClick only
+    private String workoutID; // this is for onClick only
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,12 +197,13 @@ public class WorkoutHistoryActivity extends Activity {
                 ArrayList<Workout> workouts = mItem.getWorkouts();
                 ViewGroup parent = (ViewGroup) findViewById(R.id.workout_summary_container);
                 for (Workout w : workouts) {
-                    workout = w;
+                    workoutID = w.getWorkoutMap().get("id");
                     View.OnClickListener workoutListener = new View.OnClickListener() {
+                        String id = workoutID;
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(WorkoutHistoryActivity.this,WorkoutDetailActivity.class);
-                            intent.putExtra("workout_id", workout.getWorkoutMap().get("id"));
+                            intent.putExtra("workout_id", id);
                             startActivity(intent);
                         }
                     };

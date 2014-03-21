@@ -81,7 +81,7 @@ public class WorkoutDetailActivity extends Activity {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            NavUtils.navigateUpTo(this, new Intent(this, TraineeListActivity.class));
+            NavUtils.navigateUpTo(this, new Intent(this, WorkoutHistoryActivity.class));
             return true;
         }
         if (id == R.id.action_logout) {
