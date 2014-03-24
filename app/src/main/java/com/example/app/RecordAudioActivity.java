@@ -2,22 +2,32 @@ package com.example.app;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import java.io.IOException;
 
 
 public class RecordAudioActivity extends Activity {
 
     private String fileName;
+    private String defaultOutFile;
     private String trainee_id;
     private EditText fName;
     private Button playButton;
     private Button recordButton;
     private Button stopButton;
+
+    private MediaRecorder mRecorder;
+    private MediaPlayer   mPlayer;
 
 
     @Override
@@ -26,6 +36,9 @@ public class RecordAudioActivity extends Activity {
         setContentView(R.layout.activity_record_audio);
         Intent intent = getIntent();
         trainee_id = intent.getStringExtra("trainee_id");
+
+        defaultOutFile = Environment.getExternalStorageDirectory().getAbsolutePath();
+        defaultOutFile += "/recording.3gp";
 
         fName =(EditText) findViewById(R.id.fileName);
         playButton = (Button) findViewById(R.id.Play);
@@ -62,23 +75,47 @@ public class RecordAudioActivity extends Activity {
     public void playRecording(){
         stopButton.setEnabled(false);
         recordButton.setEnabled(false);
-        //TODO: Add code to play recorded and saved audio.
-        //Enable other buttons after play is done.
+
+        mPlayer = new MediaPlayer();
+        try {
+            mPlayer.setDataSource(defaultOutFile);
+            mPlayer.prepare();
+            mPlayer.start();
+        } catch (IOException e) {
+        }
+
         stopButton.setEnabled(true);
         recordButton.setEnabled(true);
-
     }
 
     public void stopRecording(){
-        //TODO: Add code to stop and save recorded audio.
+        if(mRecorder != null)
+        {
+            mRecorder.stop();
+            mRecorder.release();
+            mRecorder = null;
+        }
+
         stopButton.setEnabled(false);
         recordButton.setEnabled(true);
     }
 
     public void startRecording(){
-        //TODO: Add code to record audio.
+        mRecorder = new MediaRecorder();
+        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+        mRecorder.setOutputFile(defaultOutFile);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+
+        try {
+            mRecorder.prepare();
+        } catch (IOException e) {
+            Toast.makeText(RecordAudioActivity.this, "Cannot start recorder (no device?)", Toast.LENGTH_LONG).show();
+        }
+
         recordButton.setEnabled(false);
         stopButton.setEnabled(true);
+        mRecorder.start();
     }
 
     public void sendRecording(){
