@@ -64,7 +64,7 @@ public class MessageActivity extends ListActivity {
         findViewById(R.id.sendText).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendMessage(view);
+                sendMessage();
             }
         });
 
@@ -95,7 +95,7 @@ public class MessageActivity extends ListActivity {
         new GetMessages().execute();
     }
 
-    public void sendMessage(View v) {
+    public void sendMessage() {
         sentMessage = text.getText().toString().trim();
         if (sentMessage.length() > 0) {
             text.setText("");
@@ -123,10 +123,10 @@ public class MessageActivity extends ListActivity {
         protected Boolean doInBackground(Void... params) {
             APIHandler handler = new APIHandler();
             List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-            parameters.add(new BasicNameValuePair("trainee_id", trainee_id));
+            parameters.add(new BasicNameValuePair("trainee_id", trainee_id.trim()));
             parameters.add(new BasicNameValuePair("content", sentMessage));
             parameters.add(new BasicNameValuePair("outgoing", "true"));
-            JSONObject jsonObj = handler.sendAPIRequestWithAuth("/message/text", handler.POST, token, "", parameters);
+            JSONObject jsonObj = handler.sendAPIRequestWithAuth("message/text", handler.POST, token, "", parameters);
             try {
                 String wasSuccess = jsonObj.get("message").toString();
                 Log.w("sentResponse", jsonObj.toString());
@@ -171,8 +171,8 @@ public class MessageActivity extends ListActivity {
         protected Boolean doInBackground(Void... params) {
             APIHandler handler = new APIHandler();
             List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-            parameters.add(new BasicNameValuePair("trainee_id", trainee_id));
-            JSONObject jsonObj = handler.sendAPIRequestWithAuth("/trainer/messages?", handler.GET, token, "", parameters);
+            parameters.add(new BasicNameValuePair("trainee_id", trainee_id.trim()));
+            JSONObject jsonObj = handler.sendAPIRequestWithAuth("trainer/messages", handler.GET, token, "", parameters);
 
             Log.d("Response: ", ">>> " + jsonObj);
 
