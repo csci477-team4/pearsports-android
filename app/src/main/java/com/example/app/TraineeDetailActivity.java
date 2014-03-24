@@ -69,6 +69,7 @@ public class TraineeDetailActivity extends FragmentActivity {
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             SharedPreferences.Editor edit = pref.edit();
             edit.remove("token");
+            edit.remove("trainee_id");
             edit.apply();
 
             Intent i = new Intent(TraineeDetailActivity.this, LoginActivity.class);

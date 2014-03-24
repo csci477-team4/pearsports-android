@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Created by Shay on 2/17/14.
  */
-public class APIHandler {
+public final class APIHandler {
 
     static String response = null;
     public static final int POST = 456;
@@ -36,8 +36,8 @@ public class APIHandler {
      * @param method - APIHandler.GET or APIHandler.POST
      * @return
      */
-    public JSONObject sendAPIRequest(String path, int method) {
-        return this.sendAPIRequest(path, method, null);
+    public static JSONObject sendAPIRequest(String path, int method) {
+        return sendAPIRequest(path, method, null);
     }
 
     /**
@@ -47,7 +47,7 @@ public class APIHandler {
      * @param params - List of key-value pairs
      * @return
      */
-    public JSONObject sendAPIRequest(String path, int method,
+    public static JSONObject sendAPIRequest(String path, int method,
                                  List<NameValuePair> params) {
         JSONObject jsonObject = null;
         try {
@@ -108,7 +108,7 @@ public class APIHandler {
      * @param params - List of key-value pairs, other parameters
      * @return
      */
-    public JSONObject sendAPIRequestWithAuth(String path, int method,
+    public static JSONObject sendAPIRequestWithAuth(String path, int method,
            String key, String value, List<NameValuePair> params){
         JSONObject jsonObject = null;
         try {
@@ -169,7 +169,7 @@ public class APIHandler {
      * @param value - password. if blank, assumes key is token
      * @return
      */
-    public JSONObject sendAPIRequestWithAuth(String path, int method,
+    public static JSONObject sendAPIRequestWithAuth(String path, int method,
     String key, String value) {
         JSONObject jsonObject = null;
         try {

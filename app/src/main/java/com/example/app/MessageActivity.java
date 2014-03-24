@@ -127,6 +127,7 @@ public class MessageActivity extends ListActivity {
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             SharedPreferences.Editor edit = pref.edit();
             edit.remove("token");
+            edit.remove("trainee_id");
             edit.apply();
 
             Intent i = new Intent(MessageActivity.this, LoginActivity.class);
