@@ -37,7 +37,6 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:id="@+id/imageButton"
-            android:onClick="launchAudioActivity"
             android:layout_weight="1.02"
             android:background="@drawable/microphone_icon"/>
     </LinearLayout>
