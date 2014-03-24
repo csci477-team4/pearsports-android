@@ -19,5 +19,6 @@
     <string name="title_activity_difficulty">DifficultyActivity</string>
     <string name="title_activity_">ActivityActivity</string>
     <string name="title_activity_sport">SportActivity</string>
+    <string name="title_activity_record_audio">RecordAudioActivity</string>
 
 </resources>

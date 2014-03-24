@@ -67,6 +67,10 @@
             android:name="com.example.app.SportActivity"
             android:label="@string/title_activity_sport" >
         </activity>
+        <activity
+            android:name="com.example.app.RecordAudioActivity"
+            android:label="@string/title_activity_record_audio" >
+        </activity>
     </application>
 
 </manifest>
