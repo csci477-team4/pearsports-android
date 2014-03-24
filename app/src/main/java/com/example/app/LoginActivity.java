@@ -392,7 +392,6 @@ public class LoginActivity extends Activity {
                 edit.putString("token", mToken);
                 edit.apply();
 
-                Toast.makeText(LoginActivity.this, mToken, Toast.LENGTH_LONG).show();
                 Intent i = new Intent(LoginActivity.this, TraineeListActivity.class);
                 i.putExtra("token", mToken);
                 startActivity(i);
