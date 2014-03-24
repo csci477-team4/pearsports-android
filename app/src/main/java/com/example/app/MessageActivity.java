@@ -21,6 +21,7 @@ public class MessageActivity extends ListActivity {
     EditText text;
     static Random rand = new Random();
     static String sender;
+    private String trainee_id;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,7 +30,12 @@ public class MessageActivity extends ListActivity {
 
         text = (EditText) this.findViewById(R.id.text);
 
-        sender = "usc students";
+        Intent intent = getIntent();
+        trainee_id = intent.getStringExtra("trainee_id");
+        this.sender = intent.getStringExtra("name");
+
+
+        //sender = "usc students";
         this.setTitle(sender);
         messages = new ArrayList<Message>();
 
@@ -53,6 +59,13 @@ public class MessageActivity extends ListActivity {
             addNewMessage(new Message(newMessage, true));
             new SendMessage().execute();
         }
+    }
+
+    public void launchAudioActivity(){
+        Intent i = new Intent(this, RecordAudioActivity.class);
+        i.putExtra("trainee_id",trainee_id);
+        i.putExtra("name", sender);
+        startActivity(i);
     }
 
     private class SendMessage extends AsyncTask<Void, String, String> {

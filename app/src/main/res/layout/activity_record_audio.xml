@@ -26,4 +26,58 @@
         android:layout_marginRight="10dp"
         android:background="@color/pearsports" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Record"
+            android:id="@+id/Record"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="139dp"
+            android:layout_toLeftOf="@+id/Play" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stop"
+            android:id="@+id/Stop"
+            android:layout_alignTop="@+id/Record"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/Play" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Play"
+            android:id="@+id/Play"
+            android:layout_marginTop="73dp"
+            android:layout_below="@+id/Record"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send"
+            android:id="@+id/Send"
+            android:layout_alignBottom="@+id/fileName"
+            android:layout_alignRight="@+id/Stop"
+            android:layout_alignEnd="@+id/Stop" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fileName"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@+id/Send"
+            android:hint="Enter File Name" />
+    </RelativeLayout>
+
 </LinearLayout>

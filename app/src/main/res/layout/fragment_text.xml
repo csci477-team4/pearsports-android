@@ -9,14 +9,14 @@
         android:id="@+id/bottom_write_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" >
+        android:layout_alignParentBottom="true"
+        android:weightSum="1">
 
         <EditText
             android:id="@+id/text"
-            android:layout_width="fill_parent"
+            android:layout_width="230dp"
             android:layout_height="fill_parent"
             android:layout_margin="5sp"
-            android:layout_weight="1"
             android:hint="Write here"
             android:padding="5sp"
             android:textColor="@color/theme_dark" />
@@ -27,11 +27,19 @@
             android:layout_margin="5sp"
             android:onClick="sendMessage"
             android:paddingBottom="5sp"
-            android:paddingLeft="15sp"
+            android:paddingLeft="10sp"
             android:paddingRight="15sp"
             android:paddingTop="5sp"
             android:text="Send"
             android:textColor="@color/theme_dark" />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:id="@+id/imageButton"
+            android:onClick="launchAudioActivity"
+            android:layout_weight="1.02"
+            android:background="@drawable/microphone_icon"/>
     </LinearLayout>
 
     <ListView
