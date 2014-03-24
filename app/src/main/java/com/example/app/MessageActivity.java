@@ -1,5 +1,7 @@
 package com.example.app;
 
+import android.app.Activity;
+import android.app.LauncherActivity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,6 +23,7 @@ public class MessageActivity extends ListActivity {
     EditText text;
     static Random rand = new Random();
     static String sender;
+    private String trainee_id;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,7 +32,19 @@ public class MessageActivity extends ListActivity {
 
         text = (EditText) this.findViewById(R.id.text);
 
-        sender = "usc students";
+        Intent intent = getIntent();
+        trainee_id = intent.getStringExtra("trainee_id");
+        this.sender = intent.getStringExtra("name");
+
+        findViewById(R.id.imageButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchAudioActivity();
+            }
+        });
+
+
+        //sender = "usc students";
         this.setTitle(sender);
         messages = new ArrayList<Message>();
 
@@ -53,6 +68,13 @@ public class MessageActivity extends ListActivity {
             addNewMessage(new Message(newMessage, true));
             new SendMessage().execute();
         }
+    }
+
+    public void launchAudioActivity(){
+        Intent i = new Intent((Activity)this, RecordAudioActivity.class);
+        i.putExtra("trainee_id",trainee_id);
+        i.putExtra("name", sender);
+        startActivity(i);
     }
 
     private class SendMessage extends AsyncTask<Void, String, String> {

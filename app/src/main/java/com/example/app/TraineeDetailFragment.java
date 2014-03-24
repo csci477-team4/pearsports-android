@@ -92,11 +92,11 @@ public class TraineeDetailFragment extends Fragment {
         rootView.findViewById(R.id.detail_fragment_audio_activity_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Change SplashScreenActivity
-//                Intent i = new Intent(getActivity(), SplashScreenActivity.class);
-//                i.putExtra("trainee_id",mItem.id);
-//                i.putExtra("name", mItem.name);
-//                startActivity(i);
+                
+                Intent i = new Intent(getActivity(), RecordAudioActivity.class);
+                i.putExtra("trainee_id",mItem.id);
+                i.putExtra("name", mItem.name);
+                startActivity(i);
             }
         });
 

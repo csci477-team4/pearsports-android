@@ -3,6 +3,9 @@
     package="com.example.app" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -62,6 +65,10 @@
         <activity
             android:name="com.example.app.SportActivity"
             android:label="@string/title_activity_sport" >
+        </activity>
+        <activity
+            android:name="com.example.app.RecordAudioActivity"
+            android:label="@string/title_activity_record_audio" >
         </activity>
     </application>
 
