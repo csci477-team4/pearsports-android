@@ -24,8 +24,8 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
+            android:id="@+id/sendText"
             android:layout_margin="5sp"
-            android:onClick="sendMessage"
             android:paddingBottom="5sp"
             android:paddingLeft="10sp"
             android:paddingRight="15sp"

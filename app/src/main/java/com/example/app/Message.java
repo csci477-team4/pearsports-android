@@ -53,6 +53,4 @@ public class Message {
     public void setStatusMessage(boolean isStatusMessage) {
         this.isStatusMessage = isStatusMessage;
     }
-
-
 }
