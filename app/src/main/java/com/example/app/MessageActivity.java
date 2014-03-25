@@ -3,6 +3,7 @@ package com.example.app;
 import android.app.Activity;
 import android.app.LauncherActivity;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -17,6 +18,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import android.app.ListActivity;
 import android.widget.Toast;
 
@@ -34,7 +36,7 @@ public class MessageActivity extends ListActivity {
     ArrayList<Message> messages;
     private JSONArray jsonMessages = null;
     private MessageAdapter adapter;
-    private EditText text;
+    private EditText writtenText;
     private String sender;
     private String trainee_id;
     private String token;
@@ -50,7 +52,8 @@ public class MessageActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_text);
 
-        text = (EditText) this.findViewById(R.id.text);
+        writtenText = (EditText) this.findViewById(R.id.message_text);
+        sentMessage = new String();
 
         //Get trainer token from sharedpref
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -58,23 +61,9 @@ public class MessageActivity extends ListActivity {
 
         Intent intent = getIntent();
         trainee_id = intent.getStringExtra("trainee_id");
-        Log.w("Trainee_ID", trainee_id);
+        if (trainee_id != null)
+            Log.w("Trainee_ID", trainee_id);
         this.sender = intent.getStringExtra("name");
-
-        findViewById(R.id.sendText).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendMessage();
-            }
-        });
-
-        findViewById(R.id.imageButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                launchAudioActivity();
-            }
-        });
-
 
         //sender = "usc students";
         this.setTitle(sender);
@@ -95,11 +84,22 @@ public class MessageActivity extends ListActivity {
         new GetMessages().execute();
     }
 
-    public void sendMessage() {
-        sentMessage = text.getText().toString().trim();
+    public void sendMessage(View v) {
+        Context context = getApplicationContext();
+        CharSequence texty = "Hello toast!";
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(context, texty, duration);
+        toast.show();
+
+        sentMessage.concat(writtenText.getText().toString());
+
+        Log.w("Sent message became", sentMessage);
+        Log.w("edit text field was", writtenText.getText().toString());
+
         if (sentMessage.length() > 0) {
-            text.setText("");
-            addNewMessage(new Message(sentMessage, true));
+            writtenText.setText("");
+            addNewMessage(new Message(sentMessage, true), true);
             new SendTextMessageTask().execute();
         }
     }
@@ -110,9 +110,15 @@ public class MessageActivity extends ListActivity {
         //getListView().setSelection(messages.size() - 1);
     }
 
-    public void launchAudioActivity(){
-        Intent i = new Intent((Activity)this, RecordAudioActivity.class);
-        i.putExtra("trainee_id",trainee_id);
+    void addNewMessage(Message m, boolean t){
+        messages.add(m);
+        adapter.notifyDataSetChanged();
+        getListView().setSelection((messages.size() - 1));
+    }
+
+    public void launchAudioActivity(View v) {
+        Intent i = new Intent((Activity) this, RecordAudioActivity.class);
+        i.putExtra("trainee_id", trainee_id);
         i.putExtra("name", sender);
         startActivity(i);
     }
@@ -121,12 +127,14 @@ public class MessageActivity extends ListActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
+            Log.w("reached sendTask", sentMessage);
             APIHandler handler = new APIHandler();
             List<NameValuePair> parameters = new ArrayList<NameValuePair>();
             parameters.add(new BasicNameValuePair("trainee_id", trainee_id.trim()));
             parameters.add(new BasicNameValuePair("content", sentMessage));
             parameters.add(new BasicNameValuePair("outgoing", "true"));
             JSONObject jsonObj = handler.sendAPIRequestWithAuth("message/text", handler.POST, token, "", parameters);
+            sentMessage = new String();
             try {
                 String wasSuccess = jsonObj.get("message").toString();
                 Log.w("sentResponse", jsonObj.toString());
