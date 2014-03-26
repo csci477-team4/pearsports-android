@@ -214,8 +214,7 @@ public class MessageActivity extends ListActivity {
                 adapter.notifyDataSetChanged();
                 setListAdapter(adapter);
                 setContentView(R.layout.fragment_text);
-
-                setListAdapter(adapter);
+                getListView().setSelection(messages.size() - 1);
             }
         }
     }
