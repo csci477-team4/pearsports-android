@@ -165,7 +165,7 @@ public class TraineeListFragment extends ListFragment {
      * Manual refresh
      */
     public void refresh() {
-        TraineeContent.resetContent();
+        TraineeContent.resetTraineeContent();
         new GetTraineeList().execute(token);
         new GetStats().execute();
     }

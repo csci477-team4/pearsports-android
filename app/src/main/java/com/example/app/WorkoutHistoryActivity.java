@@ -76,6 +76,7 @@ public class WorkoutHistoryActivity extends Activity {
 
         // TODO: specify start/stop timestamp parameters for API call
         /* defaulting to 3/9/2014 (1394345840) to 3/22/2014 (1395469040) interval */
+        TraineeContent.resetTraineeContent();
          new GetWorkoutSchedule().execute((long)1394345840, (long)1395469040);
     }
 
