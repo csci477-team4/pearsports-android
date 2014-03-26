@@ -3,6 +3,7 @@ package com.example.app;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
@@ -13,9 +14,12 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,11 +31,15 @@ public class ScheduleWorkoutActivity extends Activity {
 
     private String token;
     private String traineeID;
+    protected String sku;
+    protected long epoch_start;
+    protected long epoch_end;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule_workout);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         token = preferences.getString("token",null);
@@ -39,7 +47,7 @@ public class ScheduleWorkoutActivity extends Activity {
 
         Bundle b = getIntent().getExtras();
         final String name = b.getString("name");  //name of workout
-        final String sku = b.getString("sku");    //sku ID of workout
+        sku = b.getString("sku");    //sku ID of workout
 
         ((TextView) findViewById(R.id.workout_name)).setText(name);
 
@@ -70,19 +78,12 @@ public class ScheduleWorkoutActivity extends Activity {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                long epoch_start = date.getTime();
-                long epoch_end = epoch_start + 1800000;
+                epoch_start = date.getTime();
+                epoch_end = epoch_start + 1800000;
                 //TODO: epoch_end assumes workout is 30min long, should get duration
 
                 // API Call to post workout
-                List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                parameters.add(new BasicNameValuePair("trainee_id", traineeID));
-                parameters.add(new BasicNameValuePair("sku", sku));
-                parameters.add(new BasicNameValuePair("start", String.valueOf(epoch_start)));
-                parameters.add(new BasicNameValuePair("end", String.valueOf(epoch_end)));
-
-                //JSONObject scheduleJSON = APIHandler.sendAPIRequestWithAuth("workout", APIHandler.POST, token, "", parameters);
+                new SendWorkout().execute();
 
                 // Switch back to trainee's workout history
                 Intent i = new Intent(ScheduleWorkoutActivity.this, WorkoutHistoryActivity.class);
@@ -132,6 +133,41 @@ public class ScheduleWorkoutActivity extends Activity {
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class SendWorkout extends AsyncTask<Long,Void,Boolean> {
+
+        protected Boolean doInBackground(Long... params) {
+            List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            parameters.add(new BasicNameValuePair("trainee_id", traineeID));
+            //parameters.add(new BasicNameValuePair("sku", sku));
+            parameters.add(new BasicNameValuePair("start", String.valueOf(epoch_end)));
+            //parameters.add(new BasicNameValuePair("end", String.valueOf(epoch_end)));
+
+            JSONObject scheduleJSON = APIHandler.sendAPIRequestWithAuth("workout" + "/" + sku, APIHandler.POST, token, "", parameters);
+
+            if (scheduleJSON != null) {
+                try {
+                    if(scheduleJSON.getString("object").equals("error"))
+                        return false;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return true;
+
+        }
+
+        protected void onPostExecute(final Boolean success) {
+
+            if (success)
+                Toast.makeText(ScheduleWorkoutActivity.this, "Workout successfully sent to trainee.", Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(ScheduleWorkoutActivity.this, "Unable to send workout to trainee.", Toast.LENGTH_LONG).show();
+
+        }
     }
 
 }

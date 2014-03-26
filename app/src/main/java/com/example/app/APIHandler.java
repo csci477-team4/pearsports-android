@@ -227,4 +227,49 @@ public final class APIHandler {
         return url.toString();
     }
 
+//    public static JSONObject sendWorkoutRequest(String urlPath, int method, String key, String value, File file,
+//                                                    String fileName, String traineeId) {
+//        try {
+//            DefaultHttpClient httpClient = new DefaultHttpClient();
+//            HttpParams httpParameters = httpClient.getParams();
+//            HttpConnectionParams.setConnectionTimeout(httpParameters, 5000);
+//            HttpConnectionParams.setSoTimeout(httpParameters, 10000);
+//            HttpEntity httpEntity = null;
+//            HttpResponse httpResponse = null;
+//            String url = buildURL(urlPath);
+//
+//            //Set Authentication
+//            HttpPost httpPost = new HttpPost(url);
+//            String base64EncodedCredentials = "Basic " + Base64.encodeToString((key + ":" + value).getBytes(), Base64.NO_WRAP);
+//            httpPost.setHeader("Authorization", base64EncodedCredentials);
+//
+//            List<NameValuePair> params = new ArrayList<NameValuePair>();
+//            params.add(new BasicNameValuePair("trainee_id", traineeId));
+//            httpPost.setEntity(new UrlEncodedFormEntity(params));
+//
+//            MultipartEntityBuilder multipartEntity = MultipartEntityBuilder.create();
+//            multipartEntity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+//            multipartEntity.addPart("content", new FileBody(file));
+//            multipartEntity.addTextBody("trainee_id",traineeId);
+//            httpPost.setEntity(multipartEntity.build());
+//            httpResponse = httpClient.execute(httpPost);
+//            httpEntity = httpResponse.getEntity();
+//            response = EntityUtils.toString(httpEntity);
+//            httpEntity = httpResponse.getEntity();
+//
+//            if (response != null) {
+//                return new JSONObject(response);
+//            } else{
+//                return null;
+//            }
+//        } catch (UnsupportedEncodingException e1) {
+//            e1.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return null;
+//    }
 }
