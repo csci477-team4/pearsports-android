@@ -8,10 +8,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-
-import com.example.app.trainee.TraineeContent;
 
 
 /**
@@ -64,62 +60,6 @@ public class TraineeListActivity extends FragmentActivity
 
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
-
-        ImageView pic1 = (ImageView) findViewById(R.id.image_trainee);
-        pic1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: this is hardcoded hax to store selected trainee. find a better way.
-                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor edit= pref.edit();
-                edit.putString("trainee_id", TraineeContent.TRAINEES.get(0).id);
-                edit.apply();
-                Intent i = new Intent(TraineeListActivity.this, WorkoutHistoryActivity.class);
-                startActivity(i);
-            }
-        });
-
-        ImageView pic2 = (ImageView) findViewById(R.id.image_trainee2);
-        pic2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: this is hardcoded hax to store selected trainee. find a better way.
-                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor edit= pref.edit();
-                edit.putString("trainee_id", TraineeContent.TRAINEES.get(1).id);
-                edit.apply();
-                Intent i = new Intent(TraineeListActivity.this, WorkoutHistoryActivity.class);
-                startActivity(i);
-            }
-        });
-
-        ImageView arrow1 = (ImageView) findViewById(R.id.right_arrow1);
-        arrow1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: this is hardcoded hax to store selected trainee. find a better way.
-                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor edit= pref.edit();
-                edit.putString("trainee_id", TraineeContent.TRAINEES.get(0).id);
-                edit.apply();
-                Intent i = new Intent(TraineeListActivity.this, MessageActivity.class);
-                startActivity(i);
-            }
-        });
-
-        ImageView arrow2 = (ImageView) findViewById(R.id.right_arrow2);
-        arrow2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: this is hardcoded hax to store selected trainee. find a better way.
-                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor edit= pref.edit();
-                edit.putString("trainee_id", TraineeContent.TRAINEES.get(1).id);
-                edit.apply();
-                Intent i = new Intent(TraineeListActivity.this, MessageActivity.class);
-                startActivity(i);
-            }
-        });
 
         // TODO: If exposing deep links into your app, handle intents here.
     }

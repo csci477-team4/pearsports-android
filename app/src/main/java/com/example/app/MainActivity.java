@@ -1,26 +1,48 @@
 package com.example.app;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.Toast;
 
-public class MainActivity extends Activity {
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends Activity implements OnItemClickListener {
+
+    public static final String[] names = new String[] { "John",
+            "Daniel", "Shay", "Marc" };
+
+    public static final Integer[] arrows = { R.drawable.right_arrow,
+            R.drawable.right_arrow, R.drawable.right_arrow, R.drawable.right_arrow };
+
+    public static final Integer[] trainees = { R.drawable.trainee_1,
+            R.drawable.trainee_2, R.drawable.trainee_3, R.drawable.trainee_4 };
+
+    ListView listView;
+    List<RowItem> rowItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
+        rowItems = new ArrayList<RowItem>();
+        for (int i = 0; i < names.length; i++) {
+            RowItem item = new RowItem(trainees[i], arrows[i], names[i]);
+            rowItems.add(item);
         }
+
+        listView = (ListView) findViewById(R.id.list);
+        CustomBaseAdapter adapter = new CustomBaseAdapter(this, rowItems);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(this);
     }
 
 
@@ -44,20 +66,13 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+                            long id) {
+        Toast toast = Toast.makeText(getApplicationContext(),
+                "Item " + (position + 1) + ": " + rowItems.get(position),
+                Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
+        toast.show();
     }
 
 }
