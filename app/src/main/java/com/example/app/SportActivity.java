@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +24,6 @@ public class SportActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sport);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         final String[] workouts = new String[] { "Endurance Ride 73min",
         "Pyramid Indoor Cycle",
@@ -131,10 +129,12 @@ public class SportActivity extends Activity {
 
         myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> av, View view, int i, long l) {
-                Toast.makeText(SportActivity.this, new StringBuilder().append(workouts[i]).append(": ").append(sku[i]).toString(), Toast.LENGTH_LONG).show();
-//                Intent intent = new Intent(SportActivity.this, ScheduleWorkoutActivity.class);
-//                startActivity(intent);
-//                finish();
+                //Toast.makeText(SportActivity.this, new StringBuilder().append(workouts[i]).append(": ").append(sku[i]).toString(), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(SportActivity.this, ScheduleWorkoutActivity.class);
+                intent.putExtra("name", workouts[i]);
+                intent.putExtra("sku", sku[i]);
+                startActivity(intent);
+                finish();
             }
         });
     }

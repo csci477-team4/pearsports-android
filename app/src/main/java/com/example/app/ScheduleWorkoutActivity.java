@@ -2,24 +2,90 @@ package com.example.app;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.TextView;
+import android.widget.TimePicker;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class ScheduleWorkoutActivity extends Activity {
+
+    private String token;
+    private String traineeID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule_workout);
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        token = preferences.getString("token",null);
+        traineeID = preferences.getString("trainee_id", null);
+
+        Bundle b = getIntent().getExtras();
+        final String name = b.getString("name");  //name of workout
+        final String sku = b.getString("sku");    //sku ID of workout
+
+        ((TextView) findViewById(R.id.workout_name)).setText(name);
+
+        final DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
+        final TimePicker timePicker = (TimePicker) findViewById(R.id.timePicker);
+        timePicker.setIs24HourView(true);
+
         Button pic1 = (Button) findViewById(R.id.schedule_workout);
         pic1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(ScheduleWorkoutActivity.this, TraineeListActivity.class);
+
+                // Retrieve date and time from pickers
+                int day   = datePicker.getDayOfMonth(); //date 1-31
+                int month = datePicker.getMonth() + 1;  //month 1-12
+                int year  = datePicker.getYear();       //YYYY
+
+                int hour = timePicker.getCurrentHour();
+                int min  = timePicker.getCurrentMinute();
+
+                // Time conversion to Epoch
+                String date_str = new StringBuilder().append(month).append(' ').append(day).append(' ').append(year).append(' ').append(hour).append(':').append(min).toString();
+
+                SimpleDateFormat df = new SimpleDateFormat("MM dd yyyy HH:mm");
+                Date date = null;
+                try {
+                    date = df.parse(date_str);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                long epoch_start = date.getTime();
+                long epoch_end = epoch_start + 1800000;
+                //TODO: epoch_end assumes workout is 30min long, should get duration
+
+                // API Call to post workout
+                List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                parameters.add(new BasicNameValuePair("trainee_id", traineeID));
+                parameters.add(new BasicNameValuePair("sku", sku));
+                parameters.add(new BasicNameValuePair("start", String.valueOf(epoch_start)));
+                parameters.add(new BasicNameValuePair("end", String.valueOf(epoch_end)));
+
+                //JSONObject scheduleJSON = APIHandler.sendAPIRequestWithAuth("workout", APIHandler.POST, token, "", parameters);
+
+                // Switch back to trainee's workout history
+                Intent i = new Intent(ScheduleWorkoutActivity.this, WorkoutHistoryActivity.class);
                 startActivity(i);
                 finish();
             }
@@ -43,6 +109,27 @@ public class ScheduleWorkoutActivity extends Activity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
+        }
+        if (id == android.R.id.home) {
+            // This ID represents the Home or Up button. In the case of this
+            // activity, the Up button is shown. Use NavUtils to allow users
+            // to navigate up one level in the application structure. For
+            // more details, see the Navigation pattern on Android Design:
+            //
+            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
+            //
+            NavUtils.navigateUpTo(this, new Intent(this, SportActivity.class));
+            return true;
+        }
+        if (id == R.id.action_logout) {
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor edit = pref.edit();
+            edit.remove("token");
+            edit.remove("trainee_id");
+            edit.apply();
+
+            Intent i = new Intent(ScheduleWorkoutActivity.this, LoginActivity.class);
+            startActivity(i);
         }
         return super.onOptionsItemSelected(item);
     }

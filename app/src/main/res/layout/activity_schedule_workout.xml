@@ -1,4 +1,4 @@
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,108 +8,96 @@
     android:background="@color/theme_medium"
     tools:context="com.example.app.ScheduleWorkoutActivity" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Workout"
-        android:paddingLeft="20dp"
-        android:fontFamily="Avenir"
-        android:textColor="@color/theme_dark"
-        android:shadowColor="@color/black"
-        android:textStyle="bold"
-        style="@style/title"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp">
 
-    <View
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="2dip"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/workout_name"
+            android:text="Workout"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:fontFamily="Avenir"
+            android:textColor="@color/theme_dark"
+            android:shadowColor="@color/black"
+            android:textStyle="bold"
+            style="@style/title"/>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dip"
+            android:id="@+id/horizontal"
+            android:background="@color/pearsports"
+            android:layout_alignBottom="@+id/workout_name"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please select a date:"
+            android:paddingLeft="20dp"
+            android:fontFamily="Avenir"
+            android:textColor="@color/theme_dark"
+            android:shadowColor="@color/black"
+            android:textStyle="bold"
+            style="@style/subsubtitle"
+            android:layout_marginTop="5dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <DatePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/datePicker"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="10dp"
-        android:background="@color/pearsports" />
+        android:layout_marginRight="20dp"
+        android:layout_gravity="center"/>
 
-    <TextView
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please select a time:"
+            android:paddingLeft="20dp"
+            android:fontFamily="Avenir"
+            android:textColor="@color/theme_dark"
+            android:shadowColor="@color/black"
+            android:textStyle="bold"
+            style="@style/subsubtitle"
+            android:layout_marginTop="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+    <TimePicker
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Full body circuit strength"
-        android:id="@+id/weight_text"
-        android:paddingLeft="20dp"
-        android:paddingTop="2dp"
-        android:paddingBottom="5dp"
-        android:fontFamily="Avenir"
-        android:textSize="20dp"
-        android:textColor="@color/white" />
+        android:id="@+id/timePicker"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="5dp"/>
 
-    <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
-    android:text="Notes"
-    android:paddingLeft="20dp"
-    android:fontFamily="Avenir"
-    android:textColor="@color/theme_dark"
-    android:shadowColor="@color/black"
-    android:textStyle="bold"
-    style="@style/title"/>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="2dip"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="10dp"
-        android:background="@color/pearsports" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Good luck, I know you'll love this one!"
-        android:id="@+id/weight_text"
-        android:paddingLeft="20dp"
-        android:paddingTop="2dp"
-        android:paddingBottom="5dp"
-        android:fontFamily="Avenir"
-        android:textSize="20dp"
-        android:textColor="@color/white" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Date"
-        android:paddingLeft="20dp"
-        android:fontFamily="Avenir"
-        android:textColor="@color/theme_dark"
-        android:shadowColor="@color/black"
-        android:textStyle="bold"
-        style="@style/title"/>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="2dip"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="10dp"
-        android:background="@color/pearsports" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Friday, February 28"
-        android:id="@+id/weight_text"
-        android:paddingLeft="20dp"
-        android:paddingTop="2dp"
-        android:paddingBottom="5dp"
-        android:layout_marginBottom="180dp"
-        android:fontFamily="Avenir"
-        android:textSize="20dp"
-        android:textColor="@color/white" />
+    </LinearLayout>
+    </ScrollView>
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
         android:id="@+id/schedule_workout"
-        android:clickable="true"
         android:text="Schedule Workout"
+        android:clickable="true"
         android:enabled="true"
         android:focusable="true"
         style="@style/blue_button"
         android:gravity="center|bottom" />
 
-</LinearLayout>
+
+</RelativeLayout>

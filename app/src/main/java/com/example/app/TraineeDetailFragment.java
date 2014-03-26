@@ -103,11 +103,10 @@ public class TraineeDetailFragment extends Fragment {
         rootView.findViewById(R.id.detail_fragment_workout_activity_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Change MainActivity
-//                Intent i = new Intent(getActivity(), MainActivity.class);
-//                i.putExtra("trainee_id",mItem.id);
-//                i.putExtra("name", mItem.name);
-//                startActivity(i);
+                Intent i = new Intent(getActivity(), SportActivity.class);
+                i.putExtra("trainee_id",mItem.id);
+                i.putExtra("name", mItem.name);
+                startActivity(i);
             }
         });
         return rootView;
