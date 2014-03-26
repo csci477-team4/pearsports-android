@@ -155,8 +155,10 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
                     rowItems.add(item);
                 }
 
-                listView = (ListView) findViewById(R.id.list);
+
                 CustomBaseAdapter adapter = new CustomBaseAdapter(TraineeListActivity.this, rowItems);
+
+                listView = (ListView) findViewById(R.id.list);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(TraineeListActivity.this);
             }

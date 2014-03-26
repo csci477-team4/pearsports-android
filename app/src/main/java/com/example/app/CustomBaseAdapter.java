@@ -6,16 +6,23 @@ package com.example.app;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.app.trainee.TraineeContent;
 
 import java.util.List;
 
-public class CustomBaseAdapter extends BaseAdapter {
+public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListener {
+
     Context context;
     List<RowItem> rowItems;
 
@@ -54,7 +61,48 @@ public class CustomBaseAdapter extends BaseAdapter {
         holder.imageArrow.setImageResource(rowItem.getRightArrow());
         holder.txtName.setText(rowItem.getTraineeName());
 
+        View v = convertView;
+
+        ImageView tp = (ImageView) v.findViewById(R.id.trainee_pic);
+        tp.setTag(new Integer(position));
+        tp.setOnClickListener(this);
+
+        TextView tn = (TextView) v.findViewById(R.id.trainee_name);
+        tn.setTag(new Integer(position));
+        tn.setOnClickListener(this);
+
+        ImageView ra = (ImageView) v.findViewById(R.id.right_arrow);
+        ra.setTag(new Integer(position));
+        ra.setOnClickListener(this);
+
         return convertView;
+    }
+
+    public void onClick(View v) {
+
+        Integer pos = (Integer) v.getTag();
+
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        SharedPreferences.Editor edit= pref.edit();
+        edit.putString("trainee_id", TraineeContent.TRAINEES.get(pos).id);
+        edit.apply();
+
+        switch (v.getId()) {
+            case R.id.trainee_pic:
+                Intent w = new Intent(context, WorkoutHistoryActivity.class);
+                v.getContext().startActivity(w);
+                break;
+            case R.id.trainee_name:
+                Intent t = new Intent(context, TraineeDetailActivity.class);
+                v.getContext().startActivity(t);
+                break;
+            case R.id.right_arrow:
+                Intent m = new Intent(context, MessageActivity.class);
+                v.getContext().startActivity(m);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
