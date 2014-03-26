@@ -3,6 +3,7 @@ package com.example.app;
 import android.app.Activity;
 import android.app.LauncherActivity;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -13,122 +14,135 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.app.ListActivity;
+import android.widget.Toast;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Random;
 
 public class MessageActivity extends ListActivity {
 
     ArrayList<Message> messages;
-    MessageAdapter adapter;
-    EditText text;
-    static Random rand = new Random();
-    static String sender;
+    private JSONArray jsonMessages = null;
+    private MessageAdapter adapter;
+    private EditText writtenText;
+    private String sender;
     private String trainee_id;
+    private String token;
+    private String sentMessage;
+
+    //JSON Keys
+    private static final String TAG_MESSAGE_LIST = "message_list";
+    private static final String TAG_OUTGOING = "outgoing";
+    private static final String TAG_CONTENT = "content";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_text);
 
-        text = (EditText) this.findViewById(R.id.text);
+        writtenText = (EditText) this.findViewById(R.id.message_text);
+        sentMessage = new String();
+
+        //Get trainer token from sharedpref
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        token = pref.getString("token", null);
 
         Intent intent = getIntent();
         trainee_id = intent.getStringExtra("trainee_id");
+        if (trainee_id != null)
+            Log.w("Trainee_ID", trainee_id);
         this.sender = intent.getStringExtra("name");
-
-        findViewById(R.id.imageButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                launchAudioActivity();
-            }
-        });
-
 
         //sender = "usc students";
         this.setTitle(sender);
         messages = new ArrayList<Message>();
 
-        messages.add(new Message("How was your workout yesterday?", true));
+        /*messages.add(new Message("How was your workout yesterday?", true));
         messages.add(new Message("It was really tough.", false));
         messages.add(new Message("You did a great job!", true));
         messages.add(new Message("You stayed in the zones pretty well.", true));
         messages.add(new Message("Yeah?", false));
-        messages.add(new Message("Absolutely!", true));
+        messages.add(new Message("Absolutely!", true));*/
 
 
         adapter = new MessageAdapter(this, messages);
         setListAdapter(adapter);
-        addNewMessage(new Message("What should I try tomorrow?", false));
+
+        /*addNewMessage(new Message("What should I try tomorrow?", false));*/
+        new GetMessages().execute();
     }
 
     public void sendMessage(View v) {
-        String newMessage = text.getText().toString().trim();
-        if (newMessage.length() > 0) {
-            text.setText("");
-            addNewMessage(new Message(newMessage, true));
-            new SendMessage().execute();
+        EditText tempText = (EditText) this.findViewById(R.id.message_text);
+        String temp = tempText.getText().toString();
+
+        sentMessage = sentMessage + (temp);
+
+        Log.w("Sent message became", sentMessage);
+        Log.w("edit text field was", writtenText.getText().toString());
+
+        if (sentMessage.length() > 0) {
+            writtenText.setText("");
+            tempText.setText("");
+            addNewMessage(new Message(sentMessage, true), true);
+            new SendTextMessageTask().execute();
         }
     }
 
-    public void launchAudioActivity(){
-        Intent i = new Intent((Activity)this, RecordAudioActivity.class);
-        i.putExtra("trainee_id",trainee_id);
+    void addNewMessage(Message m) {
+        messages.add(m);
+        //adapter.notifyDataSetChanged();
+        //getListView().setSelection(messages.size() - 1);
+    }
+
+    void addNewMessage(Message m, boolean t){
+        messages.add(m);
+        adapter.notifyDataSetChanged();
+        getListView().setSelection((messages.size() - 1));
+    }
+
+    public void launchAudioActivity(View v) {
+        Intent i = new Intent((Activity) this, RecordAudioActivity.class);
+        i.putExtra("trainee_id", trainee_id);
         i.putExtra("name", sender);
         startActivity(i);
     }
 
-    private class SendMessage extends AsyncTask<Void, String, String> {
-        @Override
-        protected String doInBackground(Void... params) {
-            try {
-                Thread.sleep(2000); //simulate a network call
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            this.publishProgress(String.format("%s started writing", sender));
-            try {
-                Thread.sleep(2000); //simulate a network call
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            this.publishProgress(String.format("%s has entered text", sender));
-            try {
-                Thread.sleep(3000);//simulate a network call
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-
-            return Utility.messages[rand.nextInt(Utility.messages.length - 1)];
-
-
-        }
+    public class SendTextMessageTask extends AsyncTask<Void, Void, Boolean> {
 
         @Override
-        public void onProgressUpdate(String... v) {
-
-            if (messages.get(messages.size() - 1).isStatusMessage)//check whether we have already added a status message
-            {
-                messages.get(messages.size() - 1).setMessage(v[0]); //update the status for that
-                adapter.notifyDataSetChanged();
-                getListView().setSelection(messages.size() - 1);
-            } else {
-                addNewMessage(new Message(true, v[0])); //add new message, if there is no existing status message
+        protected Boolean doInBackground(Void... params) {
+            Log.w("reached sendTask", sentMessage);
+            APIHandler handler = new APIHandler();
+            List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+            parameters.add(new BasicNameValuePair("trainee_id", trainee_id.trim()));
+            parameters.add(new BasicNameValuePair("content", sentMessage));
+            parameters.add(new BasicNameValuePair("outgoing", "true"));
+            JSONObject jsonObj = handler.sendAPIRequestWithAuth("message/text", handler.POST, token, "", parameters);
+            sentMessage = new String();
+            try {
+                String wasSuccess = jsonObj.get("message").toString();
+                Log.w("sentResponse", jsonObj.toString());
+                if (wasSuccess.contains("success")) {
+                    return true;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+            return false;
         }
-
-        @Override
-        protected void onPostExecute(String text) {
-            if (messages.get(messages.size() - 1).isStatusMessage)//check if there is any status message, now remove it.
-            {
-                messages.remove(messages.size() - 1);
-            }
-
-            addNewMessage(new Message(text, false)); // add the original message from server.
-        }
-
-
     }
 
     @Override
@@ -158,9 +172,51 @@ public class MessageActivity extends ListActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    void addNewMessage(Message m) {
-        messages.add(m);
-        adapter.notifyDataSetChanged();
-        getListView().setSelection(messages.size() - 1);
+    private class GetMessages extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            APIHandler handler = new APIHandler();
+            List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+            parameters.add(new BasicNameValuePair("trainee_id", trainee_id.trim()));
+            JSONObject jsonObj = handler.sendAPIRequestWithAuth("trainer/messages", handler.GET, token, "", parameters);
+
+            Log.d("Response: ", ">>> " + jsonObj);
+
+            if (jsonObj != null) {
+                try {
+                    jsonMessages = jsonObj.getJSONArray(TAG_MESSAGE_LIST);
+                    Log.w("incomingMessages", jsonMessages.toString());
+                    //Outgoing means trainer to trainee.
+                    for (int i = 0; i < jsonMessages.length(); i++) {
+                        JSONObject m = jsonMessages.getJSONObject(i);
+                        Log.w("IndividualMessages", m.toString());
+                        boolean wasSender = Boolean.valueOf(m.getString(TAG_OUTGOING));
+                        if (wasSender) {
+                            String text = m.getString(TAG_CONTENT);
+                            addNewMessage(new Message(text, true));
+                        } else {
+                            String text = m.getString(TAG_CONTENT);
+                            addNewMessage(new Message(text, false));
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return true;
+            } else {
+                Log.e("APIHandler", "No data from specified URL");
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (success) {
+                adapter.notifyDataSetChanged();
+                setListAdapter(adapter);
+                setContentView(R.layout.fragment_text);
+                getListView().setSelection(messages.size() - 1);
+            }
+        }
     }
 }
