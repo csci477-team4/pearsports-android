@@ -12,23 +12,25 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:id="@+id/trainee_pic"
-            android:src="@drawable/trainee_1" />
+            android:src="@drawable/trainee_1"
+            android:layout_marginBottom="10dp"/>
 
         <TextView
             android:layout_width="275dp"
             android:layout_height="40dp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
             android:id="@+id/trainee_name"
             android:text="Trainee"
             android:textColor="@color/white"
-            android:textSize="12dp"
+            android:textSize="25dp"
             android:fontFamily="Avenir" />
 
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:id="@+id/right_arrow"
-            android:src="@drawable/right_arrow" />
+            android:src="@drawable/right_arrow"
+            android:paddingBottom="10dp"/>
 
 </LinearLayout>

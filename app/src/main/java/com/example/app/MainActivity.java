@@ -1,7 +1,10 @@
 package com.example.app;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -61,7 +64,14 @@ public class MainActivity extends Activity implements OnItemClickListener {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_logout) {
-            return true;
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor edit = pref.edit();
+            edit.remove("token");
+            edit.remove("trainee_id");
+            edit.apply();
+
+            Intent i = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(i);
         }
         return super.onOptionsItemSelected(item);
     }
