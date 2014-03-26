@@ -129,6 +129,12 @@ public class TraineeListFragment extends ListFragment {
     public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
 
+        // Add the current trainee to trainee_id in shared preferences
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        SharedPreferences.Editor edit= pref.edit();
+        edit.putString("trainee_id", TraineeContent.TRAINEES.get(position).id);
+        edit.apply();
+
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
         mCallbacks.onItemSelected(TraineeContent.TRAINEES.get(position).id);
@@ -178,10 +184,9 @@ public class TraineeListFragment extends ListFragment {
     {
         @Override
         protected Boolean doInBackground(String... params) {
-            APIHandler handler = new APIHandler();
             //List<NameValuePair> parameters = new ArrayList<NameValuePair>();
             //parameters.add(new BasicNameValuePair(LoginActivity.EMAIL, LoginActivity.PASSWORD));
-            JSONObject jsonObj = handler.sendAPIRequestWithAuth("trainee_list", handler.GET, token, "");
+            JSONObject jsonObj = APIHandler.sendAPIRequestWithAuth("trainee_list", APIHandler.GET, token, "");
 
             //Log.d("Response: ", ">>> " + jsonObj);
 
@@ -201,6 +206,18 @@ public class TraineeListFragment extends ListFragment {
                         info.put("age",trainee_info.get("age").toString());
                         info.put("height",trainee_info.get("height").toString());
                         info.put("weight",trainee_info.get("weight").toString());
+
+                        // TODO: change this - hardcoded.
+                        if (trainee.name.equals("KR")) {
+                            info.put("image","drawable/trainee_1");
+                        } else if (trainee.name.equals("Jamie")) {
+                            info.put("image","drawable/trainee_2");
+                        } else if (trainee.name.equals("Joe R")) {
+                            info.put("image","drawable/trainee_3");
+                        } else if (trainee.name.equals("eric")) {
+                            info.put("image","drawable/trainee_4");
+                        }
+
 
                         TraineeContent.addItem(trainee);
                     }
@@ -232,10 +249,9 @@ public class TraineeListFragment extends ListFragment {
     {
         @Override
         protected Boolean doInBackground(Void... params) {
-            APIHandler handler = new APIHandler();
             List<NameValuePair> parameters = new ArrayList<NameValuePair>();
             parameters.add(new BasicNameValuePair("all","True"));
-            JSONObject statsJSON = handler.sendAPIRequestWithAuth("stats", handler.GET, token, "", parameters);
+            JSONObject statsJSON = APIHandler.sendAPIRequestWithAuth("stats", APIHandler.GET, token, "", parameters);
 
             //Log.d("Response: ", ">>> " + statsJSON);
 
@@ -246,14 +262,12 @@ public class TraineeListFragment extends ListFragment {
                     for (Iterator<String> keys = trainee_stats_list.keys(); keys.hasNext();) {
                         String id = keys.next(); // keys are the trainee_ids
                         trainee_stats = trainee_stats_list.getJSONObject(id); // map of trainee stats
-                        // TODO: parse stats....
                         TraineeContent.TraineeItem trainee = TraineeContent.TRAINEE_MAP.get(id);
                         HashMap<String,String> map = trainee.getStatsMap();
                         for(Iterator<String> iter = trainee_stats.keys(); iter.hasNext();) {
                             String statKey = iter.next();
                             map.put(statKey,trainee_stats.get(statKey).toString());
                         }
-                        trainee.printStats();
                     }
 
                 } catch (JSONException e) {
@@ -269,12 +283,12 @@ public class TraineeListFragment extends ListFragment {
         @Override
         protected void onPostExecute(final Boolean success) {
             if(success){
-                ArrayAdapter<TraineeContent.TraineeItem> adapter = new ArrayAdapter<TraineeContent.TraineeItem>(
-                        getActivity(),
-                        android.R.layout.simple_list_item_activated_1,
-                        android.R.id.text1,
-                        TraineeContent.TRAINEES);
-                setListAdapter(adapter);
+//                ArrayAdapter<TraineeContent.TraineeItem> adapter = new ArrayAdapter<TraineeContent.TraineeItem>(
+//                        getActivity(),
+//                        android.R.layout.simple_list_item_activated_1,
+//                        android.R.id.text1,
+//                        TraineeContent.TRAINEES);
+//                setListAdapter(adapter);
             }
         }
     }

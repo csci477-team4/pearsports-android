@@ -2,6 +2,7 @@ package com.example.app.trainee;
 
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,9 @@ import java.util.Map;
  * <p>
  * TODO: Replace all uses of this class before publishing your app.
  */
-public class TraineeContent {
+public class TraineeContent implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * An array of trainee IDs
@@ -37,7 +40,7 @@ public class TraineeContent {
     }
 
     /**
-     * A dummy item representing a piece of name.
+     * Trainee
      */
     public static class TraineeItem {
         public String id;
@@ -46,21 +49,26 @@ public class TraineeContent {
         private HashMap<String,String> traineeInfo;
         private Stats stats;
 
+        private ArrayList<Workout> workouts;
+        private HashMap<String,Workout> workoutMap;
+
         public TraineeItem(String id, String name) {
             this.id = id;
             this.name = name;
-
+            workoutMap = new HashMap<String, Workout>();
             traineeInfo = new HashMap<String, String>(8);
             traineeInfo.put("id", id);
             traineeInfo.put("name", name);
-            traineeInfo.put("email", null);
-            traineeInfo.put("dob", null);
-            traineeInfo.put("gender", null);
-            traineeInfo.put("age", null);
-            traineeInfo.put("height", null);
-            traineeInfo.put("weight", null);
+//            traineeInfo.put("email", null);
+//            traineeInfo.put("dob", null);
+//            traineeInfo.put("gender", null);
+//            traineeInfo.put("age", null);
+//            traineeInfo.put("height", null);
+//            traineeInfo.put("weight", null);
+//            traineeInfo.put("image",null); // image path
 
             stats = new Stats();
+            workouts = new ArrayList<Workout>();
         }
 
         @Override
@@ -76,6 +84,12 @@ public class TraineeContent {
             return stats.getStatsMap();
         }
 
+        public HashMap<String,Workout> getWorkoutMap() { return workoutMap; }
+
+        public ArrayList<Workout> getWorkouts() {
+            return workouts;
+        }
+
         public void printInfo() {
             Log.d("TRAINEE INFO: ", traineeInfo.toString());
         }
@@ -85,8 +99,7 @@ public class TraineeContent {
         }
 
         /**
-         * ...working on how to best store this... :(
-         *  Strings for now...
+         *
          */
         private class Stats {
 
@@ -94,15 +107,15 @@ public class TraineeContent {
 
             public Stats() {
                 statsMap = new HashMap<String, String>(9);
-                statsMap.put("distance",null);
-                statsMap.put("duration",null);
-                statsMap.put("calories",null);
-                statsMap.put("workout_count",null);
-                statsMap.put("distance_km",null);
-                statsMap.put("distance_mi",null);
-                statsMap.put("duration_formatted",null);
-                statsMap.put("object",null);
-                statsMap.put("object_md5",null);
+//                statsMap.put("distance",null);
+//                statsMap.put("duration",null);
+//                statsMap.put("calories",null);
+//                statsMap.put("workout_count",null);
+//                statsMap.put("distance_km",null);
+//                statsMap.put("distance_mi",null);
+//                statsMap.put("duration_formatted",null);
+//                statsMap.put("object",null);
+//                statsMap.put("object_md5",null);
             }
 
             public HashMap<String,String> getStatsMap() {
