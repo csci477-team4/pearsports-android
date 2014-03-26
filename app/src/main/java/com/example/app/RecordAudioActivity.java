@@ -1,11 +1,15 @@
 package com.example.app;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +17,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class RecordAudioActivity extends Activity {
@@ -71,8 +86,42 @@ public class RecordAudioActivity extends Activity {
         });
     }
 
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        if(mRecorder != null)
+        {
+            stopRecording();
+        }
+
+        if(mPlayer != null)
+        {
+            mPlayer.stop();
+        }
+
+        File outFile = new File(defaultOutFile);
+
+        if(!outFile.exists())
+        {
+            return;
+        }
+        else
+        {
+            outFile.delete();
+        }
+    }
+
 
     public void playRecording(){
+        File outFile = new File(defaultOutFile);
+
+        if(!outFile.exists())
+        {
+            Toast.makeText(RecordAudioActivity.this, "No Recording to Play", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         stopButton.setEnabled(false);
         recordButton.setEnabled(false);
 
@@ -121,12 +170,13 @@ public class RecordAudioActivity extends Activity {
     public void sendRecording(){
         fileName = fName.getText().toString().trim();
         fName.setText("");
-        //TODO: Send the recorded audio.
+        SendUploadRequestTask mUploadTask = new SendUploadRequestTask();
+        mUploadTask.execute((Void) null);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.record_audio, menu);
         return true;
@@ -144,4 +194,81 @@ public class RecordAudioActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    public class SendUploadRequestTask extends AsyncTask<Void, Void, Boolean> {
+        private boolean finalResponse;
+        private boolean fileNotFound = false;
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            if(mRecorder != null)
+            {
+                runOnUiThread(new Runnable(){
+                    @Override
+                    public void run(){
+                        stopRecording();
+                    }
+                });
+            }
+
+            File outFile = new File(defaultOutFile);
+
+            if(!outFile.exists())
+            {
+                fileNotFound = true;
+                return false;
+            }
+
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String traineeId = pref.getString("trainee_id","");
+            String key = pref.getString("token","");
+
+            runOnUiThread(new Runnable(){
+                @Override
+                public void run(){
+                    Toast.makeText(RecordAudioActivity.this, "Uploading Starting...", Toast.LENGTH_LONG).show();
+                }
+            });
+
+            JSONObject response = APIHandler.sendAudioUploadRequest("message/audio",key,"",outFile,fileName,traineeId);
+
+            if(response == null)
+            {
+                return false;
+            }
+            else {
+                String message = null;
+                try {
+                    message = response.getString("message");
+                } catch (JSONException e) {
+                    return false;
+                }
+
+                if(message.equals("upload successful"))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if(success)
+            {
+                Toast.makeText(RecordAudioActivity.this, "Successfully Uploaded Audio File", Toast.LENGTH_LONG).show();
+            }
+            else if(fileNotFound == true)
+            {
+                Toast.makeText(RecordAudioActivity.this, "No Audio Recording Found", Toast.LENGTH_LONG).show();
+            }
+            else
+            {
+                Toast.makeText(RecordAudioActivity.this, "Error Uploading Audio File", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {    }
+    }
 }
