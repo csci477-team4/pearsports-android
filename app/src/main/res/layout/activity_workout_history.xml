@@ -61,7 +61,7 @@
 
 
     <ScrollView
-        android:id="@+id/login_form"
+        android:id="@+id/workout_history_scroll"
         android:layout_width="match_parent"
         android:layout_height="320dp"
         android:layout_marginTop="115dp"

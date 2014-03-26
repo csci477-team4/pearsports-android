@@ -1,154 +1,70 @@
 package com.example.app;
 
-import android.app.ProgressDialog;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.app.trainee.TraineeContent;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-/**
- * An activity representing a list of Trainees. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link TraineeDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- * <p>
- * The activity makes heavy use of fragments. The list of items is a
- * {@link TraineeListFragment} and the item details
- * (if present) is a {@link TraineeDetailFragment}.
- * <p>
- * This activity also implements the required
- * {@link TraineeListFragment.Callbacks} interface
- * to listen for item selections.
- */
-public class TraineeListActivity extends FragmentActivity
-        implements TraineeListFragment.Callbacks {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
-    private boolean mTwoPane;
+public class TraineeListActivity extends Activity implements OnItemClickListener {
 
-    private ProgressDialog progressDialogue;
+    public static final String[] names = new String[] { "John",
+            "Daniel", "Shay", "Marc", "Vahe", "Tanya", "Poojan", "Garima" };
 
+    public static final Integer arrows = R.drawable.right_arrow;
+
+    public static final Integer[] trainees = { R.drawable.trainee_1,
+            R.drawable.trainee_2, R.drawable.trainee_3, R.drawable.trainee_4,
+            R.drawable.trainee_5, R.drawable.trainee_6, R.drawable.trainee_7,
+            R.drawable.trainee_8};
+
+    ListView listView;
+    List<RowItem> rowItems;
+
+    private JSONObject trainee_list = null;
+    private JSONObject trainee_info = null;
+    private JSONObject trainee_stats_list = null;
+    private JSONObject trainee_stats = null;
+    private List<TraineeContent.TraineeItem> listTrainees;
     private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trainee_list);
+        setContentView(R.layout.activity_main);
 
-        if (findViewById(R.id.trainee_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-large and
-            // res/values-sw600dp). If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-
-            // In two-pane mode, list items should be given the
-            // 'activated' state when touched.
-            ((TraineeListFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.trainee_list))
-                    .setActivateOnItemClick(true);
-        }
-
-        Intent intent = getIntent();
-        token = intent.getStringExtra("token");
-
-        ImageView pic1 = (ImageView) findViewById(R.id.image_trainee);
-        pic1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: this is hardcoded hax to store selected trainee. find a better way.
-                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor edit= pref.edit();
-                edit.putString("trainee_id", TraineeContent.TRAINEES.get(0).id);
-                edit.apply();
-                Intent i = new Intent(TraineeListActivity.this, WorkoutHistoryActivity.class);
-                startActivity(i);
-            }
-        });
-
-        ImageView pic2 = (ImageView) findViewById(R.id.image_trainee2);
-        pic2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: this is hardcoded hax to store selected trainee. find a better way.
-                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor edit= pref.edit();
-                edit.putString("trainee_id", TraineeContent.TRAINEES.get(1).id);
-                edit.apply();
-                Intent i = new Intent(TraineeListActivity.this, WorkoutHistoryActivity.class);
-                startActivity(i);
-            }
-        });
-
-        ImageView arrow1 = (ImageView) findViewById(R.id.right_arrow1);
-        arrow1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: this is hardcoded hax to store selected trainee. find a better way.
-                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor edit= pref.edit();
-                edit.putString("trainee_id", TraineeContent.TRAINEES.get(0).id);
-                edit.apply();
-                Intent i = new Intent(TraineeListActivity.this, MessageActivity.class);
-                startActivity(i);
-            }
-        });
-
-        ImageView arrow2 = (ImageView) findViewById(R.id.right_arrow2);
-        arrow2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: this is hardcoded hax to store selected trainee. find a better way.
-                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor edit= pref.edit();
-                edit.putString("trainee_id", TraineeContent.TRAINEES.get(1).id);
-                edit.apply();
-                Intent i = new Intent(TraineeListActivity.this, MessageActivity.class);
-                startActivity(i);
-            }
-        });
-
-        // TODO: If exposing deep links into your app, handle intents here.
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        token = preferences.getString("token",null);
+        listTrainees = TraineeContent.TRAINEES;
+        refresh();
     }
 
-    /**
-     * Callback method from {@link TraineeListFragment.Callbacks}
-     * indicating that the item with the given ID was selected.
-     */
-    @Override
-    public void onItemSelected(String id) {
-        if (mTwoPane) {
-            // In two-pane mode, show the detail view in this activity by
-            // adding or replacing the detail fragment using a
-            // fragment transaction.
-            Bundle arguments = new Bundle();
-            arguments.putString(TraineeDetailFragment.ARG_ITEM_ID, id);
-            TraineeDetailFragment fragment = new TraineeDetailFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.trainee_detail_container, fragment)
-                    .commit();
-
-        } else {
-            // In single-pane mode, simply start the detail activity
-            // for the selected item ID.
-            Intent detailIntent = new Intent(this, TraineeDetailActivity.class);
-            detailIntent.putExtra(TraineeDetailFragment.ARG_ITEM_ID, id);
-            startActivity(detailIntent);
-        }
+    public void refresh() {
+        TraineeContent.resetContent();
+        new GetTraineeList().execute(token);
+        new GetStats().execute();
     }
 
     @Override
@@ -177,4 +93,125 @@ public class TraineeListActivity extends FragmentActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private class GetTraineeList extends AsyncTask<String,Void,Boolean>
+    {
+        @Override
+        protected Boolean doInBackground(String... params) {
+            //List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+            //parameters.add(new BasicNameValuePair(LoginActivity.EMAIL, LoginActivity.PASSWORD));
+            JSONObject jsonObj = APIHandler.sendAPIRequestWithAuth("trainee_list", APIHandler.GET, token, "");
+
+            //Log.d("Response: ", ">>> " + jsonObj);
+
+            if (jsonObj != null) {
+                try {
+                    trainee_list = jsonObj.getJSONObject("trainee_list");
+
+                    for (Iterator<String> keys = trainee_list.keys(); keys.hasNext();) {
+                        String id = keys.next();
+                        trainee_info = trainee_list.getJSONObject(id); // map of trainee info
+                        TraineeContent.TraineeItem trainee = new TraineeContent.TraineeItem(id, trainee_info.get("screen_name").toString());
+
+                        HashMap<String,String> info = trainee.getInfoMap();
+                        info.put("email",trainee_info.get("email").toString());
+                        info.put("dob",trainee_info.get("dob").toString());
+                        info.put("gender",trainee_info.get("gender").toString());
+                        info.put("age",trainee_info.get("age").toString());
+                        info.put("height",trainee_info.get("height").toString());
+                        info.put("weight",trainee_info.get("weight").toString());
+
+                        // TODO: change this - hardcoded.
+                        if (trainee.name.equals("KR")) {
+                            info.put("image","drawable/trainee_1");
+                        } else if (trainee.name.equals("Jamie")) {
+                            info.put("image","drawable/trainee_2");
+                        } else if (trainee.name.equals("Joe R")) {
+                            info.put("image","drawable/trainee_3");
+                        } else if (trainee.name.equals("eric")) {
+                            info.put("image","drawable/trainee_4");
+                        }
+
+
+                        TraineeContent.addItem(trainee);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return true;
+            } else {
+                Log.e("APIHandler", "No data from specified URL");
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if(success) {
+                rowItems = new ArrayList<RowItem>();
+                for (int i = 0; i < listTrainees.size(); i++) {
+                    RowItem item = new RowItem(trainees[i], arrows, listTrainees.get(i).getInfoMap().get("name"));
+                    rowItems.add(item);
+                }
+
+
+                CustomBaseAdapter adapter = new CustomBaseAdapter(TraineeListActivity.this, rowItems);
+
+                listView = (ListView) findViewById(R.id.list);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(TraineeListActivity.this);
+            }
+        }
+    }
+
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+                            long id) {
+        Toast toast = Toast.makeText(getApplicationContext(),
+                listTrainees.get(position).getInfoMap().get("id"),
+                Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
+        toast.show();
+    }
+
+    private class GetStats extends AsyncTask<Void,Void,Boolean>
+    {
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+            parameters.add(new BasicNameValuePair("all","True"));
+            JSONObject statsJSON = APIHandler.sendAPIRequestWithAuth("stats", APIHandler.GET, token, "", parameters);
+
+            //Log.d("Response: ", ">>> " + statsJSON);
+
+            if (statsJSON != null) {
+                try {
+                    trainee_stats_list = statsJSON.getJSONObject("trainee_stats_list");
+
+                    for (Iterator<String> keys = trainee_stats_list.keys(); keys.hasNext();) {
+                        String id = keys.next(); // keys are the trainee_ids
+                        trainee_stats = trainee_stats_list.getJSONObject(id); // map of trainee stats
+                        TraineeContent.TraineeItem trainee = TraineeContent.TRAINEE_MAP.get(id);
+                        HashMap<String,String> map = trainee.getStatsMap();
+                        for(Iterator<String> iter = trainee_stats.keys(); iter.hasNext();) {
+                            String statKey = iter.next();
+                            map.put(statKey,trainee_stats.get(statKey).toString());
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return true;
+            } else {
+                Log.e("APIHandler", "No data from specified URL");
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+        }
+    }
+
 }

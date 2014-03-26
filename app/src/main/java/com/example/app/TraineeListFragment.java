@@ -1,15 +1,20 @@
 package com.example.app;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.app.trainee.TraineeContent;
 
@@ -33,6 +38,9 @@ import java.util.List;
  * interface.
  */
 public class TraineeListFragment extends ListFragment {
+
+    private List<TraineeContent.TraineeItem> listTrainees;
+    private String traineeID;
 
     /**
      * The serialization (saved instance state) Bundle key representing the
@@ -91,7 +99,10 @@ public class TraineeListFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         token = preferences.getString("token",null);
+        traineeID = preferences.getString("trainee_id", null);
         refresh();
+
+        listTrainees = TraineeContent.TRAINEES;
     }
 
     @Override
@@ -235,12 +246,33 @@ public class TraineeListFragment extends ListFragment {
         @Override
         protected void onPostExecute(final Boolean success) {
             if(success){
-                ArrayAdapter<TraineeContent.TraineeItem> adapter = new ArrayAdapter<TraineeContent.TraineeItem>(
-                        getActivity(),
-                        android.R.layout.simple_list_item_activated_1,
-                        android.R.id.text1,
-                        TraineeContent.TRAINEES);
-                setListAdapter(adapter);
+                ViewGroup parent = (ViewGroup) getActivity().findViewById(R.id.trainee_list_container);
+                for (TraineeContent.TraineeItem t : listTrainees) {
+                    traineeID = t.getInfoMap().get("id");
+                    View.OnClickListener traineeListener = new View.OnClickListener() {
+                        String id = traineeID;
+
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity().getBaseContext(), TraineeDetailActivity.class);
+                            intent.putExtra("trainee_id", id);
+                            startActivity(intent);
+                        }
+                    };
+                    View view = null;
+
+                    LayoutInflater inflater = (LayoutInflater) getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    view = inflater.inflate(R.layout.trainee_row, null);
+
+                    Drawable trainee = getActivity().getApplicationContext().getResources().getDrawable(R.drawable.trainee_1);
+
+                    ((TextView) view.findViewById(R.id.trainee_name)).setText(t.getInfoMap().get("name"));
+                    //((ImageView) view.findViewById(R.id.trainee_pic)).setImageDrawable(trainee);
+
+                    view.setOnClickListener(traineeListener);
+
+                    parent.addView(view);
+                }
             }
         }
     }
