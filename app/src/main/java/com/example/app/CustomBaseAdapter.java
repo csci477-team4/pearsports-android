@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.app.trainee.TraineeContent;
 
@@ -25,10 +24,12 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
 
     Context context;
     List<RowItem> rowItems;
+    SharedPreferences pref;
 
     public CustomBaseAdapter(Context context, List<RowItem> items) {
         this.context = context;
         this.rowItems = items;
+        this.pref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
     }
 
     /*private view holder class*/
@@ -82,8 +83,7 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
 
         Integer pos = (Integer) v.getTag();
 
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-        SharedPreferences.Editor edit= pref.edit();
+        SharedPreferences.Editor edit = pref.edit();
         edit.putString("trainee_id", TraineeContent.TRAINEES.get(pos).id);
         edit.apply();
 
