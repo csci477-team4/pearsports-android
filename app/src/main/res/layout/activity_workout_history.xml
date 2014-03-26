@@ -18,8 +18,8 @@
         android:paddingLeft="20dp">
 
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="92dp"
+            android:layout_height="match_parent"
             android:id="@+id/image_trainee"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
