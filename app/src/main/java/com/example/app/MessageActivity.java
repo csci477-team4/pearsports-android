@@ -85,20 +85,17 @@ public class MessageActivity extends ListActivity {
     }
 
     public void sendMessage(View v) {
-        Context context = getApplicationContext();
-        CharSequence texty = "Hello toast!";
-        int duration = Toast.LENGTH_SHORT;
+        EditText tempText = (EditText) this.findViewById(R.id.message_text);
+        String temp = tempText.getText().toString();
 
-        Toast toast = Toast.makeText(context, texty, duration);
-        toast.show();
-
-        sentMessage.concat(writtenText.getText().toString());
+        sentMessage = sentMessage + (temp);
 
         Log.w("Sent message became", sentMessage);
         Log.w("edit text field was", writtenText.getText().toString());
 
         if (sentMessage.length() > 0) {
             writtenText.setText("");
+            tempText.setText("");
             addNewMessage(new Message(sentMessage, true), true);
             new SendTextMessageTask().execute();
         }
