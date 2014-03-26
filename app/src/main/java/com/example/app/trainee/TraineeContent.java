@@ -34,9 +34,16 @@ public class TraineeContent implements Serializable {
     /**
      * Manual reset/clear
      */
-    public static void resetContent() {
+    public static void resetTraineeContent() {
         TRAINEE_MAP.clear();
         TRAINEES.clear();
+    }
+
+    public static void resetWorkoutContent() {
+        for (TraineeItem t : TRAINEES) {
+            t.getWorkoutMap().clear();
+            t.getWorkouts().clear();
+        }
     }
 
     /**
