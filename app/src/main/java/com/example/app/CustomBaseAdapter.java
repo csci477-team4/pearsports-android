@@ -91,16 +91,22 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
             case R.id.trainee_pic:
                 Intent w = new Intent(context, WorkoutHistoryActivity.class);
                 w.putExtra(TraineeDetailFragment.ARG_ITEM_ID, TraineeContent.TRAINEES.get(pos).id);
+                w.putExtra("trainee_id", TraineeContent.TRAINEES.get(pos).id);
+                w.putExtra("name", TraineeContent.TRAINEES.get(pos).name);
                 v.getContext().startActivity(w);
                 break;
             case R.id.trainee_name:
                 Intent t = new Intent(context, TraineeDetailActivity.class);
                 t.putExtra(TraineeDetailFragment.ARG_ITEM_ID, TraineeContent.TRAINEES.get(pos).id);
+                t.putExtra("trainee_id", TraineeContent.TRAINEES.get(pos).id);
+                t.putExtra("name", TraineeContent.TRAINEES.get(pos).name);
                 v.getContext().startActivity(t);
                 break;
             case R.id.right_arrow:
                 Intent m = new Intent(context, MessageActivity.class);
                 m.putExtra(TraineeDetailFragment.ARG_ITEM_ID, TraineeContent.TRAINEES.get(pos).id);
+                m.putExtra("trainee_id", TraineeContent.TRAINEES.get(pos).id);
+                m.putExtra("name", TraineeContent.TRAINEES.get(pos).name);
                 v.getContext().startActivity(m);
                 break;
             default:

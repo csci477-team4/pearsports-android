@@ -7,14 +7,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.app.trainee.TraineeContent;
 
@@ -167,11 +165,7 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
 
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
-        Toast toast = Toast.makeText(getApplicationContext(),
-                listTrainees.get(position).getInfoMap().get("id"),
-                Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
-        toast.show();
+        // Click listeners are in CustomBaseAdapter
     }
 
     private class GetStats extends AsyncTask<Void,Void,Boolean>

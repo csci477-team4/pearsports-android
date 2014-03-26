@@ -1,26 +1,17 @@
 package com.example.app;
 
 import android.app.Activity;
-import android.app.LauncherActivity;
 import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-
-import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import android.app.ListActivity;
-import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -29,7 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.List;
 
 public class MessageActivity extends ListActivity {
 
@@ -62,7 +53,7 @@ public class MessageActivity extends ListActivity {
         Intent intent = getIntent();
         trainee_id = intent.getStringExtra("trainee_id");
         if (trainee_id != null)
-            Log.w("Trainee_ID", trainee_id);
+            Log.d("Trainee_ID", trainee_id);
         this.sender = intent.getStringExtra("name");
 
         //sender = "usc students";
