@@ -62,7 +62,7 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
     }
 
     public void refresh() {
-        TraineeContent.resetContent();
+        TraineeContent.resetTraineeContent();
         new GetTraineeList().execute(token);
         new GetStats().execute();
     }
