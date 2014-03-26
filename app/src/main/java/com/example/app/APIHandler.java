@@ -10,15 +10,21 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,8 +53,7 @@ public final class APIHandler {
      * @param params - List of key-value pairs
      * @return
      */
-    public static JSONObject sendAPIRequest(String path, int method,
-                                 List<NameValuePair> params) {
+    public static JSONObject sendAPIRequest(String path, int method, List<NameValuePair> params) {
         JSONObject jsonObject = null;
         try {
             DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -108,8 +113,8 @@ public final class APIHandler {
      * @param params - List of key-value pairs, other parameters
      * @return
      */
-    public static JSONObject sendAPIRequestWithAuth(String path, int method,
-           String key, String value, List<NameValuePair> params){
+    public static JSONObject sendAPIRequestWithAuth(String path, int method, String key, String value, List<NameValuePair> params){
+
         JSONObject jsonObject = null;
         try {
             DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -169,8 +174,8 @@ public final class APIHandler {
      * @param value - password. if blank, assumes key is token
      * @return
      */
-    public static JSONObject sendAPIRequestWithAuth(String path, int method,
-    String key, String value) {
+    public static JSONObject sendAPIRequestWithAuth(String path, int method, String key, String value) {
+
         JSONObject jsonObject = null;
         try {
             DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -227,49 +232,49 @@ public final class APIHandler {
         return url.toString();
     }
 
-//    public static JSONObject sendWorkoutRequest(String urlPath, int method, String key, String value, File file,
-//                                                    String fileName, String traineeId) {
-//        try {
-//            DefaultHttpClient httpClient = new DefaultHttpClient();
-//            HttpParams httpParameters = httpClient.getParams();
-//            HttpConnectionParams.setConnectionTimeout(httpParameters, 5000);
-//            HttpConnectionParams.setSoTimeout(httpParameters, 10000);
-//            HttpEntity httpEntity = null;
-//            HttpResponse httpResponse = null;
-//            String url = buildURL(urlPath);
-//
-//            //Set Authentication
-//            HttpPost httpPost = new HttpPost(url);
-//            String base64EncodedCredentials = "Basic " + Base64.encodeToString((key + ":" + value).getBytes(), Base64.NO_WRAP);
-//            httpPost.setHeader("Authorization", base64EncodedCredentials);
-//
-//            List<NameValuePair> params = new ArrayList<NameValuePair>();
-//            params.add(new BasicNameValuePair("trainee_id", traineeId));
-//            httpPost.setEntity(new UrlEncodedFormEntity(params));
-//
-//            MultipartEntityBuilder multipartEntity = MultipartEntityBuilder.create();
-//            multipartEntity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-//            multipartEntity.addPart("content", new FileBody(file));
-//            multipartEntity.addTextBody("trainee_id",traineeId);
-//            httpPost.setEntity(multipartEntity.build());
-//            httpResponse = httpClient.execute(httpPost);
-//            httpEntity = httpResponse.getEntity();
-//            response = EntityUtils.toString(httpEntity);
-//            httpEntity = httpResponse.getEntity();
-//
-//            if (response != null) {
-//                return new JSONObject(response);
-//            } else{
-//                return null;
-//            }
-//        } catch (UnsupportedEncodingException e1) {
-//            e1.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return null;
-//    }
+    public static JSONObject sendAudioUploadRequest(String urlPath, String key, String value, File file,
+                                                    String fileName, String traineeId) {
+        try {
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            HttpParams httpParameters = httpClient.getParams();
+            HttpConnectionParams.setConnectionTimeout(httpParameters, 5000);
+            HttpConnectionParams.setSoTimeout(httpParameters, 10000);
+            HttpEntity httpEntity = null;
+            HttpResponse httpResponse = null;
+            String url = buildURL(urlPath);
+
+            //Set Authentication
+            HttpPost httpPost = new HttpPost(url);
+            String base64EncodedCredentials = "Basic " + Base64.encodeToString((key + ":" + value).getBytes(), Base64.NO_WRAP);
+            httpPost.setHeader("Authorization", base64EncodedCredentials);
+
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("trainee_id", traineeId));
+            httpPost.setEntity(new UrlEncodedFormEntity(params));
+
+            MultipartEntityBuilder multipartEntity = MultipartEntityBuilder.create();
+            multipartEntity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+            multipartEntity.addPart("content", new FileBody(file));
+            multipartEntity.addTextBody("trainee_id",traineeId);
+            httpPost.setEntity(multipartEntity.build());
+            httpResponse = httpClient.execute(httpPost);
+            httpEntity = httpResponse.getEntity();
+            response = EntityUtils.toString(httpEntity);
+            httpEntity = httpResponse.getEntity();
+
+            if (response != null) {
+                return new JSONObject(response);
+            } else{
+                return null;
+            }
+        } catch (UnsupportedEncodingException e1) {
+            e1.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

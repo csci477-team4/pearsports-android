@@ -13,7 +13,7 @@
         android:weightSum="1">
 
         <EditText
-            android:id="@+id/text"
+            android:id="@+id/message_text"
             android:layout_width="230dp"
             android:layout_height="fill_parent"
             android:layout_margin="5sp"
@@ -24,13 +24,14 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
+            android:id="@+id/sendText"
             android:layout_margin="5sp"
-            android:onClick="sendMessage"
             android:paddingBottom="5sp"
             android:paddingLeft="10sp"
             android:paddingRight="15sp"
             android:paddingTop="5sp"
             android:text="Send"
+            android:onClick="sendMessage"
             android:textColor="@color/theme_dark" />
 
         <ImageButton
@@ -38,7 +39,8 @@
             android:layout_height="50dp"
             android:id="@+id/imageButton"
             android:layout_weight="1.02"
-            android:background="@drawable/microphone_icon"/>
+            android:background="@drawable/microphone_icon"
+            android:onClick="launchAudioActivity"/>
     </LinearLayout>
 
     <ListView

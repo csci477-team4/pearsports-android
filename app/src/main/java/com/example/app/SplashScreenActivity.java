@@ -38,7 +38,7 @@ public class SplashScreenActivity extends Activity {
         handlerTimer.postDelayed(new Runnable(){
             public void run() {
                 startMyActivity();
-            }}, 10000);
+            }}, 100);
     }
 
     public void startMyActivity()

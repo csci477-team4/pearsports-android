@@ -86,7 +86,7 @@ public class ScheduleWorkoutActivity extends Activity {
                 new SendWorkout().execute();
 
                 // Switch back to trainee's workout history
-                Intent i = new Intent(ScheduleWorkoutActivity.this, WorkoutHistoryActivity.class);
+                Intent i = new Intent(ScheduleWorkoutActivity.this, TraineeListActivity.class);
                 startActivity(i);
                 finish();
             }
