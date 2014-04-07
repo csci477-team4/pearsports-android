@@ -5,6 +5,7 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.rtp.AudioStream;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -37,6 +38,8 @@ public class MessageActivity extends ListActivity {
     private String token;
     private String sentMessage;
     public ListView messageList;
+    private boolean boolAudioPlaying;
+    private Intent streamIntent;
 
     //JSON Keys
     private static final String TAG_MESSAGE_LIST = "message_list";
@@ -48,6 +51,7 @@ public class MessageActivity extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_text);
+        streamIntent = new Intent(this, AudioStreamService.class);
 
         writtenText = (EditText) this.findViewById(R.id.message_text);
         sentMessage = new String();
@@ -89,11 +93,49 @@ public class MessageActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Log.w("Row Clicked", "row: " + position);
-        Log.w("Row Clicked", "message" + messages.get(position).message);
         if (messages.get(position).isAudio) {
             Log.w("Audio Clicked", "Audio" + position);
+            audioPlayStopClick(position);
         }
     }
+
+    private void audioPlayStopClick(int linkPosition) {
+        Log.w("Audio Clicked", "Audio" + linkPosition);
+        if (!boolAudioPlaying) {
+            //buttonPlayStop.setBackgroundResource(R.drawable.pausebuttonsm);
+            playAudio(linkPosition);
+            boolAudioPlaying = true;
+        } else {
+            if (boolAudioPlaying) {
+                //buttonPlayStop.setBackgroundResource(R.drawable.playbuttonsm);
+                stopMyPlayService();
+                boolAudioPlaying = false;
+            }
+        }
+    }
+
+    private void stopMyPlayService() {
+        try {
+            Log.w("Audio Clicked", "Stopping Audio");
+            stopService(streamIntent);
+        }catch(Exception e){
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), e.getClass().getName() + " " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void playAudio(int linkPosition) {
+        Log.w("Audio Clicked", "Attempt to play" + linkPosition);
+        streamIntent.putExtra("audio_url", messages.get(linkPosition).message.trim());
+        try {
+            startService(streamIntent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), e.getClass().getName() + " " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+    }
+
 
     public void sendMessage(View v) {
         EditText tempText = (EditText) this.findViewById(R.id.message_text);
