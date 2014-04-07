@@ -2,6 +2,7 @@ package com.example.app;
 
 import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -11,7 +12,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -32,11 +36,13 @@ public class MessageActivity extends ListActivity {
     private String trainee_id;
     private String token;
     private String sentMessage;
+    public ListView messageList;
 
     //JSON Keys
     private static final String TAG_MESSAGE_LIST = "message_list";
     private static final String TAG_OUTGOING = "outgoing";
     private static final String TAG_CONTENT = "content";
+    private static final String TAG_TYPE = "message_type";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +66,8 @@ public class MessageActivity extends ListActivity {
         this.setTitle(sender);
         messages = new ArrayList<Message>();
 
+        messageList = getListView();
+
         /*messages.add(new Message("How was your workout yesterday?", true));
         messages.add(new Message("It was really tough.", false));
         messages.add(new Message("You did a great job!", true));
@@ -67,12 +75,24 @@ public class MessageActivity extends ListActivity {
         messages.add(new Message("Yeah?", false));
         messages.add(new Message("Absolutely!", true));*/
 
-
         adapter = new MessageAdapter(this, messages);
         setListAdapter(adapter);
 
         /*addNewMessage(new Message("What should I try tomorrow?", false));*/
         new GetMessages().execute();
+    }
+
+    public int getItemPosition(View v) {
+        return messageList.getPositionForView(v);
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        Log.w("Row Clicked", "row: " + position);
+        Log.w("Row Clicked", "message" + messages.get(position).message);
+        if (messages.get(position).isAudio) {
+            Log.w("Audio Clicked", "Audio" + position);
+        }
     }
 
     public void sendMessage(View v) {
@@ -98,7 +118,7 @@ public class MessageActivity extends ListActivity {
         //getListView().setSelection(messages.size() - 1);
     }
 
-    void addNewMessage(Message m, boolean t){
+    void addNewMessage(Message m, boolean t) {
         messages.add(m);
         adapter.notifyDataSetChanged();
         getListView().setSelection((messages.size() - 1));
@@ -182,12 +202,17 @@ public class MessageActivity extends ListActivity {
                         JSONObject m = jsonMessages.getJSONObject(i);
                         Log.w("IndividualMessages", m.toString());
                         boolean wasSender = Boolean.valueOf(m.getString(TAG_OUTGOING));
+                        String messageType = m.getString(TAG_TYPE);
                         if (wasSender) {
                             String text = m.getString(TAG_CONTENT);
-                            addNewMessage(new Message(text, true));
+                            Message addM = new Message(text, true);
+                            addM.setType(messageType);
+                            addNewMessage(addM);
                         } else {
                             String text = m.getString(TAG_CONTENT);
-                            addNewMessage(new Message(text, false));
+                            Message addM = new Message(text, false);
+                            addM.setType(messageType);
+                            addNewMessage(addM);
                         }
                     }
                 } catch (JSONException e) {

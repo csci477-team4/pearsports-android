@@ -14,6 +14,8 @@ public class Message {
      * it reflects the changes/updates about the sender is writing, have entered text etc
      */
     boolean isStatusMessage;
+    boolean isAudio;
+    boolean isText;
 
     /**
      * Constructor to make a Message object
@@ -34,6 +36,17 @@ public class Message {
         this.message = message;
         this.isMine = false;
         this.isStatusMessage = status;
+        this.isAudio = false;
+        this.isText = false;
+    }
+
+    public void setType(String type){
+        if(type.equals("audio")){
+            isAudio = true;
+        }
+        if(type.equals("text")){
+            isText = true;
+        }
     }
     public String getMessage() {
         return message;
