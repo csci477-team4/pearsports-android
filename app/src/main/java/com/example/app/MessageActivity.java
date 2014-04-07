@@ -129,6 +129,7 @@ public class MessageActivity extends ListActivity {
         streamIntent.putExtra("audio_url", messages.get(linkPosition).message.trim());
         try {
             startService(streamIntent);
+            Log.w("Audio Clicked", "Started Service");
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), e.getClass().getName() + " " + e.getMessage(), Toast.LENGTH_LONG).show();

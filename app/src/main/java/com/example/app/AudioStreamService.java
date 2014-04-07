@@ -1,6 +1,8 @@
 package com.example.app;
 
 import java.io.IOException;
+import java.net.URI;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -16,6 +18,7 @@ import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnInfoListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaPlayer.OnSeekCompleteListener;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
@@ -41,6 +44,7 @@ public class AudioStreamService extends Service implements OnCompletionListener,
         mediaPlayer.setOnSeekCompleteListener(this);
         mediaPlayer.setOnInfoListener(this);
         mediaPlayer.reset();
+
     }
 
 

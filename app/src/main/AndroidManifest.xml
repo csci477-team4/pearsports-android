@@ -70,6 +70,7 @@
             android:name="com.example.app.RecordAudioActivity"
             android:label="@string/title_activity_record_audio" >
         </activity>
+        <service android:name=".AudioStreamService"/>
     </application>
 
 </manifest>
