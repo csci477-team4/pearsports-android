@@ -24,9 +24,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class MessageActivity extends ListActivity {
 
@@ -248,19 +252,22 @@ public class MessageActivity extends ListActivity {
                         Log.w("IndividualMessages", m.toString());
                         boolean wasSender = Boolean.valueOf(m.getString(TAG_OUTGOING));
                         String ts = m.getString(TAG_TIMESTAMP);
-                        Date timestamp = new Date(Long.parseLong(ts));
+                        Date timestamp = new Date(1000 * Long.parseLong(ts));
+                        SimpleDateFormat df = new SimpleDateFormat("EEE, d MMM yyyy hh:mm:ss");
+                        df.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+                        String formattedDate = df.format(timestamp);
                         String messageType = m.getString(TAG_TYPE);
                         if (wasSender) {
                             String text = m.getString(TAG_CONTENT);
                             Message addM = new Message(text, true);
                             addM.setType(messageType);
-                            addM.setTimestamp(timestamp.toString());
+                            addM.setTimestamp(formattedDate.toString());
                             addNewMessage(addM);
                         } else {
                             String text = m.getString(TAG_CONTENT);
                             Message addM = new Message(text, false);
                             addM.setType(messageType);
-                            addM.setTimestamp(timestamp.toString());
+                            addM.setTimestamp(formattedDate.toString());
                             addNewMessage(addM);
                         }
                     }
