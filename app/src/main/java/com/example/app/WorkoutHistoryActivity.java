@@ -241,6 +241,8 @@ public class WorkoutHistoryActivity extends Activity {
 
                         ((TextView) view.findViewById(R.id.workout_completed_name)).setText(w.getWorkoutMap().get("title"));
                         ((TextView) view.findViewById(R.id.workout_completed_activity_type)).setText(w.getWorkoutMap().get("activity_type"));
+                        ((TextView) view.findViewById(R.id.workout_completed_summary_grade)).setText("Grade: " + w.getWorkoutMap().get("grade"));
+                        ((TextView) view.findViewById(R.id.workout_completed_summary_hr)).setText("Avg HR: " + w.getWorkoutMap().get("avg_hr"));
 
                         view.setOnClickListener(workoutListener);
 

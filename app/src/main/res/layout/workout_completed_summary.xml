@@ -43,11 +43,41 @@
             android:gravity="left"
             android:textColor="@color/white"
             android:fontFamily="Avenir"/>
-        <ImageView
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="50dp"
-            android:id="@+id/workout_completed_hr_map"
-            android:src="@drawable/hiking_history"
-            android:layout_gravity="left" />
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="160dp"
+                android:layout_height="fill_parent"
+                android:id="@+id/workout_completed_hr_map"
+                android:src="@drawable/hiking_history"
+                android:layout_gravity="left" />
+            <LinearLayout
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/workout_completed_summary_grade"
+                    android:text="Grade: 53"
+                    android:fontFamily="Avenir"
+                    android:textSize="12dp"
+                    android:gravity="left"
+                    android:textColor="@color/white"
+                    />
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/workout_completed_summary_hr"
+                    android:text="Avg HR: 159"
+                    android:fontFamily="Avenir"
+                    android:textSize="12dp"
+                    android:gravity="left"
+                    android:textColor="@color/white"
+                    />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
