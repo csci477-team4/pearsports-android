@@ -5,6 +5,8 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.rtp.AudioStream;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -45,6 +47,7 @@ public class MessageActivity extends ListActivity {
     public ListView messageList;
     private boolean boolAudioPlaying;
     private Intent streamIntent;
+    private long lastPulledTimestamp;
 
     //JSON Keys
     private static final String TAG_MESSAGE_LIST = "message_list";
@@ -89,7 +92,59 @@ public class MessageActivity extends ListActivity {
         setListAdapter(adapter);
 
         /*addNewMessage(new Message("What should I try tomorrow?", false));*/
-        new GetMessages().execute();
+        //Invalidate the cache if our data is too old.
+        if(System.currentTimeMillis() - lastPulledTimestamp > 20000 && isOnline())
+            jsonMessages = null;
+        if(jsonMessages==null) {
+            lastPulledTimestamp = System.currentTimeMillis();
+            new GetMessages().execute();
+        }
+        else{
+            parseMessagesFromCache();
+        }
+    }
+
+    public void parseMessagesFromCache() {
+        try {
+            //Outgoing means trainer to trainee.
+            for (int i = 0; i < jsonMessages.length(); i++) {
+                JSONObject m = jsonMessages.getJSONObject(i);
+                Log.w("IndividualMessages", m.toString());
+                boolean wasSender = Boolean.valueOf(m.getString(TAG_OUTGOING));
+                String ts = m.getString(TAG_TIMESTAMP);
+                SimpleDateFormat df = new SimpleDateFormat("EEE, d MMM yyyy hh:mm:ss");
+                df.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+                String formattedDate = df.format(new Date(1000 * Long.parseLong(ts)));
+                String messageType = m.getString(TAG_TYPE);
+                if (wasSender) {
+                    String text = m.getString(TAG_CONTENT);
+                    Message addM = new Message(text, true);
+                    addM.setType(messageType);
+                    addM.setTimestamp(formattedDate.toString());
+                    addNewMessage(addM);
+                } else {
+                    String text = m.getString(TAG_CONTENT);
+                    Message addM = new Message(text, false);
+                    addM.setType(messageType);
+                    addM.setTimestamp(formattedDate.toString());
+                    addNewMessage(addM);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        adapter.notifyDataSetChanged();
+        getListView().setSelection((messages.size() - 1));
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
     }
 
     public int getItemPosition(View v) {
