@@ -83,7 +83,6 @@ public class WorkoutHistoryActivity extends Activity {
 
         // TODO: specify start/stop timestamp parameters for API call
         /* defaulting to 3/9/2014 (1394345840) to 3/22/2014 (1395469040) interval */
-        //TraineeContent.resetTraineeContent();
         new GetWorkoutSchedule().execute((long)1394345840, (long)1395469040);
     }
 
@@ -155,76 +154,112 @@ public class WorkoutHistoryActivity extends Activity {
 
                     // incomplete workouts
                     for (int i = 0; i < workoutsCount; i++) {
-                        Workout workout = new Workout();
-                        HashMap<String,String> workoutMap = workout.getWorkoutMap();
                         JSONObject workoutJSON = workoutArray.getJSONObject(i);
 
-                        workoutMap.put("id", workoutJSON.getString("id"));
-                        workoutMap.put("title", workoutJSON.getString("title"));
-                        workoutMap.put("activity_type", workoutJSON.getString("activity_type"));
-                        workoutMap.put("description_short", workoutJSON.getString("description_short"));
-                        workoutMap.put("duration", workoutJSON.getString("duration"));
-                        workoutMap.put("avg_hr", null);
-                        workoutMap.put("calories", "0");
-                        workoutMap.put("distance", workoutJSON.getString("distance"));
-                        //workoutMap.put("scheduled_at", workoutJSON.getString("scheduled_at"));
-                        workoutMap.put("status", workoutJSON.getString("status"));
+                        // If key not in map, add it
+                        if (!mItem.getWorkoutMap().containsKey(workoutJSON.getString("id"))) {
+                            Workout workout = new Workout();
+                            HashMap<String,String> workoutMap = workout.getWorkoutMap();
 
-                        // parse scheduled_at time to readable string
-                        String scheduled_at = workoutJSON.getString("scheduled_at");
-                        String scheduled_at_parsed = ISOToString(scheduled_at);
-                        workoutMap.put("scheduled_at", scheduled_at_parsed);
+                            workoutMap.put("id", workoutJSON.getString("id"));
+                            workoutMap.put("title", workoutJSON.getString("title"));
+                            workoutMap.put("activity_type", workoutJSON.getString("activity_type"));
+                            workoutMap.put("description_short", workoutJSON.getString("description_short"));
+                            workoutMap.put("duration", workoutJSON.getString("duration"));
+                            workoutMap.put("avg_hr", null);
+                            workoutMap.put("calories", "0");
+                            workoutMap.put("distance", workoutJSON.getString("distance"));
+                            workoutMap.put("status", workoutJSON.getString("status"));
 
-//                        for (Iterator<String> keys = workoutJSON.keys(); keys.hasNext();) {
-//                            String key = keys.next();
-//                            workoutMap.put(key, workoutJSON.getString(key));
-//                        }
-                        mItem.getWorkouts().add(workout);
-                        mItem.getWorkoutMap().put(workout.getWorkoutMap().get("id"), workout);
-                        //workout.printWorkout();
+                            // parse scheduled_at time to readable string
+                            String scheduled_at = workoutJSON.getString("scheduled_at");
+                            String scheduled_at_parsed = ISOToString(scheduled_at);
+                            workoutMap.put("scheduled_at", scheduled_at_parsed);
+
+                            mItem.getWorkouts().add(workout);
+                            mItem.getWorkoutMap().put(workout.getWorkoutMap().get("id"), workout);
+
+                        } else { // find the workout and update it
+
+                            Workout workout = mItem.getWorkoutMap().get(workoutJSON.getString("id"));
+                            HashMap<String,String> workoutMap = workout.getWorkoutMap();
+
+                            workoutMap.put("id", workoutJSON.getString("id"));
+                            workoutMap.put("title", workoutJSON.getString("title"));
+                            workoutMap.put("activity_type", workoutJSON.getString("activity_type"));
+                            workoutMap.put("description_short", workoutJSON.getString("description_short"));
+                            workoutMap.put("duration", workoutJSON.getString("duration"));
+                            workoutMap.put("avg_hr", null);
+                            workoutMap.put("calories", "0");
+                            workoutMap.put("distance", workoutJSON.getString("distance"));
+                            workoutMap.put("status", workoutJSON.getString("status"));
+
+                            // parse scheduled_at time to readable string
+                            String scheduled_at = workoutJSON.getString("scheduled_at");
+                            String scheduled_at_parsed = ISOToString(scheduled_at);
+                            workoutMap.put("scheduled_at", scheduled_at_parsed);
+                        }
                     }
 
                     // completed workouts
                     for (int i = 0; i < resultsCount; i++) {
-                        Workout workout = new Workout();
-                        HashMap<String,String> workoutMap = workout.getWorkoutMap();
 //                        HashMap<String,String> resultMap = workout.getResult().getResultMap();
                         JSONObject resultJSON = resultArray.getJSONObject(i);
                         JSONObject workoutJSON = resultJSON.getJSONObject("workout");
 
-                        workoutMap.put("id", workoutJSON.getString("id"));
-                        workoutMap.put("title", workoutJSON.getString("title"));
-                        workoutMap.put("activity_type", workoutJSON.getString("activity_type"));
-                        workoutMap.put("description_short", workoutJSON.getString("description_short"));
-                        workoutMap.put("duration", resultJSON.getString("duration"));
-                        workoutMap.put("avg_hr", resultJSON.getString("avg_hr"));
-                        workoutMap.put("calories", resultJSON.getString("calories"));
-                        workoutMap.put("distance", resultJSON.getString("distance"));
-                        workoutMap.put("status", workoutJSON.getString("status"));
-                        workoutMap.put("grade", resultJSON.getString("grade"));
+                        // If key not in map, add it
+                        if (!mItem.getWorkoutMap().containsKey(workoutJSON.getString("id"))) {
+                            Workout workout = new Workout();
+                            HashMap<String,String> workoutMap = workout.getWorkoutMap();
 
-                        // parse scheduled_at and completed_at time to human-readable string
-                        String scheduled_at = workoutJSON.getString("scheduled_at");
-                        String scheduled_at_parsed = ISOToString(scheduled_at);
-                        workoutMap.put("scheduled_at", scheduled_at_parsed);
+                            workoutMap.put("id", workoutJSON.getString("id"));
+                            workoutMap.put("title", workoutJSON.getString("title"));
+                            workoutMap.put("activity_type", workoutJSON.getString("activity_type"));
+                            workoutMap.put("description_short", workoutJSON.getString("description_short"));
+                            workoutMap.put("duration", resultJSON.getString("duration"));
+                            workoutMap.put("avg_hr", resultJSON.getString("avg_hr"));
+                            workoutMap.put("calories", resultJSON.getString("calories"));
+                            workoutMap.put("distance", resultJSON.getString("distance"));
+                            workoutMap.put("status", workoutJSON.getString("status"));
+                            workoutMap.put("grade", resultJSON.getString("grade"));
 
-                        String completed_at = resultJSON.getString("completed_at");
-                        String completed_at_parsed = ISOToString(completed_at);
-                        workoutMap.put("completed_at", completed_at_parsed);
+                            // parse scheduled_at and completed_at time to human-readable string
+                            String scheduled_at = workoutJSON.getString("scheduled_at");
+                            String scheduled_at_parsed = ISOToString(scheduled_at);
+                            workoutMap.put("scheduled_at", scheduled_at_parsed);
 
-//                        for (Iterator<String> keys = workoutJSON.keys(); keys.hasNext();) {
-//                            String key = keys.next();
-//                            workoutMap.put(key, workoutJSON.getString(key));
-//                        }
-//                        for (Iterator<String> keys = resultJSON.keys(); keys.hasNext();) {
-//                            String key = keys.next();
-//                            resultMap.put(key, resultJSON.getString(key));
-//                        }
+                            String completed_at = resultJSON.getString("completed_at");
+                            String completed_at_parsed = ISOToString(completed_at);
+                            workoutMap.put("completed_at", completed_at_parsed);
 
-                        mItem.getWorkouts().add(workout);
-                        mItem.getWorkoutMap().put(workout.getWorkoutMap().get("id"), workout);
-                        //workout.printWorkout();
-                        //workout.getResult().printResult();
+                            mItem.getWorkouts().add(workout);
+                            mItem.getWorkoutMap().put(workout.getWorkoutMap().get("id"), workout);
+
+                        } else { // find the workout and update it
+
+                            Workout workout = mItem.getWorkoutMap().get(workoutJSON.getString("id"));
+                            HashMap<String,String> workoutMap = workout.getWorkoutMap();
+
+                            workoutMap.put("id", workoutJSON.getString("id"));
+                            workoutMap.put("title", workoutJSON.getString("title"));
+                            workoutMap.put("activity_type", workoutJSON.getString("activity_type"));
+                            workoutMap.put("description_short", workoutJSON.getString("description_short"));
+                            workoutMap.put("duration", resultJSON.getString("duration"));
+                            workoutMap.put("avg_hr", resultJSON.getString("avg_hr"));
+                            workoutMap.put("calories", resultJSON.getString("calories"));
+                            workoutMap.put("distance", resultJSON.getString("distance"));
+                            workoutMap.put("status", workoutJSON.getString("status"));
+                            workoutMap.put("grade", resultJSON.getString("grade"));
+
+                            // parse scheduled_at and completed_at time to human-readable string
+                            String scheduled_at = workoutJSON.getString("scheduled_at");
+                            String scheduled_at_parsed = ISOToString(scheduled_at);
+                            workoutMap.put("scheduled_at", scheduled_at_parsed);
+
+                            String completed_at = resultJSON.getString("completed_at");
+                            String completed_at_parsed = ISOToString(completed_at);
+                            workoutMap.put("completed_at", completed_at_parsed);
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
