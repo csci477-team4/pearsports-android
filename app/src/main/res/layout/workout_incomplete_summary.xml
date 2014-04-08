@@ -47,7 +47,7 @@
             android:layout_width="fill_parent"
             android:layout_height="14dp"
             android:id="@+id/workout_incomplete_date_scheduled"
-            android:text="Date Scheduled: "
+            android:text="Scheduled: "
             android:textSize="11dp"
             android:gravity="top"
             android:textColor="@color/white"

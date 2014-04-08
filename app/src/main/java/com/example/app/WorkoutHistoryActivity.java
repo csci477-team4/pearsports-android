@@ -46,6 +46,9 @@ public class WorkoutHistoryActivity extends Activity {
     private String token;
     private TraineeContent.TraineeItem mItem;
 
+    private long epoch_start;
+    private long epoch_end;
+
     private String workoutID; // this is for onClick only
 
     @Override
@@ -168,15 +171,13 @@ public class WorkoutHistoryActivity extends Activity {
                         workoutMap.put("status", workoutJSON.getString("status"));
 
                         // parse scheduled_at time to readable string
-                        String ic_scheduled_at = workoutJSON.getString("scheduled_at");
+                        String scheduled_at = workoutJSON.getString("scheduled_at");
                         String scheduled_at_parsed = null;
-                        Log.d("ic scheduled_at raw time", ic_scheduled_at);
-                        if (!ic_scheduled_at.equals("null")) {
+                        if (!scheduled_at.equals("null")) {
                             DateTimeFormatter parser = ISODateTimeFormat.dateTimeNoMillis();
-                            DateTime dt = parser.parseDateTime(ic_scheduled_at);
+                            DateTime dt = parser.parseDateTime(scheduled_at);
                             DateTimeFormatter formatter = DateTimeFormat.mediumDateTime();
                             scheduled_at_parsed = formatter.print(dt);
-                            Log.d("IC SCHED AT TIME!", scheduled_at_parsed);
                         }
                         workoutMap.put("scheduled_at", scheduled_at_parsed);
 
@@ -209,15 +210,13 @@ public class WorkoutHistoryActivity extends Activity {
                         workoutMap.put("grade", resultJSON.getString("grade"));
 
                         // parse scheduled_at time to readable string
-                        String c_scheduled_at = workoutJSON.getString("scheduled_at");
+                        String scheduled_at = workoutJSON.getString("scheduled_at");
                         String scheduled_at_parsed = null;
-                        Log.d("c scheduled_at raw time", c_scheduled_at);
-                        if (!c_scheduled_at.equals("null")) {
+                        if (!scheduled_at.equals("null")) {
                             DateTimeFormatter parser = ISODateTimeFormat.dateTimeNoMillis();
-                            DateTime dt = parser.parseDateTime(c_scheduled_at);
+                            DateTime dt = parser.parseDateTime(scheduled_at);
                             DateTimeFormatter formatter = DateTimeFormat.mediumDateTime();
                             scheduled_at_parsed = formatter.print(dt);
-                            Log.d("C SCHED AT TIME!", scheduled_at_parsed);
                         }
                         workoutMap.put("scheduled_at", scheduled_at_parsed);
 
@@ -281,7 +280,7 @@ public class WorkoutHistoryActivity extends Activity {
 
                         ((TextView) view.findViewById(R.id.workout_incomplete_name)).setText(w.getWorkoutMap().get("title"));
                         ((TextView) view.findViewById(R.id.workout_incomplete_activity_type)).setText(w.getWorkoutMap().get("activity_type"));
-                        ((TextView) view.findViewById(R.id.workout_incomplete_date_scheduled)).setText("Date Scheduled: " + w.getWorkoutMap().get("scheduled_at"));
+                        ((TextView) view.findViewById(R.id.workout_incomplete_date_scheduled)).setText("Scheduled: " + w.getWorkoutMap().get("scheduled_at"));
                         ((TextView) view.findViewById(R.id.workout_incomplete_description)).setText(w.getWorkoutMap().get("description_short"));
 
                         view.setOnClickListener(workoutListener);
