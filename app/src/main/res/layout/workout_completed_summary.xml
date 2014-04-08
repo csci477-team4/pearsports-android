@@ -17,7 +17,7 @@
             android:layout_height="40dp"
             android:id="@+id/workout_completed_activity_icon"
             android:src="@drawable/hiking"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"/>
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="30dp"
@@ -33,7 +33,6 @@
         android:layout_height="fill_parent"
         android:orientation="vertical"
         android:paddingLeft="10dp">
-        >
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="24dp"
@@ -43,7 +42,7 @@
             android:textStyle="bold"
             android:gravity="left"
             android:textColor="@color/white"
-            android:fontFamily="Avenir" />
+            android:fontFamily="Avenir"/>
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="50dp"
@@ -51,15 +50,4 @@
             android:src="@drawable/hiking_history"
             android:layout_gravity="left" />
     </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:text="Workout Name"
-        android:textSize="24dp"
-        android:textStyle="bold"
-        android:gravity="left"
-        android:textColor="@color/white" />
-
 </LinearLayout>
