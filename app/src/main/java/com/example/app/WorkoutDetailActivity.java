@@ -43,6 +43,7 @@ public class WorkoutDetailActivity extends Activity {
         ((TextView) findViewById(R.id.workout_detail_name)).setText(workout.getWorkoutMap().get("title"));
         ((TextView) findViewById(R.id.workout_detail_activity_type)).setText(workout.getWorkoutMap().get("activity_type"));
         ((TextView) findViewById(R.id.workout_detail_description_short)).setText(workout.getWorkoutMap().get("description_short"));
+        ((TextView) findViewById(R.id.workout_detail_completed_grade)).setText("Grade: " + workout.getWorkoutMap().get("grade"));
         ((TextView) findViewById(R.id.workout_detail_duration)).setText("Duration: " + workout.getWorkoutMap().get("duration"));
         ((TextView) findViewById(R.id.workout_detail_hr)).setText("Average HR: " + workout.getWorkoutMap().get("avg_hr"));
         ((TextView) findViewById(R.id.workout_detail_calories)).setText("Calories: " + workout.getWorkoutMap().get("calories"));

@@ -190,6 +190,7 @@ public class WorkoutHistoryActivity extends Activity {
                         workoutMap.put("distance", resultJSON.getString("distance"));
                         workoutMap.put("scheduled_at", workoutJSON.getString("scheduled_at"));
                         workoutMap.put("status", workoutJSON.getString("status"));
+                        workoutMap.put("grade", resultJSON.getString("grade"));
 
 //                        for (Iterator<String> keys = workoutJSON.keys(); keys.hasNext();) {
 //                            String key = keys.next();
@@ -243,7 +244,7 @@ public class WorkoutHistoryActivity extends Activity {
 
                         view.setOnClickListener(workoutListener);
 
-                    } else {
+                    } else { // incomplete or marked_complete (i.e. no results)
                         LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         view = inflater.inflate(R.layout.workout_incomplete_summary, null);
 
