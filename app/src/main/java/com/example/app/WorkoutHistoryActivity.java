@@ -24,6 +24,10 @@ import com.example.app.trainee.Workout;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -160,8 +164,21 @@ public class WorkoutHistoryActivity extends Activity {
                         workoutMap.put("avg_hr", null);
                         workoutMap.put("calories", "0");
                         workoutMap.put("distance", workoutJSON.getString("distance"));
-                        workoutMap.put("scheduled_at", workoutJSON.getString("scheduled_at"));
+                        //workoutMap.put("scheduled_at", workoutJSON.getString("scheduled_at"));
                         workoutMap.put("status", workoutJSON.getString("status"));
+
+                        // parse scheduled_at time to readable string
+                        String ic_scheduled_at = workoutJSON.getString("scheduled_at");
+                        String scheduled_at_parsed = null;
+                        Log.d("ic scheduled_at raw time", ic_scheduled_at);
+                        if (!ic_scheduled_at.equals("null")) {
+                            DateTimeFormatter parser = ISODateTimeFormat.dateTimeNoMillis();
+                            DateTime dt = parser.parseDateTime(ic_scheduled_at);
+                            DateTimeFormatter formatter = DateTimeFormat.mediumDateTime();
+                            scheduled_at_parsed = formatter.print(dt);
+                            Log.d("IC SCHED AT TIME!", scheduled_at_parsed);
+                        }
+                        workoutMap.put("scheduled_at", scheduled_at_parsed);
 
 //                        for (Iterator<String> keys = workoutJSON.keys(); keys.hasNext();) {
 //                            String key = keys.next();
@@ -188,9 +205,21 @@ public class WorkoutHistoryActivity extends Activity {
                         workoutMap.put("avg_hr", resultJSON.getString("avg_hr"));
                         workoutMap.put("calories", resultJSON.getString("calories"));
                         workoutMap.put("distance", resultJSON.getString("distance"));
-                        workoutMap.put("scheduled_at", workoutJSON.getString("scheduled_at"));
                         workoutMap.put("status", workoutJSON.getString("status"));
                         workoutMap.put("grade", resultJSON.getString("grade"));
+
+                        // parse scheduled_at time to readable string
+                        String c_scheduled_at = workoutJSON.getString("scheduled_at");
+                        String scheduled_at_parsed = null;
+                        Log.d("c scheduled_at raw time", c_scheduled_at);
+                        if (!c_scheduled_at.equals("null")) {
+                            DateTimeFormatter parser = ISODateTimeFormat.dateTimeNoMillis();
+                            DateTime dt = parser.parseDateTime(c_scheduled_at);
+                            DateTimeFormatter formatter = DateTimeFormat.mediumDateTime();
+                            scheduled_at_parsed = formatter.print(dt);
+                            Log.d("C SCHED AT TIME!", scheduled_at_parsed);
+                        }
+                        workoutMap.put("scheduled_at", scheduled_at_parsed);
 
 //                        for (Iterator<String> keys = workoutJSON.keys(); keys.hasNext();) {
 //                            String key = keys.next();
