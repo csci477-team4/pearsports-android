@@ -252,10 +252,9 @@ public class MessageActivity extends ListActivity {
                         Log.w("IndividualMessages", m.toString());
                         boolean wasSender = Boolean.valueOf(m.getString(TAG_OUTGOING));
                         String ts = m.getString(TAG_TIMESTAMP);
-                        Date timestamp = new Date(1000 * Long.parseLong(ts));
                         SimpleDateFormat df = new SimpleDateFormat("EEE, d MMM yyyy hh:mm:ss");
                         df.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
-                        String formattedDate = df.format(timestamp);
+                        String formattedDate = df.format(new Date(1000 * Long.parseLong(ts)));
                         String messageType = m.getString(TAG_TYPE);
                         if (wasSender) {
                             String text = m.getString(TAG_CONTENT);
