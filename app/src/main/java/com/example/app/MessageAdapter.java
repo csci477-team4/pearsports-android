@@ -47,30 +47,36 @@ public class MessageAdapter extends BaseAdapter {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(R.layout.message_row, parent, false);
             holder.message = (TextView) convertView.findViewById(R.id.message_text);
+            holder.timestamp = (TextView)convertView.findViewById(R.id.msgTimestamp);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
 
         holder.message.setText(message.getMessage());
+        holder.timestamp.setText(message.getTimestamp());
 
-        LayoutParams lp = (LayoutParams) holder.message.getLayoutParams();
+        LayoutParams messagelp = (LayoutParams) holder.message.getLayoutParams();
+        LayoutParams timestamplp = (LayoutParams) holder.timestamp.getLayoutParams();
         //check if it is a status message then remove background, and change text color.
         if (message.isStatusMessage()) {
             holder.message.setBackgroundDrawable(null);
-            lp.gravity = Gravity.LEFT;
+            messagelp.gravity = Gravity.LEFT;
             holder.message.setTextColor(R.color.textColor);
         } else {
             //Check whether message is mine to show right speech bubble and align to right
             if (message.isMine()) {
                 holder.message.setBackgroundResource(R.drawable.speech_bubble_right);
-                lp.gravity = Gravity.RIGHT;
+                messagelp.gravity = Gravity.RIGHT;
+                timestamplp.gravity = Gravity.RIGHT;
             }
             //If not mine then it is from sender to show left speech bubble and align to left
             else {
                 holder.message.setBackgroundResource(R.drawable.speech_bubble_left);
-                lp.gravity = Gravity.LEFT;
+                messagelp.gravity = Gravity.LEFT;
+                timestamplp.gravity = Gravity.LEFT;
             }
-            holder.message.setLayoutParams(lp);
+            holder.message.setLayoutParams(messagelp);
+            holder.timestamp.setLayoutParams(timestamplp);
             holder.message.setTextColor(R.color.textColor);
         }
         return convertView;
@@ -78,6 +84,7 @@ public class MessageAdapter extends BaseAdapter {
 
     private static class ViewHolder {
         TextView message;
+        TextView timestamp;
     }
 
     @Override

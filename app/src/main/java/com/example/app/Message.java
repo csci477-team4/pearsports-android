@@ -5,6 +5,7 @@ public class Message {
      * The content of the message
      */
     String message;
+    String timestamp;
     /**
      * boolean to determine, who is sender of this message
      */
@@ -65,5 +66,12 @@ public class Message {
     }
     public void setStatusMessage(boolean isStatusMessage) {
         this.isStatusMessage = isStatusMessage;
+    }
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 }

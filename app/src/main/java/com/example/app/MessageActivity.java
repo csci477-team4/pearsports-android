@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MessageActivity extends ListActivity {
@@ -46,6 +47,7 @@ public class MessageActivity extends ListActivity {
     private static final String TAG_OUTGOING = "outgoing";
     private static final String TAG_CONTENT = "content";
     private static final String TAG_TYPE = "message_type";
+    private static final String TAG_TIMESTAMP = "created_at";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -245,16 +247,20 @@ public class MessageActivity extends ListActivity {
                         JSONObject m = jsonMessages.getJSONObject(i);
                         Log.w("IndividualMessages", m.toString());
                         boolean wasSender = Boolean.valueOf(m.getString(TAG_OUTGOING));
+                        String ts = m.getString(TAG_TIMESTAMP);
+                        Date timestamp = new Date(Long.parseLong(ts));
                         String messageType = m.getString(TAG_TYPE);
                         if (wasSender) {
                             String text = m.getString(TAG_CONTENT);
                             Message addM = new Message(text, true);
                             addM.setType(messageType);
+                            addM.setTimestamp(timestamp.toString());
                             addNewMessage(addM);
                         } else {
                             String text = m.getString(TAG_CONTENT);
                             Message addM = new Message(text, false);
                             addM.setType(messageType);
+                            addM.setTimestamp(timestamp.toString());
                             addNewMessage(addM);
                         }
                     }
