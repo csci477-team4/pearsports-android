@@ -178,6 +178,10 @@ public class SportActivity extends Activity {
             Intent i = new Intent(SportActivity.this, LoginActivity.class);
             startActivity(i);
         }
+        if (id == R.id.action_settings) {
+            Intent i = new Intent(SportActivity.this, SettingsActivity.class);
+            startActivity(i);
+        }
         return super.onOptionsItemSelected(item);
     }
 }

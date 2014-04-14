@@ -71,7 +71,8 @@ public class WorkoutDetailActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            return true;
+            Intent i = new Intent(WorkoutDetailActivity.this, SettingsActivity.class);
+            startActivity(i);
         }
         if (id == android.R.id.home) {
             // This ID represents the Home or Up button. In the case of this

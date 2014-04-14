@@ -160,6 +160,10 @@ public class MessageActivity extends ListActivity {
             Intent i = new Intent(MessageActivity.this, LoginActivity.class);
             startActivity(i);
         }
+        if (id == R.id.action_settings) {
+            Intent i = new Intent(MessageActivity.this, SettingsActivity.class);
+            startActivity(i);
+        }
         return super.onOptionsItemSelected(item);
     }
 

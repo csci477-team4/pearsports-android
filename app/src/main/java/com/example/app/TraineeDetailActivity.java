@@ -75,6 +75,10 @@ public class TraineeDetailActivity extends FragmentActivity {
             Intent i = new Intent(TraineeDetailActivity.this, LoginActivity.class);
             startActivity(i);
         }
+        if (id == R.id.action_settings) {
+            Intent i = new Intent(TraineeDetailActivity.this, SettingsActivity.class);
+            startActivity(i);
+        }
         return super.onOptionsItemSelected(item);
     }
 

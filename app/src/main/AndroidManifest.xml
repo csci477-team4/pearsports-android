@@ -3,12 +3,12 @@
     package="com.example.app" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.STORAGE" />
 
     <!-- Ubertesters library user-permisions -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,76 +16,82 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- Ubertesters library user-permisions -->
 
-      <application
-          android:allowBackup="true"
-          android:icon="@drawable/ic_launcher"
-          android:label="@string/app_name"
-          android:theme="@style/AppTheme" >
-          <meta-data android:name="ubertesters_project_id" android:value="3209181c-b519-11e3-80a2-123141017889"/>
-          <!-- Ubertesters library activity -->
-          <activity
-              android:name="com.ubertesters.sdk.UbertestersScreen"
-              android:configChanges="orientation"
-              android:windowSoftInputMode="adjustResize"/>
-          <!-- Ubertesters library activity -->
-          <activity
-              android:name="com.example.app.MainActivity"
-              android:label="@string/title_activity_main" >
-          </activity>
-          <activity
-              android:name="com.example.app.LoginActivity"
-              android:label="@string/title_activity_login"
-              android:windowSoftInputMode="adjustResize|stateVisible" >
-          </activity>
-          <activity
-              android:name="com.example.app.SplashScreenActivity"
-              android:label="@string/title_activity_splash_screen" >
-              <intent-filter>
-                  <action android:name="android.intent.action.MAIN" />
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <meta-data
+            android:name="ubertesters_project_id"
+            android:value="3209181c-b519-11e3-80a2-123141017889" />
+        <!-- Ubertesters library activity -->
+        <activity
+            android:name="com.ubertesters.sdk.UbertestersScreen"
+            android:configChanges="orientation"
+            android:windowSoftInputMode="adjustResize" />
+        <!-- Ubertesters library activity -->
+        <activity
+            android:name="com.example.app.MainActivity"
+            android:label="@string/title_activity_main" >
+        </activity>
+        <activity
+            android:name="com.example.app.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+        <activity
+            android:name="com.example.app.SplashScreenActivity"
+            android:label="@string/title_activity_splash_screen" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-                  <category android:name="android.intent.category.LAUNCHER" />
-              </intent-filter>
-          </activity>
-          <activity
-              android:name="com.example.app.TraineeListActivity"
-              android:label="@string/title_trainee_list" >
-          </activity>
-          <activity
-              android:name="com.example.app.TraineeDetailActivity"
-              android:label="@string/title_trainee_detail"
-              android:parentActivityName="com.example.app.TraineeListActivity" >
-              <meta-data
-                  android:name="android.support.PARENT_ACTIVITY"
-                  android:value="com.example.app.TraineeListActivity" />
-          </activity>
-          <activity
-              android:name="com.example.app.MessageActivity"
-              android:label="@string/title_activity_message" >
-          </activity>
-          <activity
-              android:name="com.example.app.WorkoutHistoryActivity"
-              android:label="@string/title_activity_workout_history" >
-          </activity>
-          <activity
-              android:name="com.example.app.WorkoutDetailActivity"
-              android:label="@string/title_activity_workout_detail" >
-          </activity>
-          <activity
-              android:name="com.example.app.ScheduleWorkoutActivity"
-              android:label="@string/title_activity_schedule_workout" >
-          </activity>
-          <activity
-              android:name="com.example.app.DifficultyActivity"
-              android:label="@string/title_activity_difficulty" >
-          </activity>
-          <activity
-              android:name="com.example.app.SportActivity"
-              android:label="@string/title_activity_sport" >
-          </activity>
-          <activity
-              android:name="com.example.app.RecordAudioActivity"
-              android:label="@string/title_activity_record_audio" >
-          </activity>
-      </application>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.app.TraineeListActivity"
+            android:label="@string/title_trainee_list" >
+        </activity>
+        <activity
+            android:name="com.example.app.TraineeDetailActivity"
+            android:label="@string/title_trainee_detail"
+            android:parentActivityName="com.example.app.TraineeListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.app.TraineeListActivity" />
+        </activity>
+        <activity
+            android:name="com.example.app.MessageActivity"
+            android:label="@string/title_activity_message" >
+        </activity>
+        <activity
+            android:name="com.example.app.WorkoutHistoryActivity"
+            android:label="@string/title_activity_workout_history" >
+        </activity>
+        <activity
+            android:name="com.example.app.WorkoutDetailActivity"
+            android:label="@string/title_activity_workout_detail" >
+        </activity>
+        <activity
+            android:name="com.example.app.ScheduleWorkoutActivity"
+            android:label="@string/title_activity_schedule_workout" >
+        </activity>
+        <activity
+            android:name="com.example.app.DifficultyActivity"
+            android:label="@string/title_activity_difficulty" >
+        </activity>
+        <activity
+            android:name="com.example.app.SportActivity"
+            android:label="@string/title_activity_sport" >
+        </activity>
+        <activity
+            android:name="com.example.app.RecordAudioActivity"
+            android:label="@string/title_activity_record_audio" >
+        </activity>
+        <activity
+            android:name="com.example.app.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
+    </application>
 
-  </manifest>
+</manifest>
