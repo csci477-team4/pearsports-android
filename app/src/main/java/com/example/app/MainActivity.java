@@ -73,6 +73,10 @@ public class MainActivity extends Activity implements OnItemClickListener {
             Intent i = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(i);
         }
+        if (id == R.id.action_settings) {
+            Intent i = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(i);
+        }
         return super.onOptionsItemSelected(item);
     }
 

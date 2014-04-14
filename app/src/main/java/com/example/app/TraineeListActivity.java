@@ -89,6 +89,10 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
             Intent i = new Intent(TraineeListActivity.this, LoginActivity.class);
             startActivity(i);
         }
+        if (id == R.id.action_settings) {
+            Intent i = new Intent(TraineeListActivity.this, SettingsActivity.class);
+            startActivity(i);
+        }
         return super.onOptionsItemSelected(item);
     }
 
