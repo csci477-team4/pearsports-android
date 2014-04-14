@@ -184,6 +184,16 @@ public class RecordAudioActivity extends Activity {
             Intent i = new Intent(RecordAudioActivity.this, SettingsActivity.class);
             startActivity(i);
         }
+        if (id == R.id.action_logout) {
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor edit = pref.edit();
+            edit.remove("token");
+            edit.remove("trainee_id");
+            edit.apply();
+
+            Intent i = new Intent(RecordAudioActivity.this, LoginActivity.class);
+            startActivity(i);
+        }
         return super.onOptionsItemSelected(item);
     }
 
