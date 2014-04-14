@@ -40,6 +40,8 @@ import java.util.List;
 
 public class WorkoutHistoryActivity extends Activity {
 
+    private static final long WEEK_MILLISECONDS = 604800;
+
     private JSONObject workoutsObject = null;
     private JSONObject resultsObject = null;
     private JSONArray workoutArray = null;
@@ -50,6 +52,7 @@ public class WorkoutHistoryActivity extends Activity {
 
     private long weekStartMillis;
     private long weekEndMillis;
+    private int currentWeek; // 0 is current week, -1 is last week, 1 is next week
 
     private String workoutID; // this is for onClick only
 
@@ -83,11 +86,38 @@ public class WorkoutHistoryActivity extends Activity {
             }
         });
 
+        Button prev = (Button) findViewById(R.id.workout_history_previous_button);
+        prev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ViewGroup vg = (ViewGroup) findViewById(R.id.workout_summary_container);
+                vg.removeAllViews();
+                currentWeek -= 1;
+                weekEndMillis = weekStartMillis;
+                weekStartMillis -= WEEK_MILLISECONDS;
+                new GetWorkoutSchedule().execute(weekStartMillis, weekEndMillis);
+            }
+        });
+
+        Button next = (Button) findViewById(R.id.workout_history_next_button);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ViewGroup vg = (ViewGroup) findViewById(R.id.workout_summary_container);
+                vg.removeAllViews();
+                currentWeek += 1;
+                weekStartMillis = weekEndMillis;
+                weekEndMillis += WEEK_MILLISECONDS;
+                new GetWorkoutSchedule().execute(weekStartMillis, weekEndMillis);
+            }
+        });
+
         DateTime dateTime = new DateTime(); // now
         DateTime weekStart = dateTime.weekOfWeekyear().roundFloorCopy();
         DateTime weekEnd = dateTime.weekOfWeekyear().roundCeilingCopy();
         weekStartMillis = weekStart.getMillis()/1000;
         weekEndMillis = weekEnd.getMillis()/1000;
+        currentWeek = 0;
         //Log.d(">>>>> START/END MILLIS: ", "start: " + weekStartMillis + ", end: " + weekEndMillis);
         new GetWorkoutSchedule().execute(weekStartMillis, weekEndMillis);
     }
@@ -158,7 +188,7 @@ public class WorkoutHistoryActivity extends Activity {
                     resultArray = resultsObject.getJSONArray("data");
 
 
-                    // incomplete workouts
+                    // incomplete or marked_complete workouts
                     for (int i = 0; i < workoutsCount; i++) {
                         JSONObject workoutJSON = workoutArray.getJSONObject(i);
 
@@ -182,6 +212,14 @@ public class WorkoutHistoryActivity extends Activity {
                             String scheduled_at_parsed = ISOStringToString(scheduled_at);
                             workoutMap.put("scheduled_at_iso", scheduled_at);
                             workoutMap.put("scheduled_at_string", scheduled_at_parsed);
+
+                            if (workoutMap.get("status").equals("marked_complete") ||
+                                    workoutMap.get("status").equals("completed")) {
+                                String completed_at = workoutJSON.getString("completed_at");
+                                String completed_at_parsed = ISOStringToString(completed_at);
+                                workoutMap.put("completed_at_iso", completed_at);
+                                workoutMap.put("completed_at_string", completed_at_parsed);
+                            }
 
                             mItem.getWeekWorkouts().add(workout);
                             mItem.getWorkouts().add(workout);
@@ -207,6 +245,14 @@ public class WorkoutHistoryActivity extends Activity {
                             String scheduled_at_parsed = ISOStringToString(scheduled_at);
                             workoutMap.put("scheduled_at_iso", scheduled_at);
                             workoutMap.put("scheduled_at_string", scheduled_at_parsed);
+
+                            if (workoutMap.get("status").equals("marked_complete") ||
+                                    workoutMap.get("status").equals("completed")) {
+                                String completed_at = workoutJSON.getString("completed_at");
+                                String completed_at_parsed = ISOStringToString(completed_at);
+                                workoutMap.put("completed_at_iso", completed_at);
+                                workoutMap.put("completed_at_string", completed_at_parsed);
+                            }
 
                             mItem.getWeekWorkouts().add(workout);
                         }
