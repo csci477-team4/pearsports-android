@@ -48,8 +48,8 @@ public class WorkoutHistoryActivity extends Activity {
     private String token;
     private TraineeContent.TraineeItem mItem;
 
-    private long epoch_start;
-    private long epoch_end;
+    private long weekStartMillis;
+    private long weekEndMillis;
 
     private String workoutID; // this is for onClick only
 
@@ -85,7 +85,13 @@ public class WorkoutHistoryActivity extends Activity {
 
         // TODO: specify start/stop timestamp parameters for API call
         /* defaulting to 3/9/2014 (1394345840) to 3/22/2014 (1395469040) interval */
-        new GetWorkoutSchedule().execute((long)1394345840, (long)1395469040);
+        DateTime dateTime = new DateTime(); // now
+        DateTime weekStart = dateTime.weekOfWeekyear().roundFloorCopy();
+        DateTime weekEnd = dateTime.weekOfWeekyear().roundCeilingCopy();
+        weekStartMillis = weekStart.getMillis()/1000;
+        weekEndMillis = weekEnd.getMillis()/1000;
+        Log.d(">>>>> START/END MILLIS: ", "start: " + weekStartMillis + ", end: " + weekEndMillis);
+        new GetWorkoutSchedule().execute(weekStartMillis, weekEndMillis);
     }
 
 
@@ -175,7 +181,7 @@ public class WorkoutHistoryActivity extends Activity {
 
                             // parse scheduled_at and completed_at time to human-readable string
                             String scheduled_at = workoutJSON.getString("scheduled_at");
-                            String scheduled_at_parsed = ISOToString(scheduled_at);
+                            String scheduled_at_parsed = ISOStringToString(scheduled_at);
                             workoutMap.put("scheduled_at_iso", scheduled_at);
                             workoutMap.put("scheduled_at_string", scheduled_at_parsed);
 
@@ -199,7 +205,7 @@ public class WorkoutHistoryActivity extends Activity {
 
                             // parse scheduled_at and completed_at time to human-readable string
                             String scheduled_at = workoutJSON.getString("scheduled_at");
-                            String scheduled_at_parsed = ISOToString(scheduled_at);
+                            String scheduled_at_parsed = ISOStringToString(scheduled_at);
                             workoutMap.put("scheduled_at_iso", scheduled_at);
                             workoutMap.put("scheduled_at_string", scheduled_at_parsed);
                         }
@@ -229,12 +235,12 @@ public class WorkoutHistoryActivity extends Activity {
 
                             // parse scheduled_at and completed_at time to human-readable string
                             String scheduled_at = workoutJSON.getString("scheduled_at");
-                            String scheduled_at_parsed = ISOToString(scheduled_at);
+                            String scheduled_at_parsed = ISOStringToString(scheduled_at);
                             workoutMap.put("scheduled_at_iso", scheduled_at);
                             workoutMap.put("scheduled_at_string", scheduled_at_parsed);
 
                             String completed_at = resultJSON.getString("completed_at");
-                            String completed_at_parsed = ISOToString(completed_at);
+                            String completed_at_parsed = ISOStringToString(completed_at);
                             workoutMap.put("completed_at_iso", completed_at);
                             workoutMap.put("completed_at_string", completed_at_parsed);
 
@@ -259,12 +265,12 @@ public class WorkoutHistoryActivity extends Activity {
 
                             // parse scheduled_at and completed_at time to human-readable string
                             String scheduled_at = workoutJSON.getString("scheduled_at");
-                            String scheduled_at_parsed = ISOToString(scheduled_at);
+                            String scheduled_at_parsed = ISOStringToString(scheduled_at);
                             workoutMap.put("scheduled_at_iso", scheduled_at);
                             workoutMap.put("scheduled_at_string", scheduled_at_parsed);
 
                             String completed_at = resultJSON.getString("completed_at");
-                            String completed_at_parsed = ISOToString(completed_at);
+                            String completed_at_parsed = ISOStringToString(completed_at);
                             workoutMap.put("completed_at_iso", completed_at);
                             workoutMap.put("completed_at_string", completed_at_parsed);
                         }
@@ -280,16 +286,6 @@ public class WorkoutHistoryActivity extends Activity {
                 Log.e("APIHandler", "No data from specified URL");
             }
             return false;
-        }
-
-        private String ISOToString(String iso) {
-            if (!iso.equals("null")) {
-                DateTimeFormatter parser = ISODateTimeFormat.dateTimeNoMillis();
-                DateTime dt = parser.parseDateTime(iso);
-                DateTimeFormatter formatter = DateTimeFormat.mediumDateTime();
-                return formatter.print(dt);
-            }
-            return "null";
         }
 
         @Override
@@ -360,6 +356,18 @@ public class WorkoutHistoryActivity extends Activity {
                 return null;
             }
         }
+    }
+
+    /*** TIME HELPER METHODS ***/
+
+    private String ISOStringToString(String iso) {
+        if (!iso.equals("null")) {
+            DateTimeFormatter parser = ISODateTimeFormat.dateTimeNoMillis();
+            DateTime dt = parser.parseDateTime(iso);
+            DateTimeFormatter formatter = DateTimeFormat.mediumDateTime();
+            return formatter.print(dt);
+        }
+        return "null";
     }
 
 }
