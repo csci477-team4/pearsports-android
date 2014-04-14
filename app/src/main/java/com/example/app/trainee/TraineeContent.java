@@ -57,6 +57,7 @@ public class TraineeContent implements Serializable {
         private Stats stats;
 
         private ArrayList<Workout> workouts;
+        private ArrayList<Workout> weekWorkouts;
         private HashMap<String,Workout> workoutMap;
 
         public TraineeItem(String id, String name) {
@@ -69,6 +70,7 @@ public class TraineeContent implements Serializable {
 
             stats = new Stats();
             workouts = new ArrayList<Workout>();
+            weekWorkouts = new ArrayList<Workout>();
         }
 
         @Override
@@ -88,6 +90,10 @@ public class TraineeContent implements Serializable {
 
         public ArrayList<Workout> getWorkouts() {
             return workouts;
+        }
+
+        public ArrayList<Workout> getWeekWorkouts() {
+            return weekWorkouts;
         }
 
         public void printInfo() {

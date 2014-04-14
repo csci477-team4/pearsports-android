@@ -83,14 +83,12 @@ public class WorkoutHistoryActivity extends Activity {
             }
         });
 
-        // TODO: specify start/stop timestamp parameters for API call
-        /* defaulting to 3/9/2014 (1394345840) to 3/22/2014 (1395469040) interval */
         DateTime dateTime = new DateTime(); // now
         DateTime weekStart = dateTime.weekOfWeekyear().roundFloorCopy();
         DateTime weekEnd = dateTime.weekOfWeekyear().roundCeilingCopy();
         weekStartMillis = weekStart.getMillis()/1000;
         weekEndMillis = weekEnd.getMillis()/1000;
-        Log.d(">>>>> START/END MILLIS: ", "start: " + weekStartMillis + ", end: " + weekEndMillis);
+        //Log.d(">>>>> START/END MILLIS: ", "start: " + weekStartMillis + ", end: " + weekEndMillis);
         new GetWorkoutSchedule().execute(weekStartMillis, weekEndMillis);
     }
 
@@ -185,6 +183,7 @@ public class WorkoutHistoryActivity extends Activity {
                             workoutMap.put("scheduled_at_iso", scheduled_at);
                             workoutMap.put("scheduled_at_string", scheduled_at_parsed);
 
+                            mItem.getWeekWorkouts().add(workout);
                             mItem.getWorkouts().add(workout);
                             mItem.getWorkoutMap().put(workout.getWorkoutMap().get("id"), workout);
 
@@ -208,6 +207,8 @@ public class WorkoutHistoryActivity extends Activity {
                             String scheduled_at_parsed = ISOStringToString(scheduled_at);
                             workoutMap.put("scheduled_at_iso", scheduled_at);
                             workoutMap.put("scheduled_at_string", scheduled_at_parsed);
+
+                            mItem.getWeekWorkouts().add(workout);
                         }
                     }
 
@@ -244,6 +245,7 @@ public class WorkoutHistoryActivity extends Activity {
                             workoutMap.put("completed_at_iso", completed_at);
                             workoutMap.put("completed_at_string", completed_at_parsed);
 
+                            mItem.getWeekWorkouts().add(workout);
                             mItem.getWorkouts().add(workout);
                             mItem.getWorkoutMap().put(workout.getWorkoutMap().get("id"), workout);
 
@@ -273,6 +275,8 @@ public class WorkoutHistoryActivity extends Activity {
                             String completed_at_parsed = ISOStringToString(completed_at);
                             workoutMap.put("completed_at_iso", completed_at);
                             workoutMap.put("completed_at_string", completed_at_parsed);
+
+                            mItem.getWeekWorkouts().add(workout);
                         }
                     }
 
@@ -289,10 +293,16 @@ public class WorkoutHistoryActivity extends Activity {
         }
 
         @Override
+        protected void onPreExecute() {
+            mItem.getWeekWorkouts().clear();
+        }
+
+        @Override
         protected void onPostExecute(final Boolean success) {
             if(success) {
                 // dynamically load in workout views
-                ArrayList<Workout> workouts = mItem.getWorkouts();
+                //ArrayList<Workout> workouts = mItem.getWorkouts();
+                ArrayList<Workout> workouts = mItem.getWeekWorkouts();
                 ViewGroup parent = (ViewGroup) findViewById(R.id.workout_summary_container);
                 for (Workout w : workouts) {
                     workoutID = w.getWorkoutMap().get("id");
