@@ -217,6 +217,8 @@ public class TraineeListFragment extends ListFragment {
                         info.put("age",trainee_info.get("age").toString());
                         info.put("height",trainee_info.get("height").toString());
                         info.put("weight",trainee_info.get("weight").toString());
+                        info.put("notes", trainee_info.get("notes").toString());
+                        info.put("photo_url", trainee_info.get("photo_url").toString());
 
                         // TODO: change this - hardcoded.
                         if (trainee.name.equals("KR")) {
@@ -228,7 +230,6 @@ public class TraineeListFragment extends ListFragment {
                         } else if (trainee.name.equals("eric")) {
                             info.put("image","drawable/trainee_4");
                         }
-
 
                         TraineeContent.addItem(trainee);
                     }

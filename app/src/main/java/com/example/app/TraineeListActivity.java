@@ -118,6 +118,8 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
                         info.put("age",trainee_info.get("age").toString());
                         info.put("height",trainee_info.get("height").toString());
                         info.put("weight",trainee_info.get("weight").toString());
+                        info.put("notes", trainee_info.get("notes").toString());
+                        info.put("photo_url", trainee_info.get("photo_url").toString());
 
                         // TODO: change this - hardcoded.
                         if (trainee.name.equals("KR")) {

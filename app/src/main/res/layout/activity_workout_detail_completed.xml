@@ -12,158 +12,211 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:orientation="horizontal"
-        android:layout_weight="1"
-        android:paddingLeft="20dp">
-
-        <LinearLayout
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:id="@+id/workout_detail_activity_icon"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
-                android:src="@drawable/trainee_1"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:id="@+id/workout_detail_activity_type"
-                android:textSize="20dp"
-                android:text="Activity"
-                android:fontFamily="Avenir"
-                android:textColor="@color/white"/>
-        </LinearLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_height="100dp"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp">
 
-            <TextView
-                android:id="@+id/workout_detail_name"
-                android:textAllCaps="false"
-                android:textSize="30dp"
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:textIsSelectable="false"
-                android:text="Workout Title"
-                android:fontFamily="Avenir"
-                android:textColor="@color/white"
-                android:capitalize="words"
-                android:textStyle="bold"
-                android:gravity="left|top" />
+            <LinearLayout
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="40dp">
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:id="@+id/workout_detail_activity_icon"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:src="@drawable/trainee_1"/>
                 <TextView
-                    android:id="@+id/workout_detail_description_short"
-                    android:textSize="12dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="30dp"
+                    android:id="@+id/workout_detail_activity_type"
+                    android:textSize="20dp"
+                    android:text="Activity"
+                    android:fontFamily="Avenir"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/workout_detail_name"
+                    android:textAllCaps="false"
+                    android:textSize="30dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
                     android:textIsSelectable="false"
-                    android:text="This is a short description of a workout. Blah blah blah... "
+                    android:text="Workout Title"
                     android:fontFamily="Avenir"
                     android:textColor="@color/white"
-                    android:gravity="top" />
-            </ScrollView>
-            <TextView
+                    android:capitalize="words"
+                    android:textStyle="bold"
+                    android:gravity="left|top" />
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+                    <TextView
+                        android:id="@+id/workout_detail_description_short"
+                        android:textSize="12dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textIsSelectable="false"
+                        android:text="This is a short description of a workout. Blah blah blah... "
+                        android:fontFamily="Avenir"
+                        android:textColor="@color/white"
+                        android:gravity="top" />
+                </ScrollView>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:id="@+id/workout_detail_completed_grade"
+                    android:textSize="15dp"
+                    android:fontFamily="Avenir"
+                    android:textColor="@color/white"
+                    android:text="Grade: "
+                    android:gravity="top"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="350dp">
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="25dp"
-                android:id="@+id/workout_detail_completed_grade"
-                android:textSize="15dp"
-                android:textStyle="bold"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:fillViewport="false">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceListItem"
+                    android:text="Results"
+                    android:paddingLeft="20dp"
+                    android:fontFamily="Avenir"
+                    android:textColor="@color/theme_dark"
+                    android:shadowColor="@color/theme_dark"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="2dip"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@color/pearsports" />
+
+                <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceListItemSmall"
+                android:text="Duration: "
+                android:id="@+id/workout_detail_duration"
+                android:paddingLeft="20dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="5dp"
                 android:fontFamily="Avenir"
                 android:textColor="@color/white"
-                android:text="Grade: "
-                android:gravity="bottom"/>
-        </LinearLayout>
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+                    android:text="Heart Rate: "
+                    android:id="@+id/workout_detail_hr"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="5dp"
+                    android:fontFamily="Avenir"
+                    android:textColor="@color/white"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+                    android:text="Calories: "
+                    android:id="@+id/workout_detail_calories"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="5dp"
+                    android:fontFamily="Avenir"
+                    android:textColor="@color/white"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+                    android:text="Distance: "
+                    android:id="@+id/workout_detail_distance"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="5dp"
+                    android:fontFamily="Avenir"
+                    android:textColor="@color/white"
+                    android:textSize="14dp" />
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="110dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:src="@drawable/running_history" />
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="110dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:src="@drawable/swimming_history" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceListItem"
+                    android:text="Description"
+                    android:paddingTop="20dp"
+                    android:paddingLeft="20dp"
+                    android:fontFamily="Avenir"
+                    android:textColor="@color/theme_dark"
+                    android:shadowColor="@color/theme_dark"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="2dip"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@color/pearsports" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/workout_detail_complete_description"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="This is the long description of the workout."
+                    android:fontFamily="Avenir"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:orientation="vertical"
-        android:layout_marginTop="115dp"
-        android:fillViewport="false">
-
-        <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:text="Duration: "
-        android:id="@+id/workout_detail_duration"
-        android:paddingLeft="20dp"
-        android:paddingTop="2dp"
-        android:paddingBottom="5dp"
-        android:fontFamily="Avenir"
-        android:textColor="@color/white"
-            android:textSize="14dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceListItemSmall"
-            android:text="Heart Rate: "
-            android:id="@+id/workout_detail_hr"
-            android:paddingLeft="20dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="5dp"
-            android:fontFamily="Avenir"
-            android:textColor="@color/white"
-            android:textSize="14dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceListItemSmall"
-            android:text="Calories: "
-            android:id="@+id/workout_detail_calories"
-            android:paddingLeft="20dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="5dp"
-            android:fontFamily="Avenir"
-            android:textColor="@color/white"
-            android:textSize="14dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceListItemSmall"
-            android:text="Distance: "
-            android:id="@+id/workout_detail_distance"
-            android:paddingLeft="20dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="5dp"
-            android:fontFamily="Avenir"
-            android:textColor="@color/white"
-            android:textSize="14dp" />
-
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="110dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:src="@drawable/running_history" />
-
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="110dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:src="@drawable/swimming_history" />
-    </LinearLayout>
-
 </RelativeLayout>

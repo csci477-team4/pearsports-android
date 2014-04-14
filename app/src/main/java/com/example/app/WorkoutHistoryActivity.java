@@ -70,6 +70,7 @@ public class WorkoutHistoryActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         ((TextView) findViewById(R.id.workout_history_trainee_name)).setText(mItem.getInfoMap().get("name"));
+        ((TextView) findViewById(R.id.workout_history_email)).setText(mItem.getInfoMap().get("email"));
 
         ImageView trainee_image = (ImageView) findViewById(R.id.image_trainee);
         int imageResource = getResources().getIdentifier(mItem.getInfoMap().get("image"), null, getPackageName());
@@ -201,6 +202,7 @@ public class WorkoutHistoryActivity extends Activity {
                             workoutMap.put("title", workoutJSON.getString("title"));
                             workoutMap.put("activity_type", workoutJSON.getString("activity_type"));
                             workoutMap.put("description_short", workoutJSON.getString("description_short"));
+                            workoutMap.put("description_html", workoutJSON.getString("description_html"));
                             workoutMap.put("duration", workoutJSON.getString("duration"));
                             workoutMap.put("avg_hr", null);
                             workoutMap.put("calories", "0");
@@ -234,6 +236,7 @@ public class WorkoutHistoryActivity extends Activity {
                             workoutMap.put("title", workoutJSON.getString("title"));
                             workoutMap.put("activity_type", workoutJSON.getString("activity_type"));
                             workoutMap.put("description_short", workoutJSON.getString("description_short"));
+                            workoutMap.put("description_html", workoutJSON.getString("description_html"));
                             workoutMap.put("duration", workoutJSON.getString("duration"));
                             workoutMap.put("avg_hr", null);
                             workoutMap.put("calories", "0");
@@ -273,6 +276,7 @@ public class WorkoutHistoryActivity extends Activity {
                             workoutMap.put("title", workoutJSON.getString("title"));
                             workoutMap.put("activity_type", workoutJSON.getString("activity_type"));
                             workoutMap.put("description_short", workoutJSON.getString("description_short"));
+                            workoutMap.put("description_html", workoutJSON.getString("description_html"));
                             workoutMap.put("duration", resultJSON.getString("duration"));
                             workoutMap.put("avg_hr", resultJSON.getString("avg_hr"));
                             workoutMap.put("calories", resultJSON.getString("calories"));
@@ -304,6 +308,7 @@ public class WorkoutHistoryActivity extends Activity {
                             workoutMap.put("title", workoutJSON.getString("title"));
                             workoutMap.put("activity_type", workoutJSON.getString("activity_type"));
                             workoutMap.put("description_short", workoutJSON.getString("description_short"));
+                            workoutMap.put("description_html", workoutJSON.getString("description_html"));
                             workoutMap.put("duration", resultJSON.getString("duration"));
                             workoutMap.put("avg_hr", resultJSON.getString("avg_hr"));
                             workoutMap.put("calories", resultJSON.getString("calories"));

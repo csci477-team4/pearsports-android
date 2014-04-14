@@ -64,6 +64,7 @@ public class TraineeDetailFragment extends Fragment {
         if (mItem != null) {
             ((TextView) rootView.findViewById(R.id.trainee_detail_text)).setText(mItem.name);
             ((TextView) rootView.findViewById(R.id.age_text)).setText("Age: " + mItem.getInfoMap().get("age"));
+            ((TextView) rootView.findViewById(R.id.trainee_detail_email)).setText(mItem.getInfoMap().get("email"));
             ((TextView) rootView.findViewById(R.id.height_text)).setText("Height: " + mItem.getInfoMap().get("height"));
             ((TextView) rootView.findViewById(R.id.weight_text)).setText("Weight: " + mItem.getInfoMap().get("weight"));
 
@@ -71,6 +72,8 @@ public class TraineeDetailFragment extends Fragment {
             ((TextView) rootView.findViewById(R.id.calories_text)).setText(mItem.getStatsMap().get("calories") + "\nCalories");
             ((TextView) rootView.findViewById(R.id.miles_text)).setText(mItem.getStatsMap().get("distance_mi") + "\nMiles");
             ((TextView) rootView.findViewById(R.id.minutes_text)).setText(mItem.getStatsMap().get("duration_formatted") + "\nTime");
+
+            ((TextView) rootView.findViewById(R.id.trainee_detail_notes)).setText(mItem.getInfoMap().get("notes"));
 
             // dynamically display the trainee image
             ImageView trainee_image = (ImageView) rootView.findViewById(R.id.image_trainee);
