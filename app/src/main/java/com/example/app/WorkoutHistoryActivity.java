@@ -206,7 +206,7 @@ public class WorkoutHistoryActivity extends Activity {
                             if (workoutJSON.has("description_html")) {
                                 workoutMap.put("description_html", workoutJSON.getString("description_html"));
                             } else {
-                                workoutMap.put("description_html", "null");
+                                workoutMap.put("description_html", "No description.");
                             }
 
                             workoutMap.put("duration", workoutJSON.getString("duration"));
@@ -246,7 +246,7 @@ public class WorkoutHistoryActivity extends Activity {
                             if (workoutJSON.has("description_html")) {
                                 workoutMap.put("description_html", workoutJSON.getString("description_html"));
                             } else {
-                                workoutMap.put("description_html", "null");
+                                workoutMap.put("description_html", "No description.");
                             }
 
                             workoutMap.put("duration", workoutJSON.getString("duration"));
@@ -293,7 +293,7 @@ public class WorkoutHistoryActivity extends Activity {
                             if (workoutJSON.has("description_html")) {
                                 workoutMap.put("description_html", workoutJSON.getString("description_html"));
                             } else {
-                                workoutMap.put("description_html", "null");
+                                workoutMap.put("description_html", "No description.");
                             }
 
                             workoutMap.put("duration", resultJSON.getString("duration"));
@@ -331,7 +331,7 @@ public class WorkoutHistoryActivity extends Activity {
                             if (workoutJSON.has("description_html")) {
                                 workoutMap.put("description_html", workoutJSON.getString("description_html"));
                             } else {
-                                workoutMap.put("description_html", "null");
+                                workoutMap.put("description_html", "No description.");
                             }
 
                             workoutMap.put("duration", resultJSON.getString("duration"));
