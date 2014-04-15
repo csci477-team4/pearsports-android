@@ -94,7 +94,7 @@ public class WorkoutHistoryActivity extends Activity {
                 ViewGroup vg = (ViewGroup) findViewById(R.id.workout_summary_container);
                 vg.removeAllViews();
                 currentWeek -= 1;
-                weekEndMillis = weekStartMillis;
+                weekEndMillis = weekStartMillis - 1;
                 weekStartMillis -= WEEK_MILLISECONDS;
                 new GetWorkoutSchedule().execute(weekStartMillis, weekEndMillis);
             }
@@ -107,7 +107,7 @@ public class WorkoutHistoryActivity extends Activity {
                 ViewGroup vg = (ViewGroup) findViewById(R.id.workout_summary_container);
                 vg.removeAllViews();
                 currentWeek += 1;
-                weekStartMillis = weekEndMillis;
+                weekStartMillis = weekEndMillis + 1;
                 weekEndMillis += WEEK_MILLISECONDS;
                 new GetWorkoutSchedule().execute(weekStartMillis, weekEndMillis);
             }
@@ -202,7 +202,13 @@ public class WorkoutHistoryActivity extends Activity {
                             workoutMap.put("title", workoutJSON.getString("title"));
                             workoutMap.put("activity_type", workoutJSON.getString("activity_type"));
                             workoutMap.put("description_short", workoutJSON.getString("description_short"));
-                            workoutMap.put("description_html", workoutJSON.getString("description_html"));
+
+                            if (workoutJSON.has("description_html")) {
+                                workoutMap.put("description_html", workoutJSON.getString("description_html"));
+                            } else {
+                                workoutMap.put("description_html", "null");
+                            }
+
                             workoutMap.put("duration", workoutJSON.getString("duration"));
                             workoutMap.put("avg_hr", null);
                             workoutMap.put("calories", "0");
@@ -236,7 +242,13 @@ public class WorkoutHistoryActivity extends Activity {
                             workoutMap.put("title", workoutJSON.getString("title"));
                             workoutMap.put("activity_type", workoutJSON.getString("activity_type"));
                             workoutMap.put("description_short", workoutJSON.getString("description_short"));
-                            workoutMap.put("description_html", workoutJSON.getString("description_html"));
+
+                            if (workoutJSON.has("description_html")) {
+                                workoutMap.put("description_html", workoutJSON.getString("description_html"));
+                            } else {
+                                workoutMap.put("description_html", "null");
+                            }
+
                             workoutMap.put("duration", workoutJSON.getString("duration"));
                             workoutMap.put("avg_hr", null);
                             workoutMap.put("calories", "0");
@@ -274,9 +286,16 @@ public class WorkoutHistoryActivity extends Activity {
 
                             workoutMap.put("id", workoutJSON.getString("id"));
                             workoutMap.put("title", workoutJSON.getString("title"));
+                            Log.d("WORKOUT TITLE:", workoutMap.get("title"));
                             workoutMap.put("activity_type", workoutJSON.getString("activity_type"));
                             workoutMap.put("description_short", workoutJSON.getString("description_short"));
-                            workoutMap.put("description_html", workoutJSON.getString("description_html"));
+
+                            if (workoutJSON.has("description_html")) {
+                                workoutMap.put("description_html", workoutJSON.getString("description_html"));
+                            } else {
+                                workoutMap.put("description_html", "null");
+                            }
+
                             workoutMap.put("duration", resultJSON.getString("duration"));
                             workoutMap.put("avg_hr", resultJSON.getString("avg_hr"));
                             workoutMap.put("calories", resultJSON.getString("calories"));
@@ -308,7 +327,13 @@ public class WorkoutHistoryActivity extends Activity {
                             workoutMap.put("title", workoutJSON.getString("title"));
                             workoutMap.put("activity_type", workoutJSON.getString("activity_type"));
                             workoutMap.put("description_short", workoutJSON.getString("description_short"));
-                            workoutMap.put("description_html", workoutJSON.getString("description_html"));
+
+                            if (workoutJSON.has("description_html")) {
+                                workoutMap.put("description_html", workoutJSON.getString("description_html"));
+                            } else {
+                                workoutMap.put("description_html", "null");
+                            }
+
                             workoutMap.put("duration", resultJSON.getString("duration"));
                             workoutMap.put("avg_hr", resultJSON.getString("avg_hr"));
                             workoutMap.put("calories", resultJSON.getString("calories"));
@@ -333,6 +358,7 @@ public class WorkoutHistoryActivity extends Activity {
 
                     // TODO: sort mItem.getWorkouts() array by date
                     Collections.sort(mItem.getWorkouts(), new WorkoutComparator());
+                    Collections.sort(mItem.getWeekWorkouts(), new WorkoutComparator());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -425,7 +451,8 @@ public class WorkoutHistoryActivity extends Activity {
         if (!iso.equals("null")) {
             DateTimeFormatter parser = ISODateTimeFormat.dateTimeNoMillis();
             DateTime dt = parser.parseDateTime(iso);
-            DateTimeFormatter formatter = DateTimeFormat.mediumDateTime();
+            DateTimeFormatter formatter = DateTimeFormat.shortDateTime();
+            //Log.d("ISOStringToString >>", "iso: "+iso+", formatted: " + formatter.print(dt));
             return formatter.print(dt);
         }
         return "null";
