@@ -22,5 +22,6 @@
     <string name="title_activity_sport">Workout List</string>
     <string name="title_activity_record_audio">RecordAudioActivity</string>
     <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_trainee">TraineeActivity</string>
 
 </resources>
