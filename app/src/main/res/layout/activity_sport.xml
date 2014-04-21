@@ -13,18 +13,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select a Workout"
-        android:paddingLeft="20dp"
         android:fontFamily="Avenir"
-        android:textColor="@color/black"
-        android:shadowColor="@color/black"
-        android:textStyle="bold"
+        android:layout_marginLeft="20dp"
         style="@style/title"/>
 
     <View
         android:layout_width="fill_parent"
         android:layout_height="2dip"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="10dp"
         android:background="@color/pearsports" />
 
     <ListView
@@ -34,9 +29,7 @@
         android:choiceMode="none"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"/>
+        android:layout_marginTop="5dp"/>
 
 </LinearLayout>
 

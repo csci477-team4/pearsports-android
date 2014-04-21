@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
@@ -51,9 +50,7 @@ public class ScheduleWorkoutActivity extends Activity {
 
         ((TextView) findViewById(R.id.workout_name)).setText(name);
 
-        final DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
-        final TimePicker timePicker = (TimePicker) findViewById(R.id.timePicker);
-        timePicker.setIs24HourView(true);
+        final DatePicker datePicker = (DatePicker) findViewById(R.id.datePickerStart);
 
         Button pic1 = (Button) findViewById(R.id.schedule_workout);
         pic1.setOnClickListener(new View.OnClickListener() {
@@ -65,13 +62,10 @@ public class ScheduleWorkoutActivity extends Activity {
                 int month = datePicker.getMonth() + 1;  //month 1-12
                 int year  = datePicker.getYear();       //YYYY
 
-                int hour = timePicker.getCurrentHour();
-                int min  = timePicker.getCurrentMinute();
-
                 // Time conversion to Epoch
-                String date_str = new StringBuilder().append(month).append(' ').append(day).append(' ').append(year).append(' ').append(hour).append(':').append(min).toString();
+                String date_str = new StringBuilder().append(month).append(' ').append(day).append(' ').append(year).toString();
 
-                SimpleDateFormat df = new SimpleDateFormat("MM dd yyyy HH:mm");
+                SimpleDateFormat df = new SimpleDateFormat("MM dd yyyy");
                 Date date = null;
                 try {
                     date = df.parse(date_str);
