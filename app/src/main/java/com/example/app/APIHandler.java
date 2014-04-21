@@ -235,6 +235,21 @@ public final class APIHandler {
     public static JSONObject sendAudioUploadRequest(String urlPath, String key, String value, File file,
                                                     String fileName, String traineeId) {
         try {
+            int dotIndex = fileName.lastIndexOf('.');
+            if(dotIndex == -1)
+            {
+                fileName = fileName.concat(".3gp");
+            }
+            else
+            {
+                String test = fileName.substring(dotIndex,fileName.length());
+
+                if(!test.equals(".3gp"))
+                {
+                    fileName = fileName.concat(".3gp");
+                }
+            }
+
             DefaultHttpClient httpClient = new DefaultHttpClient();
             HttpParams httpParameters = httpClient.getParams();
             HttpConnectionParams.setConnectionTimeout(httpParameters, 5000);
@@ -256,6 +271,7 @@ public final class APIHandler {
             multipartEntity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
             multipartEntity.addPart("content", new FileBody(file));
             multipartEntity.addTextBody("trainee_id",traineeId);
+            multipartEntity.addTextBody("filename",fileName);
             httpPost.setEntity(multipartEntity.build());
             httpResponse = httpClient.execute(httpPost);
             httpEntity = httpResponse.getEntity();
