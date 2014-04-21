@@ -11,10 +11,8 @@ import java.util.HashMap;
 public class Workout implements Serializable {
 
     private HashMap<String,String> workoutMap;
-    private Result result;
 
     public Workout() {
-        result = new Result();
         workoutMap = new HashMap<String, String>(13);
     }
 
@@ -22,35 +20,12 @@ public class Workout implements Serializable {
         return workoutMap;
     }
 
-    public Result getResult() { return result; }
-
     public boolean isCompleted() {
         return workoutMap.get("status").toString().equals("completed");
     }
 
     public void printWorkout() {
         Log.d("WORKOUT: ", workoutMap.toString());
-    }
-
-    /**
-     * Holds the data that is only available if the workout
-     * has been completed.
-     */
-    public class Result implements Serializable {
-
-        public HashMap<String,String> resultMap;
-
-        public Result() {
-
-            resultMap = new HashMap<String, String>(7);
-        }
-
-        public void printResult() {
-            Log.d("RESULT: ", resultMap.toString());
-        }
-
-        public HashMap<String,String> getResultMap() { return resultMap; }
-
     }
 
 }

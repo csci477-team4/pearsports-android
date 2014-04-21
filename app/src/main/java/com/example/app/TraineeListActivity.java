@@ -21,6 +21,11 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -132,8 +137,21 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
                             info.put("image","drawable/trainee_4");
                         }
 
-
                         TraineeContent.addItem(trainee);
+                    }
+
+                    // serialize
+                    try
+                    {
+                        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(getFilesDir() + "trainee_content.txt"))); //Select where you wish to save the file...
+                        oos.writeObject(new TraineeContent()); // write the class as an 'object'
+                        oos.flush(); // flush the stream to insure all of the information was written to 'save_object.bin'
+                        oos.close();// close the stream
+                    }
+                    catch(Exception ex)
+                    {
+                        Log.v("Serialization Save Error : ", ex.getMessage());
+                        ex.printStackTrace();
                     }
 
                 } catch (JSONException e) {
@@ -141,6 +159,16 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
                 }
                 return true;
             } else {
+                try
+                {
+                    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(getFilesDir() + "trainee_content.txt")));
+                    TraineeContent tc = (TraineeContent) ois.readObject();
+                }
+                catch(Exception ex)
+                {
+                    Log.v("Serialization Read Error : ",ex.getMessage());
+                    ex.printStackTrace();
+                }
                 Log.e("APIHandler", "No data from specified URL");
             }
             return false;
@@ -194,12 +222,35 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
                             map.put(statKey,trainee_stats.get(statKey).toString());
                         }
                     }
+                    // serialize
+                    try
+                    {
+                        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(getFilesDir() + "trainee_content.txt"))); //Select where you wish to save the file...
+                        oos.writeObject(new TraineeContent()); // write the class as an 'object'
+                        oos.flush(); // flush the stream to insure all of the information was written to 'save_object.bin'
+                        oos.close();// close the stream
+                    }
+                    catch(Exception ex)
+                    {
+                        Log.v("Serialization Save Error : ", ex.getMessage());
+                        ex.printStackTrace();
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 return true;
             } else {
+                try
+                {
+                    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(getFilesDir() + "trainee_content.txt")));
+                    TraineeContent tc = (TraineeContent) ois.readObject();
+                }
+                catch(Exception ex)
+                {
+                    Log.v("Serialization Read Error : ",ex.getMessage());
+                    ex.printStackTrace();
+                }
                 Log.e("APIHandler", "No data from specified URL");
             }
             return false;

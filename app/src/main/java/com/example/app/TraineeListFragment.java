@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -23,6 +22,11 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -234,11 +238,35 @@ public class TraineeListFragment extends ListFragment {
                         TraineeContent.addItem(trainee);
                     }
 
+                    // serialize
+                    try
+                    {
+                        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(getActivity().getFilesDir() + "trainee_content.txt"))); //Select where you wish to save the file...
+                        oos.writeObject(new TraineeContent()); // write the class as an 'object'
+                        oos.flush(); // flush the stream to insure all of the information was written to 'save_object.bin'
+                        oos.close();// close the stream
+                    }
+                    catch(Exception ex)
+                    {
+                        Log.v("Serialization Save Error : ", ex.getMessage());
+                        ex.printStackTrace();
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 return true;
             } else {
+                try
+                {
+                    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(getActivity().getFilesDir() + "trainee_content.txt")));
+                    TraineeContent tc = (TraineeContent) ois.readObject();
+                }
+                catch(Exception ex)
+                {
+                    Log.v("Serialization Read Error : ",ex.getMessage());
+                    ex.printStackTrace();
+                }
                 Log.e("APIHandler", "No data from specified URL");
             }
             return false;
@@ -265,7 +293,7 @@ public class TraineeListFragment extends ListFragment {
                     LayoutInflater inflater = (LayoutInflater) getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     view = inflater.inflate(R.layout.trainee_row, null);
 
-                    Drawable trainee = getActivity().getApplicationContext().getResources().getDrawable(R.drawable.trainee_1);
+                    //Drawable trainee = getActivity().getApplicationContext().getResources().getDrawable(R.drawable.trainee_1);
 
                     ((TextView) view.findViewById(R.id.trainee_name)).setText(t.getInfoMap().get("name"));
                     //((ImageView) view.findViewById(R.id.trainee_pic)).setImageDrawable(trainee);
@@ -302,12 +330,35 @@ public class TraineeListFragment extends ListFragment {
                             map.put(statKey,trainee_stats.get(statKey).toString());
                         }
                     }
+                    // serialize
+                    try
+                    {
+                        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(getActivity().getFilesDir() + "trainee_content.txt"))); //Select where you wish to save the file...
+                        oos.writeObject(new TraineeContent()); // write the class as an 'object'
+                        oos.flush(); // flush the stream to insure all of the information was written to 'save_object.bin'
+                        oos.close();// close the stream
+                    }
+                    catch(Exception ex)
+                    {
+                        Log.v("Serialization Save Error : ", ex.getMessage());
+                        ex.printStackTrace();
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 return true;
             } else {
+                try
+                {
+                    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(getActivity().getFilesDir() + "trainee_content.txt")));
+                    TraineeContent tc = (TraineeContent) ois.readObject();
+                }
+                catch(Exception ex)
+                {
+                    Log.v("Serialization Read Error : ",ex.getMessage());
+                    ex.printStackTrace();
+                }
                 Log.e("APIHandler", "No data from specified URL");
             }
             return false;

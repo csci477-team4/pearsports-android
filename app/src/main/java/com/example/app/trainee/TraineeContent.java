@@ -8,17 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * <p>
- * TODO: Replace all uses of this class before publishing your app.
- */
+
 public class TraineeContent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * An array of trainee IDs
-     */
+    // An array of trainee IDs
     public static List<TraineeItem> TRAINEES = new ArrayList<TraineeItem>();
 
     /**
@@ -49,7 +44,7 @@ public class TraineeContent implements Serializable {
     /**
      * Trainee
      */
-    public static class TraineeItem {
+    public static class TraineeItem implements Serializable {
         public String id;
         public String name;
 
@@ -107,7 +102,7 @@ public class TraineeContent implements Serializable {
         /**
          *
          */
-        private class Stats {
+        private static class Stats implements Serializable {
 
             private HashMap<String,String> statsMap;
 

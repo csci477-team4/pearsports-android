@@ -32,6 +32,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -61,13 +66,13 @@ public class WorkoutHistoryActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        setContentView(R.layout.activity_workout_history);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
         token = preferences.getString("token",null);
         traineeID = preferences.getString("trainee_id", null);
+
         mItem = TraineeContent.TRAINEE_MAP.get(traineeID);
-
-        setContentView(R.layout.activity_workout_history);
-
-        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         ((TextView) findViewById(R.id.workout_history_trainee_name)).setText(mItem.getInfoMap().get("name"));
         ((TextView) findViewById(R.id.workout_history_email)).setText(mItem.getInfoMap().get("email"));
@@ -189,7 +194,7 @@ public class WorkoutHistoryActivity extends Activity {
                     resultArray = resultsObject.getJSONArray("data");
 
 
-                    // incomplete or marked_complete workouts
+                    // incomplete or marked_complete workouts (no results)
                     for (int i = 0; i < workoutsCount; i++) {
                         JSONObject workoutJSON = workoutArray.getJSONObject(i);
 
@@ -273,7 +278,7 @@ public class WorkoutHistoryActivity extends Activity {
                         }
                     }
 
-                    // completed workouts
+                    // completed workouts with results
                     for (int i = 0; i < resultsCount; i++) {
 //                        HashMap<String,String> resultMap = workout.getResult().getResultMap();
                         JSONObject resultJSON = resultArray.getJSONObject(i);
@@ -356,14 +361,38 @@ public class WorkoutHistoryActivity extends Activity {
                         }
                     }
 
-                    // TODO: sort mItem.getWorkouts() array by date
+                    // sort by date
                     Collections.sort(mItem.getWorkouts(), new WorkoutComparator());
                     Collections.sort(mItem.getWeekWorkouts(), new WorkoutComparator());
+
+                    // serialize
+                    try
+                    {
+                        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(getFilesDir() + "trainee_content.txt"))); //Select where you wish to save the file...
+                        oos.writeObject(new TraineeContent()); // write the class as an 'object'
+                        oos.flush(); // flush the stream to insure all of the information was written to 'save_object.bin'
+                        oos.close();// close the stream
+                    }
+                    catch(Exception ex)
+                    {
+                        Log.v("Serialization Save Error : ", ex.getMessage());
+                        ex.printStackTrace();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 return true;
             } else {
+                try
+                {
+                    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(getFilesDir() + "trainee_content.txt")));
+                    TraineeContent tc = (TraineeContent) ois.readObject();
+                }
+                catch(Exception ex)
+                {
+                    Log.v("Serialization Read Error : ",ex.getMessage());
+                    ex.printStackTrace();
+                }
                 Log.e("APIHandler", "No data from specified URL");
             }
             return false;
