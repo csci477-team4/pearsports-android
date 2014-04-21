@@ -1,9 +1,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+<LinearLayout
     android:orientation="horizontal"
     android:layout_width="fill_parent"
-    android:layout_height="80dp"
-    android:paddingLeft="10dp"
-    android:paddingTop="10dp"
+    android:layout_height="75dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginLeft="10dp"
     android:layout_alignParentTop="true"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true">
@@ -16,7 +21,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:id="@+id/workout_completed_activity_icon"
-            android:src="@drawable/hiking"
+            android:src="@drawable/running"
             android:layout_gravity="center_horizontal" />
         <TextView
             android:layout_width="fill_parent"
@@ -46,20 +51,19 @@
             android:fontFamily="Avenir" />
         <ImageView
             android:layout_width="fill_parent"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:id="@+id/workout_completed_hr_map"
-            android:src="@drawable/hiking_history"
-            android:layout_gravity="left" />
+            android:src="@drawable/heart_rate_map"
+            android:scaleType="fitStart" />
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:text="Workout Name"
-        android:textSize="24dp"
-        android:textStyle="bold"
-        android:gravity="left"
-        android:textColor="@color/white" />
-
 </LinearLayout>
+
+<View
+android:layout_width="fill_parent"
+android:layout_height="1dip"
+android:layout_marginLeft="20dp"
+android:layout_marginRight="20dp"
+android:background="@color/pearsports" />
+
+    </LinearLayout>

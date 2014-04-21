@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingTop="20dp"
-    android:background="@color/theme_medium"
+    android:background="@color/dgray"
     tools:context="com.example.app.ScheduleWorkoutActivity" >
 
     <ScrollView

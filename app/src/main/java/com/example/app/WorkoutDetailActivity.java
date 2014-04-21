@@ -3,13 +3,11 @@ package com.example.app;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.app.trainee.TraineeContent;
@@ -50,10 +48,10 @@ public class WorkoutDetailActivity extends Activity {
 
 
         // TODO: change this to display the activity icon
-        ImageView trainee_image = (ImageView) findViewById(R.id.workout_detail_activity_icon);
-        int imageResource = getResources().getIdentifier(mItem.getInfoMap().get("image"), null, getPackageName());
-        Drawable drawable = getResources().getDrawable(imageResource);
-        trainee_image.setImageDrawable(drawable);
+//        ImageView trainee_image = (ImageView) findViewById(R.id.workout_detail_activity_icon);
+//        int imageResource = getResources().getIdentifier(mItem.getInfoMap().get("image"), null, getPackageName());
+//        Drawable drawable = getResources().getDrawable(imageResource);
+//        trainee_image.setImageDrawable(drawable);
     }
 
     @Override

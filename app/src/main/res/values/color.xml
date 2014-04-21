@@ -9,6 +9,10 @@
     <color name="theme_light">#E0E0DF</color>
     <color name="white">#FFFFFF</color>
 
+    <color name="offblack">#363636</color>
+    <color name="dgray">#565656</color>
+    <color name="lgray">#747474</color>
+
     <!-- Android Theme -->
     <color name="red_dark">#CC0000</color>
     <color name="red_light">#FF4444</color>

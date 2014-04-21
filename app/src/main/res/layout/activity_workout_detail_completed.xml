@@ -7,12 +7,12 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:background="@color/theme_medium"
+    android:background="@color/dgray"
     tools:context="com.example.app.WorkoutHistoryActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="100dp"
         android:orientation="horizontal"
         android:layout_weight="1"
         android:paddingLeft="20dp">
@@ -23,15 +23,15 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:id="@+id/workout_detail_activity_icon"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
-                android:src="@drawable/trainee_1"/>
+                android:layout_marginBottom="5dp"
+                android:src="@drawable/running"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -53,18 +53,18 @@
                 android:textAllCaps="false"
                 android:textSize="30dp"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="35dp"
                 android:textIsSelectable="false"
                 android:text="Workout Title"
                 android:fontFamily="Avenir"
                 android:textColor="@color/white"
                 android:capitalize="words"
-                android:textStyle="bold"
-                android:gravity="left|top" />
+                android:textStyle="bold" />
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="60dp">
+                android:layout_height="55dp"
+                android:layout_marginTop="5dp">
                 <TextView
                     android:id="@+id/workout_detail_description_short"
                     android:textSize="12dp"
@@ -82,10 +82,18 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="fill_parent"
         android:orientation="vertical"
-        android:layout_marginTop="115dp"
+        android:layout_marginTop="95dp"
         android:fillViewport="false">
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dip"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/pearsports" />
 
         <TextView
         android:layout_width="match_parent"
@@ -145,7 +153,9 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:src="@drawable/running_history" />
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/heart_rate_map" />
 
         <ImageView
             android:layout_width="fill_parent"
@@ -153,7 +163,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:src="@drawable/swimming_history" />
+            android:src="@drawable/heart_rate_map" />
     </LinearLayout>
 
 </RelativeLayout>

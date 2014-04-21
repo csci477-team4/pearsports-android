@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/theme_medium"
+    android:background="@color/dgray"
     tools:context="${packageName}.${activityClass}">
 
     <TextView
@@ -15,8 +15,8 @@
         android:paddingTop="20dp"
         android:paddingLeft="20dp"
         android:fontFamily="Avenir"
-        android:textColor="@color/theme_dark"
-        android:shadowColor="@color/black"
+        android:textColor="@color/lgray"
+        android:shadowColor="@color/lgray"
         android:textStyle="bold" />
 
     <View
