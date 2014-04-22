@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,15 +122,20 @@ public class MessageActivity extends ListActivity {
             parameters.add(new BasicNameValuePair("trainee_id", trainee_id.trim()));
             parameters.add(new BasicNameValuePair("content", sentMessage));
             parameters.add(new BasicNameValuePair("outgoing", "true"));
-            JSONObject jsonObj = handler.sendAPIRequestWithAuth("message/text", handler.POST, token, "", parameters);
-            sentMessage = new String();
             try {
-                String wasSuccess = jsonObj.get("message").toString();
-                Log.w("sentResponse", jsonObj.toString());
-                if (wasSuccess.contains("success")) {
-                    return true;
+                JSONObject jsonObj = handler.sendAPIRequestWithAuth("message/text", handler.POST, token, "", parameters);
+                sentMessage = new String();
+                try {
+                    String wasSuccess = jsonObj.get("message").toString();
+                    Log.w("sentResponse", jsonObj.toString());
+                    if (wasSuccess.contains("success")) {
+                        return true;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            } catch (JSONException e) {
+            } catch (IOException e) {
+                Log.e("MessageActivity::IOException >> ", e.getMessage());
                 e.printStackTrace();
             }
             return false;
@@ -169,33 +175,38 @@ public class MessageActivity extends ListActivity {
             APIHandler handler = new APIHandler();
             List<NameValuePair> parameters = new ArrayList<NameValuePair>();
             parameters.add(new BasicNameValuePair("trainee_id", trainee_id.trim()));
-            JSONObject jsonObj = handler.sendAPIRequestWithAuth("trainer/messages", handler.GET, token, "", parameters);
+            try {
+                JSONObject jsonObj = handler.sendAPIRequestWithAuth("trainer/messages", handler.GET, token, "", parameters);
 
-            Log.d("Response: ", ">>> " + jsonObj);
+                Log.d("Response: ", ">>> " + jsonObj);
 
-            if (jsonObj != null) {
-                try {
-                    jsonMessages = jsonObj.getJSONArray(TAG_MESSAGE_LIST);
-                    Log.w("incomingMessages", jsonMessages.toString());
-                    //Outgoing means trainer to trainee.
-                    for (int i = 0; i < jsonMessages.length(); i++) {
-                        JSONObject m = jsonMessages.getJSONObject(i);
-                        Log.w("IndividualMessages", m.toString());
-                        boolean wasSender = Boolean.valueOf(m.getString(TAG_OUTGOING));
-                        if (wasSender) {
-                            String text = m.getString(TAG_CONTENT);
-                            addNewMessage(new Message(text, true));
-                        } else {
-                            String text = m.getString(TAG_CONTENT);
-                            addNewMessage(new Message(text, false));
+                if (jsonObj != null) {
+                    try {
+                        jsonMessages = jsonObj.getJSONArray(TAG_MESSAGE_LIST);
+                        Log.w("incomingMessages", jsonMessages.toString());
+                        //Outgoing means trainer to trainee.
+                        for (int i = 0; i < jsonMessages.length(); i++) {
+                            JSONObject m = jsonMessages.getJSONObject(i);
+                            Log.w("IndividualMessages", m.toString());
+                            boolean wasSender = Boolean.valueOf(m.getString(TAG_OUTGOING));
+                            if (wasSender) {
+                                String text = m.getString(TAG_CONTENT);
+                                addNewMessage(new Message(text, true));
+                            } else {
+                                String text = m.getString(TAG_CONTENT);
+                                addNewMessage(new Message(text, false));
+                            }
                         }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    return true;
+                } else {
+                    Log.e("APIHandler", "No data from specified URL");
                 }
-                return true;
-            } else {
-                Log.e("APIHandler", "No data from specified URL");
+            } catch (IOException e) {
+                Log.e("MessageActivity::IOException >> ",e.getMessage());
+                e.printStackTrace();
             }
             return false;
         }

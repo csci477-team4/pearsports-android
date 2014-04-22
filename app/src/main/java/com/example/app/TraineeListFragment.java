@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -25,6 +27,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -45,6 +48,7 @@ public class TraineeListFragment extends ListFragment {
 
     private List<TraineeContent.TraineeItem> listTrainees;
     private String traineeID;
+    private TraineeContent traineeContent = TraineeContent.getInstance();
 
     /**
      * The serialization (saved instance state) Bundle key representing the
@@ -104,9 +108,11 @@ public class TraineeListFragment extends ListFragment {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         token = preferences.getString("token",null);
         traineeID = preferences.getString("trainee_id", null);
-        refresh();
-
-        listTrainees = TraineeContent.TRAINEES;
+        if (isOnline()) {
+            Log.d("TraineeListFragment::onCreate >> ", "refresh.");
+            refresh();
+        }
+        listTrainees = traineeContent.TRAINEES;
     }
 
     @Override
@@ -147,12 +153,12 @@ public class TraineeListFragment extends ListFragment {
         // Add the current trainee to trainee_id in shared preferences
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         SharedPreferences.Editor edit= pref.edit();
-        edit.putString("trainee_id", TraineeContent.TRAINEES.get(position).id);
+        edit.putString("trainee_id", traineeContent.TRAINEES.get(position).id);
         edit.apply();
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(TraineeContent.TRAINEES.get(position).id);
+        mCallbacks.onItemSelected(traineeContent.TRAINEES.get(position).id);
     }
 
     @Override
@@ -180,7 +186,7 @@ public class TraineeListFragment extends ListFragment {
      * Manual refresh
      */
     public void refresh() {
-        TraineeContent.resetTraineeContent();
+        traineeContent.resetTraineeContent();
         new GetTraineeList().execute(token);
         new GetStats().execute();
     }
@@ -195,86 +201,75 @@ public class TraineeListFragment extends ListFragment {
         mActivatedPosition = position;
     }
 
-    private class GetTraineeList extends AsyncTask<String,Void,Boolean>
+    private class GetTraineeList extends AsyncTask<String,Void,TraineeContent>
     {
         @Override
-        protected Boolean doInBackground(String... params) {
+        protected TraineeContent doInBackground(String... params) {
             //List<NameValuePair> parameters = new ArrayList<NameValuePair>();
             //parameters.add(new BasicNameValuePair(LoginActivity.EMAIL, LoginActivity.PASSWORD));
-            JSONObject jsonObj = APIHandler.sendAPIRequestWithAuth("trainee_list", APIHandler.GET, token, "");
-
-            //Log.d("Response: ", ">>> " + jsonObj);
-
-            if (jsonObj != null) {
+            if (isOnline()) {
                 try {
-                    trainee_list = jsonObj.getJSONObject("trainee_list");
+                    JSONObject jsonObj = APIHandler.sendAPIRequestWithAuth("trainee_list", APIHandler.GET, token, "");
 
-                    for (Iterator<String> keys = trainee_list.keys(); keys.hasNext();) {
-                        String id = keys.next();
-                        trainee_info = trainee_list.getJSONObject(id); // map of trainee info
-                        TraineeContent.TraineeItem trainee = new TraineeContent.TraineeItem(id, trainee_info.get("screen_name").toString());
+                    //Log.d("Response: ", ">>> " + jsonObj);
 
-                        HashMap<String,String> info = trainee.getInfoMap();
-                        info.put("email",trainee_info.get("email").toString());
-                        info.put("dob",trainee_info.get("dob").toString());
-                        info.put("gender",trainee_info.get("gender").toString());
-                        info.put("age",trainee_info.get("age").toString());
-                        info.put("height",trainee_info.get("height").toString());
-                        info.put("weight",trainee_info.get("weight").toString());
-                        info.put("notes", trainee_info.get("notes").toString());
-                        info.put("photo_url", trainee_info.get("photo_url").toString());
+                    if (jsonObj != null) {
+                        try {
+                            trainee_list = jsonObj.getJSONObject("trainee_list");
 
-                        // TODO: change this - hardcoded.
-                        if (trainee.name.equals("KR")) {
-                            info.put("image","drawable/trainee_1");
-                        } else if (trainee.name.equals("Jamie")) {
-                            info.put("image","drawable/trainee_2");
-                        } else if (trainee.name.equals("Joe R")) {
-                            info.put("image","drawable/trainee_3");
-                        } else if (trainee.name.equals("eric")) {
-                            info.put("image","drawable/trainee_4");
+                            for (Iterator<String> keys = trainee_list.keys(); keys.hasNext(); ) {
+                                String id = keys.next();
+                                trainee_info = trainee_list.getJSONObject(id); // map of trainee info
+                                TraineeContent.TraineeItem trainee = traineeContent.new TraineeItem(id, trainee_info.get("screen_name").toString());
+
+                                HashMap<String, String> info = trainee.getInfoMap();
+                                info.put("email", trainee_info.get("email").toString());
+                                info.put("dob", trainee_info.get("dob").toString());
+                                info.put("gender", trainee_info.get("gender").toString());
+                                info.put("age", trainee_info.get("age").toString());
+                                info.put("height", trainee_info.get("height").toString());
+                                info.put("weight", trainee_info.get("weight").toString());
+                                info.put("notes", trainee_info.get("notes").toString());
+                                info.put("photo_url", trainee_info.get("photo_url").toString());
+
+                                // TODO: change this - hardcoded.
+                                if (trainee.name.equals("KR")) {
+                                    info.put("image", "drawable/trainee_1");
+                                } else if (trainee.name.equals("Jamie")) {
+                                    info.put("image", "drawable/trainee_2");
+                                } else if (trainee.name.equals("Joe R")) {
+                                    info.put("image", "drawable/trainee_3");
+                                } else if (trainee.name.equals("eric")) {
+                                    info.put("image", "drawable/trainee_4");
+                                }
+
+                                traineeContent.addItem(trainee);
+                            }
+                            writeTraineeContent();
+                        } catch (JSONException e) {
+                            Log.e("TraineeListFragment::GetTraineeList : ", "JSONException: " + e.getMessage());
+                            e.printStackTrace();
+                            loadTraineeContent();
                         }
-
-                        TraineeContent.addItem(trainee);
+                    } else {
+                        Log.e("APIHandler", "No data from specified URL");
+                        loadTraineeContent();
                     }
-
-                    // serialize
-                    try
-                    {
-                        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(getActivity().getFilesDir() + "trainee_content.txt"))); //Select where you wish to save the file...
-                        oos.writeObject(new TraineeContent()); // write the class as an 'object'
-                        oos.flush(); // flush the stream to insure all of the information was written to 'save_object.bin'
-                        oos.close();// close the stream
-                    }
-                    catch(Exception ex)
-                    {
-                        Log.v("Serialization Save Error : ", ex.getMessage());
-                        ex.printStackTrace();
-                    }
-
-                } catch (JSONException e) {
+                } catch (IOException e) {
+                    Log.d("TraineeListFragment::GetTraineeList::IOException >> ", e.getMessage());
                     e.printStackTrace();
+                    loadTraineeContent();
                 }
-                return true;
             } else {
-                try
-                {
-                    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(getActivity().getFilesDir() + "trainee_content.txt")));
-                    TraineeContent tc = (TraineeContent) ois.readObject();
-                }
-                catch(Exception ex)
-                {
-                    Log.v("Serialization Read Error : ",ex.getMessage());
-                    ex.printStackTrace();
-                }
-                Log.e("APIHandler", "No data from specified URL");
+                Log.d("TraineeListFragment::GetTraineeList >> ", "Not online.");
+                loadTraineeContent();
             }
-            return false;
+            return traineeContent;
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
-            if(success){
+        protected void onPostExecute(final TraineeContent success) {
+            //if(success && loadTraineeContent()){
                 ViewGroup parent = (ViewGroup) getActivity().findViewById(R.id.trainee_list_container);
                 for (TraineeContent.TraineeItem t : listTrainees) {
                     traineeID = t.getInfoMap().get("id");
@@ -302,79 +297,105 @@ public class TraineeListFragment extends ListFragment {
 
                     parent.addView(view);
                 }
-            }
+            //}
         }
     }
 
-    private class GetStats extends AsyncTask<Void,Void,Boolean>
+    private class GetStats extends AsyncTask<Void,Void,TraineeContent>
     {
         @Override
-        protected Boolean doInBackground(Void... params) {
-            List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-            parameters.add(new BasicNameValuePair("all","True"));
-            JSONObject statsJSON = APIHandler.sendAPIRequestWithAuth("stats", APIHandler.GET, token, "", parameters);
-
-            //Log.d("Response: ", ">>> " + statsJSON);
-
-            if (statsJSON != null) {
+        protected TraineeContent doInBackground(Void... params) {
+            if (isOnline()) {
+                List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+                parameters.add(new BasicNameValuePair("all", "True"));
                 try {
-                    trainee_stats_list = statsJSON.getJSONObject("trainee_stats_list");
+                    JSONObject statsJSON = APIHandler.sendAPIRequestWithAuth("stats", APIHandler.GET, token, "", parameters);
 
-                    for (Iterator<String> keys = trainee_stats_list.keys(); keys.hasNext();) {
-                        String id = keys.next(); // keys are the trainee_ids
-                        trainee_stats = trainee_stats_list.getJSONObject(id); // map of trainee stats
-                        TraineeContent.TraineeItem trainee = TraineeContent.TRAINEE_MAP.get(id);
-                        HashMap<String,String> map = trainee.getStatsMap();
-                        for(Iterator<String> iter = trainee_stats.keys(); iter.hasNext();) {
-                            String statKey = iter.next();
-                            map.put(statKey,trainee_stats.get(statKey).toString());
+                    //Log.d("Response: ", ">>> " + statsJSON);
+
+                    if (statsJSON != null) {
+                        try {
+                            trainee_stats_list = statsJSON.getJSONObject("trainee_stats_list");
+
+                            for (Iterator<String> keys = trainee_stats_list.keys(); keys.hasNext(); ) {
+                                String id = keys.next(); // keys are the trainee_ids
+                                trainee_stats = trainee_stats_list.getJSONObject(id); // map of trainee stats
+                                TraineeContent.TraineeItem trainee = traineeContent.TRAINEE_MAP.get(id);
+                                HashMap<String, String> map = trainee.getStatsMap();
+                                for (Iterator<String> iter = trainee_stats.keys(); iter.hasNext(); ) {
+                                    String statKey = iter.next();
+                                    map.put(statKey, trainee_stats.get(statKey).toString());
+                                }
+                            }
+                            writeTraineeContent();
+                        } catch (JSONException e) {
+                            Log.e("TraineeListFragment::GetStats : ", "JSONException: " + e.getMessage());
+                            e.printStackTrace();
+                            loadTraineeContent();
                         }
+                    } else {
+                        Log.e("APIHandler", "No data from specified URL");
+                        loadTraineeContent();
                     }
-                    // serialize
-                    try
-                    {
-                        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(getActivity().getFilesDir() + "trainee_content.txt"))); //Select where you wish to save the file...
-                        oos.writeObject(new TraineeContent()); // write the class as an 'object'
-                        oos.flush(); // flush the stream to insure all of the information was written to 'save_object.bin'
-                        oos.close();// close the stream
-                    }
-                    catch(Exception ex)
-                    {
-                        Log.v("Serialization Save Error : ", ex.getMessage());
-                        ex.printStackTrace();
-                    }
-
-                } catch (JSONException e) {
+                } catch (IOException e) {
+                    Log.d("TraineeListFragment::GetStats::IOException >> ", e.getMessage());
                     e.printStackTrace();
+                    loadTraineeContent();
                 }
-                return true;
             } else {
-                try
-                {
-                    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(getActivity().getFilesDir() + "trainee_content.txt")));
-                    TraineeContent tc = (TraineeContent) ois.readObject();
-                }
-                catch(Exception ex)
-                {
-                    Log.v("Serialization Read Error : ",ex.getMessage());
-                    ex.printStackTrace();
-                }
-                Log.e("APIHandler", "No data from specified URL");
+                Log.d("TraineeListFragment::GetStats >> ", "Not online.");
+                loadTraineeContent();
             }
-            return false;
+            return traineeContent;
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
-            if(success){
-//                ArrayAdapter<TraineeContent.TraineeItem> adapter = new ArrayAdapter<TraineeContent.TraineeItem>(
-//                        getActivity(),
-//                        android.R.layout.simple_list_item_activated_1,
-//                        android.R.id.text1,
-//                        TraineeContent.TRAINEES);
-//                setListAdapter(adapter);
-            }
+        protected void onPostExecute(final TraineeContent success) {
+            //                ArrayAdapter<TraineeContent.TraineeItem> adapter = new ArrayAdapter<TraineeContent.TraineeItem>(
+            //                        getActivity(),
+            //                        android.R.layout.simple_list_item_activated_1,
+            //                        android.R.id.text1,
+            //                        TraineeContent.TRAINEES);
+            //                setListAdapter(adapter);
         }
+    }
+
+    /*** I/O HELPERS ***/
+
+    private void writeTraineeContent() {
+        // serialize TraineeContent
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(getActivity().getFilesDir() + "trainee_content.txt"))); //Select where you wish to save the file...
+            oos.writeObject(traineeContent); // write the class as an 'object'
+            oos.flush(); // flush the stream to insure all of the information was written to 'save_object.bin'
+            oos.close();// close the stream
+            Log.d("TraineeListFragment >> ", "OOS writeObject, flush, close.");
+        } catch (Exception ex) {
+            Log.v("Serialization Save Error : ", ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
+    private boolean loadTraineeContent() {
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(getActivity().getFilesDir() + "trainee_content.txt")));
+            traineeContent = (TraineeContent) ois.readObject();
+            listTrainees = traineeContent.TRAINEES;
+            Log.d("TraineeListFragment >> ", "OIS readObject.");
+            return true;
+        } catch (Exception ex) {
+            Log.v("Serialization Read Error : ", ex.getMessage());
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    private boolean isOnline()	{
+        ConnectivityManager cm = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        if(ni != null && ni.isConnected())
+            return true;
+        return false;
     }
 
 }

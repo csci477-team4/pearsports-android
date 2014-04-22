@@ -106,6 +106,7 @@
             android:background="@color/gray"
             android:textColor="@color/white"
             android:layout_marginLeft="5dp"
+            android:textSize="16dp"
             android:gravity="center"
             android:text="Next Week"
             android:fontFamily="Avenir"/>

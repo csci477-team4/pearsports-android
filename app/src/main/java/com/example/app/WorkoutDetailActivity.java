@@ -23,6 +23,7 @@ public class WorkoutDetailActivity extends Activity {
 
     private String traineeID;
     private TraineeContent.TraineeItem mItem;
+    private TraineeContent traineeContent = TraineeContent.getInstance();
     private String workoutID;
     private Workout workout; // the current workout
 
@@ -32,7 +33,7 @@ public class WorkoutDetailActivity extends Activity {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         traineeID = preferences.getString("trainee_id", null);
-        mItem = TraineeContent.TRAINEE_MAP.get(traineeID);
+        mItem = traineeContent.TRAINEE_MAP.get(traineeID);
         workoutID = getIntent().getStringExtra("workout_id");
         workout = mItem.getWorkoutMap().get(workoutID);
 

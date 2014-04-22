@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -145,19 +147,23 @@ public class ScheduleWorkoutActivity extends Activity {
             parameters.add(new BasicNameValuePair("start", String.valueOf(epoch_end)));
             //parameters.add(new BasicNameValuePair("end", String.valueOf(epoch_end)));
 
-            JSONObject scheduleJSON = APIHandler.sendAPIRequestWithAuth("workout" + "/" + sku, APIHandler.POST, token, "", parameters);
+            try {
+                JSONObject scheduleJSON = APIHandler.sendAPIRequestWithAuth("workout" + "/" + sku, APIHandler.POST, token, "", parameters);
 
-            if (scheduleJSON != null) {
-                try {
-                    if(scheduleJSON.getString("object").equals("error"))
-                        return false;
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (scheduleJSON != null) {
+                    try {
+                        if (scheduleJSON.getString("object").equals("error"))
+                            return false;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
+                return true;
+            } catch (IOException e ) {
+                Log.e("ScheduleWorkoutActivity::IOException >> ", e.getMessage());
+                e.printStackTrace();
             }
-
             return true;
-
         }
 
         protected void onPostExecute(final Boolean success) {

@@ -30,6 +30,8 @@ public class TraineeDetailFragment extends Fragment {
      */
     private TraineeContent.TraineeItem mItem;
 
+    private TraineeContent traineeContent = TraineeContent.getInstance();
+
     /**
      * The trainer's token authentication.
      */
@@ -51,7 +53,7 @@ public class TraineeDetailFragment extends Fragment {
             // arguments. In a real-world scenario, use a Loader
             // to load name from a name provider.
             //mItem is a TraineeItem
-            mItem = TraineeContent.TRAINEE_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            mItem = traineeContent.TRAINEE_MAP.get(getArguments().getString(ARG_ITEM_ID));
         }
     }
 

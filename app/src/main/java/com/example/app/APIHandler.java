@@ -42,7 +42,7 @@ public final class APIHandler {
      * @param method - APIHandler.GET or APIHandler.POST
      * @return
      */
-    public static JSONObject sendAPIRequest(String path, int method) {
+    public static JSONObject sendAPIRequest(String path, int method) throws IOException {
         return sendAPIRequest(path, method, null);
     }
 
@@ -53,7 +53,7 @@ public final class APIHandler {
      * @param params - List of key-value pairs
      * @return
      */
-    public static JSONObject sendAPIRequest(String path, int method, List<NameValuePair> params) {
+    public static JSONObject sendAPIRequest(String path, int method, List<NameValuePair> params) throws IOException {
         JSONObject jsonObject = null;
         try {
             DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -89,8 +89,6 @@ public final class APIHandler {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -113,7 +111,8 @@ public final class APIHandler {
      * @param params - List of key-value pairs, other parameters
      * @return
      */
-    public static JSONObject sendAPIRequestWithAuth(String path, int method, String key, String value, List<NameValuePair> params){
+    public static JSONObject sendAPIRequestWithAuth(String path, int method,
+                                                    String key, String value, List<NameValuePair> params) throws IOException {
 
         JSONObject jsonObject = null;
         try {
@@ -152,8 +151,6 @@ public final class APIHandler {
             e.printStackTrace();
         } catch (ClientProtocolException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         if (response != null) {
@@ -170,11 +167,11 @@ public final class APIHandler {
      *
      * @param path - e.g. "trainee_list" or "sign-in"
      * @param method - APIHandler.GET or APIHandler.POST
-     * @param key - username or token
-     * @param value - password. if blank, assumes key is token
+     * @param key - username or token. if token, leave value blank.
+     * @param value - password. if blank, assumes key is token.
      * @return
      */
-    public static JSONObject sendAPIRequestWithAuth(String path, int method, String key, String value) {
+    public static JSONObject sendAPIRequestWithAuth(String path, int method, String key, String value) throws IOException {
 
         JSONObject jsonObject = null;
         try {
@@ -204,8 +201,6 @@ public final class APIHandler {
             e.printStackTrace();
         } catch (ClientProtocolException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         if (response != null) {
@@ -220,7 +215,7 @@ public final class APIHandler {
 
     /**
      *
-     * @param path - e.g. "trainee_list" or "sign-in"
+     * @param path - e.g. "trainee_list" or "stats"
      * @return
      */
     public static String buildURL(String path)

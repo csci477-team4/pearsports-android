@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
     Context context;
     List<RowItem> rowItems;
     SharedPreferences pref;
+    TraineeContent traineeContent = TraineeContent.getInstance();
 
     public CustomBaseAdapter(Context context, List<RowItem> items) {
         this.context = context;
@@ -84,29 +86,32 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         Integer pos = (Integer) v.getTag();
 
         SharedPreferences.Editor edit = pref.edit();
-        edit.putString("trainee_id", TraineeContent.TRAINEES.get(pos).id);
+        Log.d("CustomBaseAdapter: ", "onClick " + v.getId());
+        traineeContent = TraineeContent.getInstance();
+        traineeContent.printTraineeList();
+        edit.putString("trainee_id", traineeContent.TRAINEES.get(pos).id);
         edit.apply();
 
         switch (v.getId()) {
             case R.id.trainee_pic:
                 Intent w = new Intent(context, WorkoutHistoryActivity.class);
-                w.putExtra(TraineeDetailFragment.ARG_ITEM_ID, TraineeContent.TRAINEES.get(pos).id);
-                w.putExtra("trainee_id", TraineeContent.TRAINEES.get(pos).id);
-                w.putExtra("name", TraineeContent.TRAINEES.get(pos).name);
+                w.putExtra(TraineeDetailFragment.ARG_ITEM_ID, traineeContent.TRAINEES.get(pos).id);
+                w.putExtra("trainee_id", traineeContent.TRAINEES.get(pos).id);
+                w.putExtra("name", traineeContent.TRAINEES.get(pos).name);
                 v.getContext().startActivity(w);
                 break;
             case R.id.trainee_name:
                 Intent t = new Intent(context, TraineeDetailActivity.class);
-                t.putExtra(TraineeDetailFragment.ARG_ITEM_ID, TraineeContent.TRAINEES.get(pos).id);
-                t.putExtra("trainee_id", TraineeContent.TRAINEES.get(pos).id);
-                t.putExtra("name", TraineeContent.TRAINEES.get(pos).name);
+                t.putExtra(TraineeDetailFragment.ARG_ITEM_ID, traineeContent.TRAINEES.get(pos).id);
+                t.putExtra("trainee_id", traineeContent.TRAINEES.get(pos).id);
+                t.putExtra("name", traineeContent.TRAINEES.get(pos).name);
                 v.getContext().startActivity(t);
                 break;
             case R.id.right_arrow:
                 Intent m = new Intent(context, MessageActivity.class);
-                m.putExtra(TraineeDetailFragment.ARG_ITEM_ID, TraineeContent.TRAINEES.get(pos).id);
-                m.putExtra("trainee_id", TraineeContent.TRAINEES.get(pos).id);
-                m.putExtra("name", TraineeContent.TRAINEES.get(pos).name);
+                m.putExtra(TraineeDetailFragment.ARG_ITEM_ID, traineeContent.TRAINEES.get(pos).id);
+                m.putExtra("trainee_id", traineeContent.TRAINEES.get(pos).id);
+                m.putExtra("name", traineeContent.TRAINEES.get(pos).name);
                 v.getContext().startActivity(m);
                 break;
             default:

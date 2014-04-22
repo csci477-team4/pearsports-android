@@ -11,17 +11,30 @@ import java.util.Map;
 
 public class TraineeContent implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
-    // An array of trainee IDs
-    public static List<TraineeItem> TRAINEES = new ArrayList<TraineeItem>();
+    private static TraineeContent instance = null;
+
+    /**
+     * An array of trainee IDs
+     */
+    public List<TraineeItem> TRAINEES = new ArrayList<TraineeItem>();
 
     /**
      * Maps String trainee_id to TraineeItem
      */
-    public static Map<String, TraineeItem> TRAINEE_MAP = new HashMap<String, TraineeItem>();
+    public Map<String, TraineeItem> TRAINEE_MAP = new HashMap<String, TraineeItem>();
 
-    public static void addItem(TraineeItem item) {
+    protected TraineeContent() {}
+
+    public static TraineeContent getInstance() {
+        if (instance == null) {
+            instance = new TraineeContent();
+        }
+        return instance;
+    }
+
+    public void addItem(TraineeItem item) {
         TRAINEES.add(item);
         TRAINEE_MAP.put(item.id, item);
     }
@@ -29,22 +42,26 @@ public class TraineeContent implements Serializable {
     /**
      * Manual reset/clear
      */
-    public static void resetTraineeContent() {
+    public void resetTraineeContent() {
         TRAINEE_MAP.clear();
         TRAINEES.clear();
     }
 
-    public static void resetWorkoutContent() {
+    public void resetWorkoutContent() {
         for (TraineeItem t : TRAINEES) {
             t.getWorkoutMap().clear();
             t.getWorkouts().clear();
         }
     }
 
+    public void printTraineeList() {
+        Log.d("TraineeList: ", TRAINEES.toString());
+    }
+
     /**
      * Trainee
      */
-    public static class TraineeItem implements Serializable {
+    public class TraineeItem implements Serializable {
         public String id;
         public String name;
 
@@ -95,6 +112,8 @@ public class TraineeContent implements Serializable {
             Log.d("TRAINEE INFO: ", traineeInfo.toString());
         }
 
+        public void printWeekWorkouts() { Log.d("TRAINEE WEEK WORKOUTS: ", workouts.toString()); }
+
         public void printStats() {
             Log.d("TRAINEE STATS: ", stats.getStatsMap().toString());
         }
@@ -102,7 +121,7 @@ public class TraineeContent implements Serializable {
         /**
          *
          */
-        private static class Stats implements Serializable {
+        private class Stats implements Serializable {
 
             private HashMap<String,String> statsMap;
 
