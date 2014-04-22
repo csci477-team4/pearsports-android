@@ -67,10 +67,8 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
         token = preferences.getString("token",null);
         loadTraineeContent();
         listTrainees = traineeContent.TRAINEES;
-        if (isOnline()) {
-            Log.d("TraineeListActivity::onCreate >> ", "refresh.");
-            refresh();
-        }
+        Log.d("TraineeListActivity::onCreate >> ", "refresh.");
+        refresh();
     }
 
     public void refresh() {
