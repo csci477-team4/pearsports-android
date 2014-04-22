@@ -69,13 +69,14 @@ public class WorkoutHistoryActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         setContentView(R.layout.activity_workout_history);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         token = preferences.getString("token",null);
         traineeID = preferences.getString("trainee_id", null);
 
+        loadTraineeContent();
         mItem = traineeContent.TRAINEE_MAP.get(traineeID);
 
         ((TextView) findViewById(R.id.workout_history_trainee_name)).setText(mItem.getInfoMap().get("name"));
@@ -392,41 +393,6 @@ public class WorkoutHistoryActivity extends Activity {
             return traineeContent;
         }
 
-        private void writeTraineeContent() {
-            // serialize TraineeContent
-            try
-            {
-                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(getFilesDir() + "trainee_content.txt"))); //Select where you wish to save the file...
-                oos.writeObject(traineeContent); // write the class as an 'object'
-                oos.flush(); // flush the stream to insure all of the information was written to 'save_object.bin'
-                oos.close();// close the stream
-                Log.d("WorkoutHistoryActivity >> ", "OOS writeObject, flush, close.");
-            }
-            catch(Exception ex)
-            {
-                Log.v("Serialization Save Error : ", ex.getMessage());
-                ex.printStackTrace();
-            }
-        }
-
-        private boolean loadTraineeContent() {
-            try
-            {
-                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(getFilesDir() + "trainee_content.txt")));
-                traineeContent = (TraineeContent) ois.readObject();
-                mItem = traineeContent.TRAINEE_MAP.get(traineeID);
-                Log.d("WorkoutHistoryActivity >> ", "OIS readObject.");
-                mItem.printWeekWorkouts();
-                return true;
-            }
-            catch(Exception ex)
-            {
-                Log.v("WorkoutHistoryActivity >> Serialization Read Error : ",ex.getMessage());
-                ex.printStackTrace();
-                return false;
-            }
-        }
-
         @Override
         protected void onPreExecute() {
             mItem.getWeekWorkouts().clear();
@@ -522,6 +488,41 @@ public class WorkoutHistoryActivity extends Activity {
         if(ni != null && ni.isConnected())
             return true;
         return false;
+    }
+
+    private void writeTraineeContent() {
+        // serialize TraineeContent
+        try
+        {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(getFilesDir() + "trainee_content.txt"))); //Select where you wish to save the file...
+            oos.writeObject(traineeContent); // write the class as an 'object'
+            oos.flush(); // flush the stream to insure all of the information was written to 'save_object.bin'
+            oos.close();// close the stream
+            Log.d("WorkoutHistoryActivity >> ", "OOS writeObject, flush, close.");
+        }
+        catch(Exception ex)
+        {
+            Log.v("Serialization Save Error : ", ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
+    private boolean loadTraineeContent() {
+        try
+        {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(getFilesDir() + "trainee_content.txt")));
+            traineeContent = (TraineeContent) ois.readObject();
+            mItem = traineeContent.TRAINEE_MAP.get(traineeID);
+            Log.d("WorkoutHistoryActivity >> ", "OIS readObject.");
+            mItem.printWeekWorkouts();
+            return true;
+        }
+        catch(Exception ex)
+        {
+            Log.v("WorkoutHistoryActivity >> Serialization Read Error : ",ex.getMessage());
+            ex.printStackTrace();
+            return false;
+        }
     }
 
 }

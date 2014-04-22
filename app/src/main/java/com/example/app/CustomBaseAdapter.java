@@ -19,6 +19,9 @@ import android.widget.TextView;
 
 import com.example.app.trainee.TraineeContent;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.util.List;
 
 public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListener {
@@ -87,8 +90,7 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
 
         SharedPreferences.Editor edit = pref.edit();
         Log.d("CustomBaseAdapter: ", "onClick " + v.getId());
-        traineeContent = TraineeContent.getInstance();
-        traineeContent.printTraineeList();
+        loadTraineeContent();
         edit.putString("trainee_id", traineeContent.TRAINEES.get(pos).id);
         edit.apply();
 
@@ -132,5 +134,19 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
     @Override
     public long getItemId(int position) {
         return rowItems.indexOf(getItem(position));
+    }
+
+    private boolean loadTraineeContent() {
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(context.getFilesDir() + "trainee_content.txt")));
+            traineeContent = (TraineeContent) ois.readObject();
+            Log.d("CustomBaseAdapter >> ", "OIS readObject.");
+            traineeContent.printTraineeList();
+            return true;
+        } catch (Exception ex) {
+            Log.v("Serialization Read Error : ", ex.getMessage());
+            ex.printStackTrace();
+            return false;
+        }
     }
 }

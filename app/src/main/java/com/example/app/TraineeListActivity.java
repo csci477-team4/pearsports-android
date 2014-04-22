@@ -65,6 +65,7 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         token = preferences.getString("token",null);
+        loadTraineeContent();
         listTrainees = traineeContent.TRAINEES;
         if (isOnline()) {
             Log.d("TraineeListActivity::onCreate >> ", "refresh.");

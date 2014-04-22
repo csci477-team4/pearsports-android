@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -15,6 +16,10 @@ import android.widget.TextView;
 
 import com.example.app.trainee.TraineeContent;
 import com.example.app.trainee.Workout;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 
 /**
  * Created by Shay on 3/20/14.
@@ -33,6 +38,7 @@ public class WorkoutDetailActivity extends Activity {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         traineeID = preferences.getString("trainee_id", null);
+        loadTraineeContent();
         mItem = traineeContent.TRAINEE_MAP.get(traineeID);
         workoutID = getIntent().getStringExtra("workout_id");
         workout = mItem.getWorkoutMap().get(workoutID);
@@ -107,5 +113,23 @@ public class WorkoutDetailActivity extends Activity {
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean loadTraineeContent() {
+        try
+        {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(getFilesDir() + "trainee_content.txt")));
+            traineeContent = (TraineeContent) ois.readObject();
+            mItem = traineeContent.TRAINEE_MAP.get(traineeID);
+            Log.d("WorkoutHistoryActivity >> ", "OIS readObject.");
+            mItem.printWeekWorkouts();
+            return true;
+        }
+        catch(Exception ex)
+        {
+            Log.v("WorkoutHistoryActivity >> Serialization Read Error : ",ex.getMessage());
+            ex.printStackTrace();
+            return false;
+        }
     }
 }
