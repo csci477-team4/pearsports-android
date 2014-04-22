@@ -38,6 +38,8 @@ public class WorkoutDetailActivity extends Activity {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         traineeID = preferences.getString("trainee_id", null);
+
+        Log.d("WorkoutDetailActivity::onCreate >> ", "Loading TraineeContent.");
         loadTraineeContent();
         mItem = traineeContent.TRAINEE_MAP.get(traineeID);
         workoutID = getIntent().getStringExtra("workout_id");
@@ -118,16 +120,16 @@ public class WorkoutDetailActivity extends Activity {
     private boolean loadTraineeContent() {
         try
         {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(getFilesDir() + "trainee_content.txt")));
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(getFilesDir() + "trainee_workouts.txt")));
             traineeContent = (TraineeContent) ois.readObject();
             mItem = traineeContent.TRAINEE_MAP.get(traineeID);
-            Log.d("WorkoutHistoryActivity >> ", "OIS readObject.");
+            Log.d("WorkoutDetailActivity >> ", "OIS readObject.");
             mItem.printWeekWorkouts();
             return true;
         }
         catch(Exception ex)
         {
-            Log.v("WorkoutHistoryActivity >> Serialization Read Error : ",ex.getMessage());
+            Log.v("WorkoutDetailActivity >> Serialization Read Error : ",ex.getMessage());
             ex.printStackTrace();
             return false;
         }

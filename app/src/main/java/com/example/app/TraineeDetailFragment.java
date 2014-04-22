@@ -62,7 +62,6 @@ public class TraineeDetailFragment extends Fragment {
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_trainee_detail, container, false);
 
-        // Show the name as text in a TextView.
         if (mItem != null) {
             ((TextView) rootView.findViewById(R.id.trainee_detail_text)).setText(mItem.name);
             ((TextView) rootView.findViewById(R.id.age_text)).setText("Age: " + mItem.getInfoMap().get("age"));

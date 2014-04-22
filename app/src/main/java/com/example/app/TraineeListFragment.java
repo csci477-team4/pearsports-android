@@ -112,6 +112,7 @@ public class TraineeListFragment extends ListFragment {
             Log.d("TraineeListFragment::onCreate >> ", "refresh.");
             refresh();
         }
+        // execute?
         listTrainees = traineeContent.TRAINEES;
     }
 
@@ -187,6 +188,9 @@ public class TraineeListFragment extends ListFragment {
      */
     public void refresh() {
         traineeContent.resetTraineeContent();
+    }
+
+    public void executeAsyncTasks() {
         new GetTraineeList().execute(token);
         new GetStats().execute();
     }

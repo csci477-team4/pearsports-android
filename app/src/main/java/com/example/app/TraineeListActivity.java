@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.app.trainee.TraineeContent;
 
@@ -65,14 +66,24 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         token = preferences.getString("token",null);
-        loadTraineeContent();
+
+        if(isOnline()) {
+            Log.d("TraineeListActivity::onCreate >> ", "Online. Refresh.");
+            refresh();
+        } else {
+            Log.d("TraineeListActivity::onCreate >> ", "Offline. Load.");
+            loadTraineeContent();
+        }
+
         listTrainees = traineeContent.TRAINEES;
-        Log.d("TraineeListActivity::onCreate >> ", "refresh.");
-        refresh();
+        executeAsyncTasks();
     }
 
     public void refresh() {
         traineeContent.resetTraineeContent();
+    }
+
+    public void executeAsyncTasks() {
         new GetTraineeList().execute(token);
         new GetStats().execute();
     }
@@ -253,15 +264,19 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
 
     private void writeTraineeContent() {
         // serialize TraineeContent
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(getFilesDir() + "trainee_content.txt"))); //Select where you wish to save the file...
-            oos.writeObject(traineeContent); // write the class as an 'object'
-            oos.flush(); // flush the stream to insure all of the information was written to 'save_object.bin'
-            oos.close();// close the stream
-            Log.d("TraineeListActivity >> ", "OOS writeObject, flush, close.");
-        } catch (Exception ex) {
-            Log.v("Serialization Save Error : ", ex.getMessage());
-            ex.printStackTrace();
+        if (isOnline()) {
+            try {
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(getFilesDir() + "trainee_content.txt"))); //Select where you wish to save the file...
+                oos.writeObject(traineeContent); // write the class as an 'object'
+                oos.flush(); // flush the stream to insure all of the information was written to 'save_object.bin'
+                oos.close();// close the stream
+                Log.d("TraineeListActivity >> ", "OOS writeObject, flush, close.");
+            } catch (Exception ex) {
+                Log.v("Serialization Save Error : ", ex.getMessage());
+                ex.printStackTrace();
+            }
+        } else {
+            Log.d("TraineeListActivity::writeTraineeContent >> ", "Not online, will not save.");
         }
     }
 
@@ -285,6 +300,11 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
         NetworkInfo ni = cm.getActiveNetworkInfo();
         if(ni != null && ni.isConnected())
             return true;
+        TraineeListActivity.this.runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(TraineeListActivity.this, "Device is offline.", Toast.LENGTH_LONG).show();
+            }
+        });
         return false;
     }
 

@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.app.trainee.TraineeContent;
 import com.example.app.trainee.Workout;
@@ -395,7 +396,10 @@ public class WorkoutHistoryActivity extends Activity {
 
         @Override
         protected void onPreExecute() {
-            mItem.getWeekWorkouts().clear();
+            if (isOnline()) {
+                Log.d("WorkoutHistoryActivity::onPreExecute >> ", "Clearing week workouts for trainer " + mItem.getInfoMap().get("name"));
+                mItem.getWeekWorkouts().clear();
+            }
         }
 
         @Override
@@ -405,6 +409,9 @@ public class WorkoutHistoryActivity extends Activity {
             traineeContent = tc;
             mItem = traineeContent.TRAINEE_MAP.get(traineeID);
             ArrayList<Workout> workouts = mItem.getWeekWorkouts();
+            Log.d("WorkoutHistoryActivity::onPostExecute >> ", "Printing trainee list and week workouts for trainee " + mItem.getInfoMap().get("name"));
+            traineeContent.printTraineeList();
+            mItem.printWeekWorkouts();
             ViewGroup parent = (ViewGroup) findViewById(R.id.workout_summary_container);
             for (Workout w : workouts) {
                 workoutID = w.getWorkoutMap().get("id");
@@ -487,33 +494,39 @@ public class WorkoutHistoryActivity extends Activity {
         NetworkInfo ni = cm.getActiveNetworkInfo();
         if(ni != null && ni.isConnected())
             return true;
+        WorkoutHistoryActivity.this.runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(WorkoutHistoryActivity.this, "Device is offline.", Toast.LENGTH_LONG).show();
+            }
+        });
         return false;
     }
 
     private void writeTraineeContent() {
         // serialize TraineeContent
-        try
-        {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(getFilesDir() + "trainee_content.txt"))); //Select where you wish to save the file...
-            oos.writeObject(traineeContent); // write the class as an 'object'
-            oos.flush(); // flush the stream to insure all of the information was written to 'save_object.bin'
-            oos.close();// close the stream
-            Log.d("WorkoutHistoryActivity >> ", "OOS writeObject, flush, close.");
-        }
-        catch(Exception ex)
-        {
-            Log.v("Serialization Save Error : ", ex.getMessage());
-            ex.printStackTrace();
+        if (isOnline()) {
+            try {
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(getFilesDir() + "trainee_workouts.txt"))); //Select where you wish to save the file...
+                oos.writeObject(traineeContent); // write the class as an 'object'
+                oos.flush(); // flush the stream to insure all of the information was written to 'save_object.bin'
+                oos.close();// close the stream
+                Log.d("WorkoutHistoryActivity >> ", "OOS writeObject, flush, close.");
+            } catch (Exception ex) {
+                Log.v("Serialization Save Error : ", ex.getMessage());
+                ex.printStackTrace();
+            }
+        } else {
+            Log.d("WorkoutHistoryActivity::writeTraineeContent >> ", "Not online, will not save.");
         }
     }
 
     private boolean loadTraineeContent() {
         try
         {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(getFilesDir() + "trainee_content.txt")));
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(getFilesDir() + "trainee_workouts.txt")));
             traineeContent = (TraineeContent) ois.readObject();
             mItem = traineeContent.TRAINEE_MAP.get(traineeID);
-            Log.d("WorkoutHistoryActivity >> ", "OIS readObject.");
+            Log.d("WorkoutHistoryActivity >> ", "OIS readObject. Printing week workouts.");
             mItem.printWeekWorkouts();
             return true;
         }
