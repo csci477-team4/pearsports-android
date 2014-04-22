@@ -45,9 +45,17 @@ public class MessageAdapter extends BaseAdapter {
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.message_row, parent, false);
-            holder.message = (TextView) convertView.findViewById(R.id.message_text);
-            holder.timestamp = (TextView)convertView.findViewById(R.id.msgTimestamp);
+            if(message.isText){
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.message_row, parent, false);
+                holder.message = (TextView) convertView.findViewById(R.id.message_text);
+                holder.timestamp = (TextView)convertView.findViewById(R.id.msgTimestamp);
+            }
+            else if(message.isAudio){
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.message_row, parent, false);
+                holder.message = (TextView) convertView.findViewById(R.id.message_text);
+                holder.timestamp = (TextView)convertView.findViewById(R.id.msgTimestamp);
+            }
+
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
