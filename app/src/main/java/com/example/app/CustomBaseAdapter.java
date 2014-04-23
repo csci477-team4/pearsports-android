@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,9 @@ import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.renderer.SimpleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +41,7 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
     Context context;
     List<RowItem> rowItems;
     SharedPreferences pref;
+    TraineeContent traineeContent = TraineeContent.getInstance();
 
     public CustomBaseAdapter(Context context, List<RowItem> items) {
         this.context = context;
@@ -100,13 +105,15 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         Integer pos = (Integer) v.getTag();
 
         SharedPreferences.Editor edit = pref.edit();
-        edit.putString("trainee_id", TraineeContent.TRAINEES.get(pos).id);
+        Log.d("CustomBaseAdapter: ", "onClick " + v.getId());
+        loadTraineeContent();
+        edit.putString("trainee_id", traineeContent.TRAINEES.get(pos).id);
         edit.apply();
 
         Intent i = new Intent(context, WorkoutHistoryActivity.class);
-        i.putExtra(TraineeDetailFragment.ARG_ITEM_ID, TraineeContent.TRAINEES.get(pos).id);
-        i.putExtra("trainee_id", TraineeContent.TRAINEES.get(pos).id);
-        i.putExtra("name", TraineeContent.TRAINEES.get(pos).name);
+        i.putExtra(TraineeDetailFragment.ARG_ITEM_ID, traineeContent.TRAINEES.get(pos).id);
+        i.putExtra("trainee_id", traineeContent.TRAINEES.get(pos).id);
+        i.putExtra("name", traineeContent.TRAINEES.get(pos).name);
         v.getContext().startActivity(i);
     }
 
@@ -227,5 +234,19 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
     @Override
     public long getItemId(int position) {
         return rowItems.indexOf(getItem(position));
+    }
+
+    private boolean loadTraineeContent() {
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(context.getFilesDir() + "trainee_content.txt")));
+            traineeContent = (TraineeContent) ois.readObject();
+            Log.d("CustomBaseAdapter >> ", "OIS readObject.");
+            traineeContent.printTraineeList();
+            return true;
+        } catch (Exception ex) {
+            Log.v("Serialization Read Error : ", ex.getMessage());
+            ex.printStackTrace();
+            return false;
+        }
     }
 }

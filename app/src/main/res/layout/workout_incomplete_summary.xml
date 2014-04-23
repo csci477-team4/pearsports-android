@@ -45,14 +45,15 @@
             android:text="Workout Name"
             android:textSize="18dp"
             android:textStyle="bold"
+            android:gravity="bottom"
             android:textColor="@color/white"
             android:fontFamily="Avenir" />
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="14dp"
             android:id="@+id/workout_incomplete_date_scheduled"
-            android:text="Date Scheduled: "
-            android:textSize="11dp"
+            android:text="Scheduled: "
+            android:textSize="10dp"
             android:gravity="top"
             android:textColor="@color/white"
             android:fontFamily="Avenir" />

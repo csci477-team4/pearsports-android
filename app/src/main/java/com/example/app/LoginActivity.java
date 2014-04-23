@@ -15,6 +15,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.UnderlineSpan;
 import android.util.Base64;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -487,19 +488,22 @@ public class LoginActivity extends Activity {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
             nameValuePairs.add(new BasicNameValuePair("email", EMAIL));
             String prefix = getResources().getString(R.string.newAccountPrefix);
-            JSONObject myObj = APIHandler.sendAPIRequest(prefix,APIHandler.POST,nameValuePairs);
-
             try {
-                String status = myObj.get("status").toString();
+                JSONObject myObj = APIHandler.sendAPIRequest(prefix, APIHandler.POST, nameValuePairs);
 
-                if(status.equals("200"))
-                {
-                    return true;
+                try {
+                    String status = myObj.get("status").toString();
+
+                    if (status.equals("200")) {
+                        return true;
+                    }
+                } catch (JSONException e) {
+                    finalResponse = false;
                 }
-            } catch (JSONException e) {
-                finalResponse = false;
+            } catch (IOException e) {
+                Log.e("LoginActivity::IOException >> ", e.getMessage());
+                e.printStackTrace();
             }
-
             return false;
         }
 
