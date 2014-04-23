@@ -155,7 +155,7 @@ public class MessageActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Log.w("Row Clicked", "row: " + position);
-        if (messages.get(position).isAudio && !boolAudioPlaying) {
+        if (messages.get(position).isAudio) {
             Log.w("Audio Clicked", "Audio" + position);
             audioPlayStopClick(position);
             adapter.positionClicked(position);

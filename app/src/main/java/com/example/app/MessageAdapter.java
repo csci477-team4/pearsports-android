@@ -42,7 +42,7 @@ public class MessageAdapter extends BaseAdapter {
     }
 
     public void positionClicked(int position){
-
+        lastItemClicked = position;
     }
 
     @Override
