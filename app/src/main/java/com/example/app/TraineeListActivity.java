@@ -153,11 +153,11 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
         protected void onPostExecute(final Boolean success) {
             if(success) {
                 rowItems = new ArrayList<RowItem>();
+
                 for (int i = 0; i < listTrainees.size(); i++) {
                     RowItem item = new RowItem(trainees[i], arrows, listTrainees.get(i).getInfoMap().get("name"));
                     rowItems.add(item);
                 }
-
 
                 CustomBaseAdapter adapter = new CustomBaseAdapter(TraineeListActivity.this, rowItems);
 
@@ -171,7 +171,7 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
     public void onItemClick(AdapterView<?> parent, View view, int pos,
                             long id) {
 
-        Intent i = new Intent(TraineeListActivity.this, GraphActivity.class);
+        Intent i = new Intent(TraineeListActivity.this, WorkoutHistoryActivity.class);
         i.putExtra(TraineeDetailFragment.ARG_ITEM_ID, TraineeContent.TRAINEES.get(pos).id);
         i.putExtra("trainee_id", TraineeContent.TRAINEES.get(pos).id);
         i.putExtra("name", TraineeContent.TRAINEES.get(pos).name);

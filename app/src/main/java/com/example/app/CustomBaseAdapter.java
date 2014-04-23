@@ -8,16 +8,28 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.app.trainee.TraineeContent;
 
+import org.achartengine.ChartFactory;
+import org.achartengine.GraphicalView;
+import org.achartengine.chart.BarChart;
+import org.achartengine.model.CategorySeries;
+import org.achartengine.model.XYMultipleSeriesDataset;
+import org.achartengine.renderer.SimpleSeriesRenderer;
+import org.achartengine.renderer.XYMultipleSeriesRenderer;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListener {
@@ -76,6 +88,10 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         ra.setTag(new Integer(position));
         ra.setOnClickListener(this);
 
+        GraphicalView gv = createGraph();
+        RelativeLayout rl = (RelativeLayout) convertView.findViewById(R.id.graph_layout);
+        rl.addView(gv);
+
         return convertView;
     }
 
@@ -92,6 +108,110 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         i.putExtra("trainee_id", TraineeContent.TRAINEES.get(pos).id);
         i.putExtra("name", TraineeContent.TRAINEES.get(pos).name);
         v.getContext().startActivity(i);
+    }
+
+    public GraphicalView createGraph() {
+        String[] titles = new String[] { "Completed", "Missed","Scheduled" };
+        List<double[]> values = new ArrayList<double[]>();
+        String graph_title = null;
+        int week = 0;
+
+        switch(week) {
+            case 0:
+                graph_title = "This Week";
+                break;
+            case 1:
+                graph_title = "Last Week";
+                break;
+            case 2:
+                graph_title = "Two Weeks Ago";
+                break;
+        }
+
+        //values.add(new double[] { S, M, T, W, T, F, S});
+        values.add(new double[] { 3, 0, 0, 2, 3, 0, 0}); // completed
+        values.add(new double[] { 2, 0, 2, 1, 2, 2, 0}); // missed
+        values.add(new double[] { 1, 1, 0, 0, 0, 1, 2}); // scheduled
+        int[] colors = new int[] { Color.parseColor("#00C8EC"), Color.parseColor("#CC0000"),Color.parseColor("#99CC00") };
+        XYMultipleSeriesRenderer renderer = buildBarRenderer(colors);
+        renderer.setOrientation(XYMultipleSeriesRenderer.Orientation.HORIZONTAL);
+        setChartSettings(renderer, graph_title, "", "# Workouts", 0.5,
+                7.5, 0.5, 4, Color.WHITE, Color.WHITE);
+        renderer.setXLabels(0);
+        renderer.setYLabels(0);
+        renderer.addXTextLabel(1, "Sun");
+        renderer.addXTextLabel(2, "Mon");
+        renderer.addXTextLabel(3, "Tue");
+        renderer.addXTextLabel(4, "Wed");
+        renderer.addXTextLabel(5, "Thu");
+        renderer.addXTextLabel(6, "Fri");
+        renderer.addXTextLabel(7, "Sat");
+        renderer.addYTextLabel(1, "1");
+        renderer.addYTextLabel(2, "2");
+        renderer.addYTextLabel(3, "3");
+        int length = renderer.getSeriesRendererCount();
+        for (int i = 0; i < length; i++) {
+            SimpleSeriesRenderer seriesRenderer = renderer.getSeriesRendererAt(i);
+            seriesRenderer.setDisplayChartValues(false);
+        }
+
+
+        final GraphicalView grfv = ChartFactory.getBarChartView(context, buildBarDataset(titles, values), renderer, BarChart.Type.STACKED);
+        return grfv;
+    }
+    protected XYMultipleSeriesRenderer buildBarRenderer(int[] colors) {
+        XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
+        renderer.setAxisTitleTextSize(20);
+        renderer.setChartTitleTextSize(30);
+        renderer.setLabelsTextSize(20);
+        renderer.setLegendTextSize(20);
+        renderer.setBarSpacing(1);
+        renderer.setPanEnabled(false, false);
+
+        renderer.setMarginsColor(Color.parseColor("#565656"));
+        renderer.setXLabelsColor(Color.WHITE);
+        renderer.setYLabelsColor(0,Color.WHITE);
+
+        renderer.setApplyBackgroundColor(true);
+        renderer.setBackgroundColor(Color.parseColor("#565656"));
+
+        int length = colors.length;
+        for (int i = 0; i < length; i++) {
+            SimpleSeriesRenderer r = new SimpleSeriesRenderer();
+            r.setColor(colors[i]);
+            r.setChartValuesSpacing(0);
+            renderer.addSeriesRenderer(r);
+        }
+        return renderer;
+    }
+    protected XYMultipleSeriesDataset buildBarDataset(String[] titles, List<double[]> values) {
+        XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+        int length = titles.length;
+        for (int i = 0; i < length; i++) {
+            CategorySeries series = new CategorySeries(titles[i]);
+            double[] v = values.get(i);
+            int seriesLength = v.length;
+            for (int k = 0; k < seriesLength; k++) {
+                series.add(v[k]);
+            }
+            dataset.addSeries(series.toXYSeries());
+        }
+        return dataset;
+    }
+    protected void setChartSettings(XYMultipleSeriesRenderer renderer, String title, String xTitle,
+                                    String yTitle, double xMin, double xMax, double yMin, double yMax, int axesColor,
+                                    int labelsColor) {
+        renderer.setChartTitle(title);
+        renderer.setYLabelsAlign(Paint.Align.RIGHT);
+        renderer.setXTitle(xTitle);
+        renderer.setYTitle(yTitle);
+        renderer.setXAxisMin(xMin);
+        renderer.setXAxisMax(xMax);
+        renderer.setYAxisMin(yMin);
+        renderer.setYAxisMax(yMax);
+        renderer.setMargins(new int[] { 25, 65, 10, 15 });
+        renderer.setAxesColor(axesColor);
+        renderer.setLabelsColor(labelsColor);
     }
 
     @Override

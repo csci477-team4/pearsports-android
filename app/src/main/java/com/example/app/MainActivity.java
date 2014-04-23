@@ -38,8 +38,8 @@ public class MainActivity extends Activity implements OnItemClickListener {
 
         rowItems = new ArrayList<RowItem>();
         for (int i = 0; i < names.length; i++) {
-            RowItem item = new RowItem(trainees[i], arrows[i], names[i]);
-            rowItems.add(item);
+            //RowItem item = new RowItem(trainees[i], arrows[i], names[i]);
+            //rowItems.add(item);
         }
 
         listView = (ListView) findViewById(R.id.list);
