@@ -231,7 +231,7 @@ public class MessageActivity extends ListActivity {
             Log.w("Audio Clicked", "Audio" + position);
             //View row = (View)getListView().getItemAtPosition(position);
             //ImageView buttonImg = (ImageView)row.findViewById(R.id.message_audio_play);
-            //buttonImg.setImageResource(R.drawable.message_audio_pause);
+            //buttonImg.setImageResource(R.drawable.ic_action_pause);
             audioPlayStopClick(position);
             adapter.positionClicked(position);
             adapter.notifyDataSetChanged();
