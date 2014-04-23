@@ -1,6 +1,8 @@
 package com.example.app;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -68,12 +70,74 @@ public class MessageActivity extends ListActivity {
         messages.add(new Message("Yeah?", false));
         messages.add(new Message("Absolutely!", true));*/
 
+        SharedPreferences.Editor edit = pref.edit();
+        edit.putString("trainee_id", trainee_id);
+        edit.apply();
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        // Create a tab listener that is called when the user changes tabs.
+        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // show the given tab
+                int tabPos = tab.getPosition();
+                switch (tabPos) {
+                    case 0:
+                        Intent w = new Intent(MessageActivity.this, WorkoutHistoryActivity.class);
+                        w.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
+                        w.putExtra("trainee_id", trainee_id);
+                        w.putExtra("name", sender);
+                        startActivity(w);
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        Intent t = new Intent(MessageActivity.this, TraineeDetailActivity.class);
+                        t.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
+                        t.putExtra("trainee_id", trainee_id);
+                        t.putExtra("name", sender);
+                        startActivity(t);
+                        break;
+                }
+            }
+
+            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // hide the given tab
+            }
+
+            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // probably ignore this event
+            }
+        };
+
+        actionBar.addTab(actionBar.newTab()
+                .setText("Workouts")
+                .setIcon(R.drawable.ic_action_go_to_today)
+                .setTabListener(tabListener), 0, false);
+
+        actionBar.addTab(actionBar.newTab()
+                .setText("Messages")
+                .setIcon(R.drawable.ic_action_chat)
+                .setTabListener(tabListener), 1, true);
+
+        actionBar.addTab(actionBar.newTab()
+                .setText("Contact")
+                .setIcon(R.drawable.ic_action_person)
+                .setTabListener(tabListener), 2, false);
+
 
         adapter = new MessageAdapter(this, messages);
         setListAdapter(adapter);
 
         /*addNewMessage(new Message("What should I try tomorrow?", false));*/
         new GetMessages().execute();
+    }
+
+    public void onBackPressed() {
+        Intent intent = new Intent(MessageActivity.this, TraineeListActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void sendMessage(View v) {
@@ -164,6 +228,10 @@ public class MessageActivity extends ListActivity {
             edit.apply();
 
             Intent i = new Intent(MessageActivity.this, LoginActivity.class);
+            startActivity(i);
+        }
+        if (id == R.id.action_settings) {
+            Intent i = new Intent(MessageActivity.this, SettingsActivity.class);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);

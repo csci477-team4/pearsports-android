@@ -20,6 +20,39 @@
         <item name="android:background" >@drawable/button</item>
         <item name="android:layout_width" >fill_parent</item>
         <item name="android:layout_height" >fill_parent</item>
+        <item name="android:textColor" >@color/dgray</item>
+        <item name="android:gravity" >center</item>
+        <item name="android:layout_margin" >3dp</item>
+        <item name="android:textSize" >17dp</item>
+        <item name="android:textStyle" >bold</item>
+    </style>
+
+    <style name="red_button" >
+        <item name="android:background" >@drawable/red_button</item>
+        <item name="android:layout_width" >fill_parent</item>
+        <item name="android:layout_height" >fill_parent</item>
+        <item name="android:textColor" >@color/white</item>
+        <item name="android:gravity" >center</item>
+        <item name="android:layout_margin" >3dp</item>
+        <item name="android:textSize" >17dp</item>
+        <item name="android:textStyle" >bold</item>
+    </style>
+
+    <style name="white_button" >
+        <item name="android:background" >@drawable/orange_button</item>
+        <item name="android:layout_width" >fill_parent</item>
+        <item name="android:layout_height" >fill_parent</item>
+        <item name="android:textColor" >@color/white</item>
+        <item name="android:gravity" >center</item>
+        <item name="android:layout_margin" >3dp</item>
+        <item name="android:textSize" >17dp</item>
+        <item name="android:textStyle" >bold</item>
+    </style>
+
+    <style name="green_button" >
+        <item name="android:background" >@drawable/green_button</item>
+        <item name="android:layout_width" >fill_parent</item>
+        <item name="android:layout_height" >fill_parent</item>
         <item name="android:textColor" >@color/white</item>
         <item name="android:gravity" >center</item>
         <item name="android:layout_margin" >3dp</item>
@@ -39,22 +72,20 @@
     </style>
 
     <style name="title" >
-        <item name="android:textColor" >@color/white</item>
-        <item name="android:textStyle" >bold</item>
+        <item name="android:textColor" >@color/offblack</item>
+        <item name="android:shadowColor" >@color/offblack</item>
         <item name="android:textSize" >30dp</item>
         <item name="android:textAllCaps" >true</item>
     </style>
 
     <style name="subtitle" >
         <item name="android:textColor" >@color/white</item>
-        <item name="android:textStyle" >bold</item>
-        <item name="android:textSize" >25dp</item>
+        <item name="android:textSize" >20dp</item>
     </style>
 
     <style name="subsubtitle" >
         <item name="android:textColor" >@color/white</item>
-        <item name="android:textStyle" >bold</item>
-        <item name="android:textSize" >20dp</item>
+        <item name="android:textSize" >15dp</item>
     </style>
 
 </resources>

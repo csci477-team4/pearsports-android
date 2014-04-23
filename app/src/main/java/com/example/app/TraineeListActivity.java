@@ -77,6 +77,7 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
 
         listTrainees = traineeContent.TRAINEES;
         executeAsyncTasks();
+
     }
 
     public void refresh() {
@@ -110,6 +111,10 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
             edit.apply();
 
             Intent i = new Intent(TraineeListActivity.this, LoginActivity.class);
+            startActivity(i);
+        }
+        if (id == R.id.action_settings) {
+            Intent i = new Intent(TraineeListActivity.this, SettingsActivity.class);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);
@@ -201,9 +206,14 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
         }
     }
 
-    public void onItemClick(AdapterView<?> parent, View view, int position,
+    public void onItemClick(AdapterView<?> parent, View view, int pos,
                             long id) {
-        // Click listeners are in CustomBaseAdapter
+
+        Intent i = new Intent(TraineeListActivity.this, WorkoutHistoryActivity.class);
+        i.putExtra(TraineeDetailFragment.ARG_ITEM_ID, traineeContent.TRAINEES.get(pos).id);
+        i.putExtra("trainee_id", traineeContent.TRAINEES.get(pos).id);
+        i.putExtra("name", traineeContent.TRAINEES.get(pos).name);
+        startActivity(i);
     }
 
     private class GetStats extends AsyncTask<Void,Void,TraineeContent>

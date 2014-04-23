@@ -1,6 +1,8 @@
 package com.example.app;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -57,6 +59,8 @@ public class WorkoutHistoryActivity extends Activity {
     private JSONArray resultArray = null;
     private String traineeID;
     private String token;
+    private String name;
+    private String trainee_id;
     private TraineeContent.TraineeItem mItem;
     private TraineeContent traineeContent = TraineeContent.getInstance();
 
@@ -93,6 +97,9 @@ public class WorkoutHistoryActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(WorkoutHistoryActivity.this, SportActivity.class);
+                i.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
+                i.putExtra("trainee_id", trainee_id);
+                i.putExtra("name", name);
                 startActivity(i);
                 finish();
             }
@@ -132,8 +139,75 @@ public class WorkoutHistoryActivity extends Activity {
         currentWeek = 0;
         //Log.d(">>>>> START/END MILLIS: ", "start: " + weekStartMillis + ", end: " + weekEndMillis);
         new GetWorkoutSchedule().execute(weekStartMillis, weekEndMillis);
+
+        Intent intent = getIntent();
+        trainee_id = intent.getStringExtra("trainee_id");
+        name = intent.getStringExtra("name");
+        this.setTitle(name);
+
+        SharedPreferences.Editor edit = preferences.edit();
+        edit.putString("trainee_id", trainee_id);
+        edit.apply();
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        // Create a tab listener that is called when the user changes tabs.
+        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // show the given tab
+                int tabPos = tab.getPosition();
+
+                switch (tabPos) {
+                    case 0:
+                        break;
+                    case 1:
+                        Intent m = new Intent(WorkoutHistoryActivity.this, MessageActivity.class);
+                        m.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
+                        m.putExtra("trainee_id", trainee_id);
+                        m.putExtra("name", name);
+                        startActivity(m);
+                        break;
+                    case 2:
+                        Intent t = new Intent(WorkoutHistoryActivity.this, TraineeDetailActivity.class);
+                        t.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
+                        t.putExtra("trainee_id", trainee_id);
+                        t.putExtra("name", name);
+                        startActivity(t);
+                        break;
+                }
+            }
+
+            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // hide the given tab
+            }
+
+            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // probably ignore this event
+            }
+        };
+
+        actionBar.addTab(actionBar.newTab()
+                .setText("Workouts")
+                .setIcon(R.drawable.ic_action_go_to_today)
+                .setTabListener(tabListener), 0, true);
+
+        actionBar.addTab(actionBar.newTab()
+                .setText("Messages")
+                .setIcon(R.drawable.ic_action_chat)
+                .setTabListener(tabListener), 1, false);
+
+        actionBar.addTab(actionBar.newTab()
+                .setText("Contact")
+                .setIcon(R.drawable.ic_action_person)
+                .setTabListener(tabListener), 2, false);
     }
 
+    public void onBackPressed() {
+        Intent intent = new Intent(WorkoutHistoryActivity.this, TraineeListActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -150,7 +224,8 @@ public class WorkoutHistoryActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            return true;
+            Intent i = new Intent(WorkoutHistoryActivity.this, SettingsActivity.class);
+            startActivity(i);
         }
         if (id == android.R.id.home) {
             // This ID represents the Home or Up button. In the case of this

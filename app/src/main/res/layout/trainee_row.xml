@@ -1,5 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="80dp"
     android:paddingLeft="10dp"
@@ -8,12 +8,16 @@
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true">
 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal" >
+
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:id="@+id/trainee_pic"
-            android:src="@drawable/trainee_1"
-            android:layout_marginBottom="10dp"/>
+            android:src="@drawable/trainee_1" />
 
         <TextView
             android:layout_width="275dp"
@@ -32,5 +36,14 @@
             android:id="@+id/right_arrow"
             android:src="@drawable/right_arrow"
             android:paddingBottom="10dp"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="110dp"
+        android:layout_marginLeft="40dp"
+        android:id="@+id/graph_layout" >
+
+    </RelativeLayout>
 
 </LinearLayout>

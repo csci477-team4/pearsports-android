@@ -11,7 +11,7 @@
     <string name="title_trainee_detail">Trainee Contact</string>
     <string name="title_activity_message">Message Stream</string>
     <string name="forgot_password">Forgot Password</string>
-    <string name="create_account">Create Account</string>
+    <string name="create_account">Request Account</string>
     <string name="vertical_divider">|</string>
     <string name="title_activity_workout_history">Workout History</string>
     <string name="title_activity_workout_detail">Workout Detail</string>
@@ -21,5 +21,8 @@
     <string name="title_activity_">ActivityActivity</string>
     <string name="title_activity_sport">Workout List</string>
     <string name="title_activity_record_audio">RecordAudioActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_trainee">TraineeActivity</string>
+    <string name="title_activity_graph">GraphActivity</string>
 
 </resources>
