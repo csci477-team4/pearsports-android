@@ -70,7 +70,17 @@ public class MessageActivity extends ListActivity {
         //Get trainer token from sharedpref
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         token = pref.getString("token", null);
+        try {
+            String temp = pref.getString("cache_messages",null);
 
+            if(temp != null && !temp.isEmpty())
+            {
+                jsonMessages = new JSONArray(pref.getString("cache_messages", null));
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+            }
         Intent intent = getIntent();
         trainee_id = intent.getStringExtra("trainee_id");
         if (trainee_id != null)
@@ -321,6 +331,10 @@ public class MessageActivity extends ListActivity {
             if (jsonObj != null) {
                 try {
                     jsonMessages = jsonObj.getJSONArray(TAG_MESSAGE_LIST);
+                    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor edit= pref.edit();
+                    edit.putString("cache_messages", jsonMessages.toString());
+                    edit.apply();
                     Log.w("incomingMessages", jsonMessages.toString());
                     //Outgoing means trainer to trainee.
                     for (int i = 0; i < jsonMessages.length(); i++) {
