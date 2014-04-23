@@ -6,6 +6,7 @@ public class Message {
      */
     String message;
     String timestamp;
+    String filename;
     /**
      * boolean to determine, who is sender of this message
      */
@@ -41,9 +42,12 @@ public class Message {
         this.isText = false;
     }
 
-    public void setType(String type){
+    public void setType(String type, String filename){
         if(type.equals("audio")){
             isAudio = true;
+            if(filename != null) {
+                this.filename = filename;
+            }
             return;
         }
         if(type.equals("text")){

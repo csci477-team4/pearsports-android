@@ -72,7 +72,7 @@ public class MessageAdapter extends BaseAdapter {
         } else
             holder = (ViewHolder) convertView.getTag();
 
-        holder.message.setText(message.getMessage());
+        holder.message.setText(message.filename);
         holder.timestamp.setText(message.getTimestamp());
 
         LayoutParams messagelp = (LayoutParams) holder.message.getLayoutParams();
