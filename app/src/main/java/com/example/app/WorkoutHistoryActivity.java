@@ -73,6 +73,9 @@ public class WorkoutHistoryActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(WorkoutHistoryActivity.this, SportActivity.class);
+                i.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
+                i.putExtra("trainee_id", trainee_id);
+                i.putExtra("name", name);
                 startActivity(i);
                 finish();
             }
@@ -132,14 +135,17 @@ public class WorkoutHistoryActivity extends Activity {
 
         actionBar.addTab(actionBar.newTab()
                 .setText("Workouts")
+                .setIcon(R.drawable.ic_action_go_to_today)
                 .setTabListener(tabListener), 0, true);
 
         actionBar.addTab(actionBar.newTab()
                 .setText("Messages")
+                .setIcon(R.drawable.ic_action_chat)
                 .setTabListener(tabListener), 1, false);
 
         actionBar.addTab(actionBar.newTab()
                 .setText("Contact")
+                .setIcon(R.drawable.ic_action_person)
                 .setTabListener(tabListener), 2, false);
     }
 

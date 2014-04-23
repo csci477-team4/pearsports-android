@@ -30,6 +30,7 @@ public class ScheduleWorkoutActivity extends Activity {
 
     private String token;
     private String traineeID;
+    private String name;
     protected String sku;
     protected long epoch_start;
     protected long epoch_end;
@@ -38,17 +39,17 @@ public class ScheduleWorkoutActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule_workout);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         token = preferences.getString("token",null);
         traineeID = preferences.getString("trainee_id", null);
 
         Bundle b = getIntent().getExtras();
-        final String name = b.getString("name");  //name of workout
+        final String workout_name = b.getString("workout_name");  //name of workout
         sku = b.getString("sku");    //sku ID of workout
+        name = b.getString("name");
 
-        ((TextView) findViewById(R.id.workout_name)).setText(name);
+        ((TextView) findViewById(R.id.workout_name)).setText(workout_name);
 
         final DatePicker datePicker = (DatePicker) findViewById(R.id.datePickerStart);
 
@@ -89,6 +90,9 @@ public class ScheduleWorkoutActivity extends Activity {
 
     public void onBackPressed() {
         Intent intent = new Intent(ScheduleWorkoutActivity.this, SportActivity.class);
+        intent.putExtra(TraineeDetailFragment.ARG_ITEM_ID, traineeID);
+        intent.putExtra("trainee_id", traineeID);
+        intent.putExtra("name", name);
         startActivity(intent);
         finish();
     }

@@ -100,14 +100,17 @@ public class TraineeDetailActivity extends FragmentActivity {
 
         actionBar.addTab(actionBar.newTab()
                 .setText("Workouts")
+                .setIcon(R.drawable.ic_action_go_to_today)
                 .setTabListener(tabListener), 0, false);
 
         actionBar.addTab(actionBar.newTab()
                 .setText("Messages")
+                .setIcon(R.drawable.ic_action_chat)
                 .setTabListener(tabListener), 1, false);
 
         actionBar.addTab(actionBar.newTab()
                 .setText("Contact")
+                .setIcon(R.drawable.ic_action_person)
                 .setTabListener(tabListener), 2, true);
 }
 

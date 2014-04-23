@@ -19,12 +19,17 @@ import java.util.Arrays;
 public class SportActivity extends Activity {
 
     private ArrayAdapter<String> listAdapter;
+    private String trainee_id;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sport);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Intent intent = getIntent();
+        trainee_id = intent.getStringExtra("trainee_id");
+        name = intent.getStringExtra("name");
 
         final String[] workouts = new String[] { "Endurance Ride 73min",
         "Pyramid Indoor Cycle",
@@ -131,8 +136,11 @@ public class SportActivity extends Activity {
         myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> av, View view, int i, long l) {
                 Intent intent = new Intent(SportActivity.this, ScheduleWorkoutActivity.class);
-                intent.putExtra("name", workouts[i]);
+                intent.putExtra("workout_name", workouts[i]);
                 intent.putExtra("sku", sku[i]);
+                intent.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
+                intent.putExtra("trainee_id", trainee_id);
+                intent.putExtra("name", name);
                 startActivity(intent);
                 finish();
             }
@@ -141,6 +149,9 @@ public class SportActivity extends Activity {
 
     public void onBackPressed() {
         Intent intent = new Intent(SportActivity.this, WorkoutHistoryActivity.class);
+        intent.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
+        intent.putExtra("trainee_id", trainee_id);
+        intent.putExtra("name", name);
         startActivity(intent);
         finish();
     }

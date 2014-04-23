@@ -35,8 +35,6 @@ public class WorkoutDetailActivity extends Activity {
 
         setContentView(R.layout.activity_workout_detail_completed);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-
         // if completed
         ((TextView) findViewById(R.id.workout_detail_name)).setText(workout.getWorkoutMap().get("title"));
         ((TextView) findViewById(R.id.workout_detail_activity_type)).setText(workout.getWorkoutMap().get("activity_type"));
