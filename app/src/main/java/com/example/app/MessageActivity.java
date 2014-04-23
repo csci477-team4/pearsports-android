@@ -118,16 +118,22 @@ public class MessageActivity extends ListActivity {
                 df.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
                 String formattedDate = df.format(new Date(1000 * Long.parseLong(ts)));
                 String messageType = m.getString(TAG_TYPE);
+                String filename = null;
+
+                if(messageType.equals("audio")) {
+                    filename = m.getString("filename");
+                }
+
                 if (wasSender) {
                     String text = m.getString(TAG_CONTENT);
                     Message addM = new Message(text, true);
-                    addM.setType(messageType);
+                    addM.setType(messageType, filename);
                     addM.setTimestamp(formattedDate.toString());
                     addNewMessage(addM);
                 } else {
                     String text = m.getString(TAG_CONTENT);
                     Message addM = new Message(text, false);
-                    addM.setType(messageType);
+                    addM.setType(messageType, filename);
                     addM.setTimestamp(formattedDate.toString());
                     addNewMessage(addM);
                 }
