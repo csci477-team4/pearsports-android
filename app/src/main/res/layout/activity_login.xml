@@ -1,6 +1,7 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.app.LoginActivity">
+    tools:context="com.example.app.LoginActivity"
+    android:background="@color/dgray">
 
     <!-- Login progress -->
     <LinearLayout android:id="@+id/login_status"
@@ -9,7 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/dgray">
 
         <ProgressBar style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
@@ -31,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="false"
-        style="@style/background_gray">>
+        android:background="@color/dgray">
 
         <LinearLayout style="@style/LoginFormContainer"
             android:orientation="vertical"
@@ -41,7 +43,7 @@
                 android:layout_width="245dp"
                 android:layout_height="56dp"
                 android:id="@+id/pear_logo"
-                android:src="@drawable/pear_logo_black"
+                android:src="@drawable/pear_logo_blue"
                 android:layout_weight="0.26"
                 android:layout_marginTop="50dp"
                 android:layout_gravity="center_horizontal"/>
@@ -53,7 +55,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:inputType="textEmailAddress"
-                android:textColor="@color/theme_dark"
+                android:textColor="@color/white"
                 android:layout_marginTop="50dp"
                 android:hint="@string/prompt_email" />
 
@@ -64,7 +66,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:hint="@string/prompt_password"
-                android:textColor="@color/theme_dark"
+                android:textColor="@color/white"
                 android:inputType="textPassword"
                 android:layout_marginTop="5dp"
                 android:imeActionLabel="@string/action_sign_in_short"
@@ -88,8 +90,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/forgot_password"
                     android:id="@+id/text_forgotPassword"
-                    android:layout_marginLeft="10dp"
-                    style="@style/gray_text" />
+                    android:textColor="@color/lgray" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -98,7 +99,8 @@
                     android:text="@string/vertical_divider"
                     android:id="@+id/text_divider"
                     android:layout_marginLeft="15dp"
-                    style="@style/gray_text" />
+                    android:layout_marginRight="15dp"
+                    android:textColor="@color/lgray" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -106,8 +108,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/create_account"
                     android:id="@+id/text_createAccount"
-                    android:layout_marginLeft="15dp"
-                    style="@style/gray_text" />
+                    android:textColor="@color/lgray" />
 
             </LinearLayout>
         </LinearLayout>

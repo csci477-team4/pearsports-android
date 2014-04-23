@@ -6,49 +6,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:background="@drawable/sil_tall"
+    android:background="@drawable/splash"
     tools:context="com.example.app.SplashScreenActivity$PlaceholderFragment" >
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="WHAT"
-        android:id="@+id/text_what"
-        style="@style/huge_text"
-        android:layout_marginTop="75dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="PUSHES"
-        android:id="@+id/text_pushes"
-        style="@style/huge_text"
-        android:layout_marginTop="135dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="YOU."
-        android:id="@+id/text_you"
-        style="@style/huge_text"
-        android:layout_marginTop="195dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/pear_logo"
-        android:src="@drawable/logo"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

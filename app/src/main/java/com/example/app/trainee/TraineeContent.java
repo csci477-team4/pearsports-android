@@ -8,25 +8,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * <p>
- * TODO: Replace all uses of this class before publishing your app.
- */
+
 public class TraineeContent implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
+
+    private static TraineeContent instance = null;
 
     /**
      * An array of trainee IDs
      */
-    public static List<TraineeItem> TRAINEES = new ArrayList<TraineeItem>();
+    public List<TraineeItem> TRAINEES = new ArrayList<TraineeItem>();
 
     /**
      * Maps String trainee_id to TraineeItem
      */
-    public static Map<String, TraineeItem> TRAINEE_MAP = new HashMap<String, TraineeItem>();
+    public Map<String, TraineeItem> TRAINEE_MAP = new HashMap<String, TraineeItem>();
 
-    public static void addItem(TraineeItem item) {
+    protected TraineeContent() {}
+
+    public static TraineeContent getInstance() {
+        if (instance == null) {
+            instance = new TraineeContent();
+        }
+        return instance;
+    }
+
+    public void addItem(TraineeItem item) {
         TRAINEES.add(item);
         TRAINEE_MAP.put(item.id, item);
     }
@@ -34,22 +42,26 @@ public class TraineeContent implements Serializable {
     /**
      * Manual reset/clear
      */
-    public static void resetTraineeContent() {
+    public void resetTraineeContent() {
         TRAINEE_MAP.clear();
         TRAINEES.clear();
     }
 
-    public static void resetWorkoutContent() {
+    public void resetWorkoutContent() {
         for (TraineeItem t : TRAINEES) {
             t.getWorkoutMap().clear();
             t.getWorkouts().clear();
         }
     }
 
+    public void printTraineeList() {
+        Log.d("TraineeList: ", TRAINEES.toString());
+    }
+
     /**
      * Trainee
      */
-    public static class TraineeItem {
+    public class TraineeItem implements Serializable {
         public String id;
         public String name;
 
@@ -57,6 +69,7 @@ public class TraineeContent implements Serializable {
         private Stats stats;
 
         private ArrayList<Workout> workouts;
+        private ArrayList<Workout> weekWorkouts;
         private HashMap<String,Workout> workoutMap;
 
         public TraineeItem(String id, String name) {
@@ -66,16 +79,10 @@ public class TraineeContent implements Serializable {
             traineeInfo = new HashMap<String, String>(8);
             traineeInfo.put("id", id);
             traineeInfo.put("name", name);
-//            traineeInfo.put("email", null);
-//            traineeInfo.put("dob", null);
-//            traineeInfo.put("gender", null);
-//            traineeInfo.put("age", null);
-//            traineeInfo.put("height", null);
-//            traineeInfo.put("weight", null);
-//            traineeInfo.put("image",null); // image path
 
             stats = new Stats();
             workouts = new ArrayList<Workout>();
+            weekWorkouts = new ArrayList<Workout>();
         }
 
         @Override
@@ -97,9 +104,15 @@ public class TraineeContent implements Serializable {
             return workouts;
         }
 
+        public ArrayList<Workout> getWeekWorkouts() {
+            return weekWorkouts;
+        }
+
         public void printInfo() {
             Log.d("TRAINEE INFO: ", traineeInfo.toString());
         }
+
+        public void printWeekWorkouts() { Log.d("TRAINEE WEEK WORKOUTS: ", workouts.toString()); }
 
         public void printStats() {
             Log.d("TRAINEE STATS: ", stats.getStatsMap().toString());
@@ -108,21 +121,12 @@ public class TraineeContent implements Serializable {
         /**
          *
          */
-        private class Stats {
+        private class Stats implements Serializable {
 
             private HashMap<String,String> statsMap;
 
             public Stats() {
                 statsMap = new HashMap<String, String>(9);
-//                statsMap.put("distance",null);
-//                statsMap.put("duration",null);
-//                statsMap.put("calories",null);
-//                statsMap.put("workout_count",null);
-//                statsMap.put("distance_km",null);
-//                statsMap.put("distance_mi",null);
-//                statsMap.put("duration_formatted",null);
-//                statsMap.put("object",null);
-//                statsMap.put("object_md5",null);
             }
 
             public HashMap<String,String> getStatsMap() {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.app" >
+    package="com.example.app"
+    android:installLocation="preferExternal" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -8,12 +9,29 @@
     <uses-permission android:name="android.permission.STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <!-- Ubertesters library user-permisions -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- Ubertesters library user-permisions -->
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <meta-data
+            android:name="ubertesters_project_id"
+            android:value="3209181c-b519-11e3-80a2-123141017889" />
+        <!-- Ubertesters library activity -->
+        <activity
+            android:name="com.ubertesters.sdk.UbertestersScreen"
+            android:configChanges="orientation"
+            android:windowSoftInputMode="adjustResize" />
+        <!-- Ubertesters library activity -->
         <activity
             android:name="com.example.app.MainActivity"
             android:label="@string/title_activity_main" >
@@ -73,6 +91,14 @@
             android:label="@string/title_activity_record_audio" >
         </activity>
         <service android:name=".AudioStreamService"/>
+        <activity
+            android:name="com.example.app.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name="com.example.app.GraphActivity"
+            android:label="@string/title_activity_graph" >
+        </activity>
     </application>
 
 </manifest>

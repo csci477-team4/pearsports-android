@@ -1,9 +1,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+<LinearLayout
     android:orientation="horizontal"
     android:layout_width="fill_parent"
-    android:layout_height="80dp"
-    android:paddingLeft="10dp"
-    android:paddingTop="10dp"
+    android:layout_height="75dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginLeft="10dp"
     android:layout_alignParentTop="true"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true">
@@ -16,7 +21,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:id="@+id/workout_incomplete_activity_icon"
-            android:src="@drawable/hiking"
+            android:src="@drawable/running"
             android:layout_gravity="center_horizontal"/>
         <TextView
             android:layout_width="fill_parent"
@@ -40,15 +45,15 @@
             android:text="Workout Name"
             android:textSize="18dp"
             android:textStyle="bold"
-            android:gravity="top"
+            android:gravity="bottom"
             android:textColor="@color/white"
             android:fontFamily="Avenir" />
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="14dp"
             android:id="@+id/workout_incomplete_date_scheduled"
-            android:text="Date Scheduled: "
-            android:textSize="11dp"
+            android:text="Scheduled: "
+            android:textSize="10dp"
             android:gravity="top"
             android:textColor="@color/white"
             android:fontFamily="Avenir" />
@@ -63,4 +68,13 @@
             android:fontFamily="Avenir"
             android:paddingRight="5dp" />
     </LinearLayout>
+</LinearLayout>
+
+<View
+android:layout_width="fill_parent"
+android:layout_height="1dip"
+android:layout_marginLeft="20dp"
+android:layout_marginRight="20dp"
+android:background="@color/pearsports" />
+
 </LinearLayout>

@@ -7,13 +7,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
@@ -21,6 +21,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class ScheduleWorkoutActivity extends Activity {
 
     private String token;
     private String traineeID;
+    private String name;
     protected String sku;
     protected long epoch_start;
     protected long epoch_end;
@@ -39,21 +41,19 @@ public class ScheduleWorkoutActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule_workout);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         token = preferences.getString("token",null);
         traineeID = preferences.getString("trainee_id", null);
 
         Bundle b = getIntent().getExtras();
-        final String name = b.getString("name");  //name of workout
+        final String workout_name = b.getString("workout_name");  //name of workout
         sku = b.getString("sku");    //sku ID of workout
+        name = b.getString("name");
 
-        ((TextView) findViewById(R.id.workout_name)).setText(name);
+        ((TextView) findViewById(R.id.workout_name)).setText(workout_name);
 
-        final DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
-        final TimePicker timePicker = (TimePicker) findViewById(R.id.timePicker);
-        timePicker.setIs24HourView(true);
+        final DatePicker datePicker = (DatePicker) findViewById(R.id.datePickerStart);
 
         Button pic1 = (Button) findViewById(R.id.schedule_workout);
         pic1.setOnClickListener(new View.OnClickListener() {
@@ -65,13 +65,10 @@ public class ScheduleWorkoutActivity extends Activity {
                 int month = datePicker.getMonth() + 1;  //month 1-12
                 int year  = datePicker.getYear();       //YYYY
 
-                int hour = timePicker.getCurrentHour();
-                int min  = timePicker.getCurrentMinute();
-
                 // Time conversion to Epoch
-                String date_str = new StringBuilder().append(month).append(' ').append(day).append(' ').append(year).append(' ').append(hour).append(':').append(min).toString();
+                String date_str = new StringBuilder().append(month).append(' ').append(day).append(' ').append(year).toString();
 
-                SimpleDateFormat df = new SimpleDateFormat("MM dd yyyy HH:mm");
+                SimpleDateFormat df = new SimpleDateFormat("MM dd yyyy");
                 Date date = null;
                 try {
                     date = df.parse(date_str);
@@ -93,6 +90,15 @@ public class ScheduleWorkoutActivity extends Activity {
         });
     }
 
+    public void onBackPressed() {
+        Intent intent = new Intent(ScheduleWorkoutActivity.this, SportActivity.class);
+        intent.putExtra(TraineeDetailFragment.ARG_ITEM_ID, traineeID);
+        intent.putExtra("trainee_id", traineeID);
+        intent.putExtra("name", name);
+        startActivity(intent);
+        finish();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -109,7 +115,8 @@ public class ScheduleWorkoutActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            return true;
+            Intent i = new Intent(ScheduleWorkoutActivity.this, SettingsActivity.class);
+            startActivity(i);
         }
         if (id == android.R.id.home) {
             // This ID represents the Home or Up button. In the case of this
@@ -145,19 +152,23 @@ public class ScheduleWorkoutActivity extends Activity {
             parameters.add(new BasicNameValuePair("start", String.valueOf(epoch_end)));
             //parameters.add(new BasicNameValuePair("end", String.valueOf(epoch_end)));
 
-            JSONObject scheduleJSON = APIHandler.sendAPIRequestWithAuth("workout" + "/" + sku, APIHandler.POST, token, "", parameters);
+            try {
+                JSONObject scheduleJSON = APIHandler.sendAPIRequestWithAuth("workout" + "/" + sku, APIHandler.POST, token, "", parameters);
 
-            if (scheduleJSON != null) {
-                try {
-                    if(scheduleJSON.getString("object").equals("error"))
-                        return false;
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (scheduleJSON != null) {
+                    try {
+                        if (scheduleJSON.getString("object").equals("error"))
+                            return false;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
+                return true;
+            } catch (IOException e ) {
+                Log.e("ScheduleWorkoutActivity::IOException >> ", e.getMessage());
+                e.printStackTrace();
             }
-
             return true;
-
         }
 
         protected void onPostExecute(final Boolean success) {

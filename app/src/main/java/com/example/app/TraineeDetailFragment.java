@@ -1,6 +1,5 @@
 package com.example.app;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,6 +29,8 @@ public class TraineeDetailFragment extends Fragment {
      */
     private TraineeContent.TraineeItem mItem;
 
+    private TraineeContent traineeContent = TraineeContent.getInstance();
+
     /**
      * The trainer's token authentication.
      */
@@ -51,7 +52,7 @@ public class TraineeDetailFragment extends Fragment {
             // arguments. In a real-world scenario, use a Loader
             // to load name from a name provider.
             //mItem is a TraineeItem
-            mItem = TraineeContent.TRAINEE_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            mItem = traineeContent.TRAINEE_MAP.get(getArguments().getString(ARG_ITEM_ID));
         }
     }
 
@@ -60,10 +61,10 @@ public class TraineeDetailFragment extends Fragment {
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_trainee_detail, container, false);
 
-        // Show the name as text in a TextView.
         if (mItem != null) {
             ((TextView) rootView.findViewById(R.id.trainee_detail_text)).setText(mItem.name);
             ((TextView) rootView.findViewById(R.id.age_text)).setText("Age: " + mItem.getInfoMap().get("age"));
+            ((TextView) rootView.findViewById(R.id.trainee_detail_email)).setText(mItem.getInfoMap().get("email"));
             ((TextView) rootView.findViewById(R.id.height_text)).setText("Height: " + mItem.getInfoMap().get("height"));
             ((TextView) rootView.findViewById(R.id.weight_text)).setText("Weight: " + mItem.getInfoMap().get("weight"));
 
@@ -72,6 +73,8 @@ public class TraineeDetailFragment extends Fragment {
             ((TextView) rootView.findViewById(R.id.miles_text)).setText(mItem.getStatsMap().get("distance_mi") + "\nMiles");
             ((TextView) rootView.findViewById(R.id.minutes_text)).setText(mItem.getStatsMap().get("duration_formatted") + "\nTime");
 
+            ((TextView) rootView.findViewById(R.id.trainee_detail_notes)).setText(mItem.getInfoMap().get("notes"));
+
             // dynamically display the trainee image
             ImageView trainee_image = (ImageView) rootView.findViewById(R.id.image_trainee);
             int imageResource = getResources().getIdentifier(mItem.getInfoMap().get("image"), null, getActivity().getPackageName());
@@ -79,36 +82,6 @@ public class TraineeDetailFragment extends Fragment {
             trainee_image.setImageDrawable(drawable);
         }
 
-        rootView.findViewById(R.id.detail_fragment_text_activity_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getActivity(), MessageActivity.class);
-                i.putExtra("trainee_id",mItem.id);
-                i.putExtra("name", mItem.name);
-                startActivity(i);
-            }
-        });
-
-        rootView.findViewById(R.id.detail_fragment_audio_activity_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                
-                Intent i = new Intent(getActivity(), RecordAudioActivity.class);
-                i.putExtra("trainee_id",mItem.id);
-                i.putExtra("name", mItem.name);
-                startActivity(i);
-            }
-        });
-
-        rootView.findViewById(R.id.detail_fragment_workout_activity_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getActivity(), SportActivity.class);
-                i.putExtra("trainee_id",mItem.id);
-                i.putExtra("name", mItem.name);
-                startActivity(i);
-            }
-        });
         return rootView;
     }
 

@@ -1,9 +1,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+<LinearLayout
     android:orientation="horizontal"
     android:layout_width="fill_parent"
-    android:layout_height="80dp"
-    android:paddingLeft="10dp"
-    android:paddingTop="10dp"
+    android:layout_height="75dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginLeft="10dp"
     android:layout_alignParentTop="true"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true">
@@ -17,7 +22,7 @@
             android:layout_height="40dp"
             android:id="@+id/workout_completed_activity_icon"
             android:src="@drawable/hiking"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"/>
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="30dp"
@@ -33,33 +38,61 @@
         android:layout_height="fill_parent"
         android:orientation="vertical"
         android:paddingLeft="10dp">
-        >
         <TextView
             android:layout_width="fill_parent"
-            android:layout_height="24dp"
+            android:layout_height="20dp"
             android:id="@+id/workout_completed_name"
             android:text="Workout Name"
             android:textSize="18dp"
             android:textStyle="bold"
-            android:gravity="left"
+            android:gravity="left|top"
             android:textColor="@color/white"
             android:fontFamily="Avenir" />
-        <ImageView
+        <TextView
             android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:id="@+id/workout_completed_hr_map"
-            android:src="@drawable/hiking_history"
-            android:layout_gravity="left" />
+            android:layout_height="12dp"
+            android:id="@+id/workout_completed_date"
+            android:text="Completed: "
+            android:textSize="10dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
+            android:fontFamily="Avenir" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="160dp"
+                android:layout_height="fill_parent"
+                android:id="@+id/workout_completed_hr_map"
+                android:src="@drawable/heart_rate_map"
+                android:layout_gravity="bottom|left" />
+            <LinearLayout
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/workout_completed_summary_grade"
+                    android:text="Grade: 53"
+                    android:fontFamily="Avenir"
+                    android:textSize="12dp"
+                    android:gravity="left"
+                    android:textColor="@color/white"
+                    />
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/workout_completed_summary_hr"
+                    android:text="Avg HR: 159"
+                    android:fontFamily="Avenir"
+                    android:textSize="12dp"
+                    android:gravity="left"
+                    android:textColor="@color/white"
+                    />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:text="Workout Name"
-        android:textSize="24dp"
-        android:textStyle="bold"
-        android:gravity="left"
-        android:textColor="@color/white" />
-
+</LinearLayout>
 </LinearLayout>

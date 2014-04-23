@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/listViewBg"
+    android:background="@color/dgray"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -17,22 +17,16 @@
             android:layout_width="230dp"
             android:layout_height="fill_parent"
             android:layout_margin="5sp"
-            android:hint="Write here"
-            android:padding="5sp"
-            android:textColor="@color/theme_dark" />
+            android:hint="Text Message"
+            android:textColor="@color/white" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:id="@+id/sendText"
-            android:layout_margin="5sp"
-            android:paddingBottom="5sp"
-            android:paddingLeft="10sp"
-            android:paddingRight="15sp"
-            android:paddingTop="5sp"
             android:text="Send"
             android:onClick="sendMessage"
-            android:textColor="@color/theme_dark" />
+            style="@style/blue_button"/>
 
         <ImageButton
             android:layout_width="0dp"
