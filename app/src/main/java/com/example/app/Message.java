@@ -44,10 +44,14 @@ public class Message {
     public void setType(String type){
         if(type.equals("audio")){
             isAudio = true;
+            return;
         }
         if(type.equals("text")){
             isText = true;
+            return;
         }
+        isText = true;
+
     }
     public String getMessage() {
         return message;

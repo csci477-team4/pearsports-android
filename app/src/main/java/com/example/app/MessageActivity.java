@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -154,21 +155,21 @@ public class MessageActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Log.w("Row Clicked", "row: " + position);
-        if (messages.get(position).isAudio) {
+        if (messages.get(position).isAudio && !boolAudioPlaying) {
             Log.w("Audio Clicked", "Audio" + position);
             audioPlayStopClick(position);
+            adapter.positionClicked(position);
+            adapter.notifyDataSetChanged();
         }
     }
 
     private void audioPlayStopClick(int linkPosition) {
         Log.w("Audio Clicked", "Audio" + linkPosition);
         if (!boolAudioPlaying) {
-            //buttonPlayStop.setBackgroundResource(R.drawable.pausebuttonsm);
             playAudio(linkPosition);
             boolAudioPlaying = true;
         } else {
             if (boolAudioPlaying) {
-                //buttonPlayStop.setBackgroundResource(R.drawable.playbuttonsm);
                 stopMyPlayService();
                 boolAudioPlaying = false;
             }

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,11 +22,13 @@ import java.util.ArrayList;
 public class MessageAdapter extends BaseAdapter {
     private Context mContext;
     private ArrayList<Message> mMessages;
+    private int lastItemClicked;
 
     public MessageAdapter(Context context, ArrayList<Message> messages) {
         super();
         this.mContext = context;
         this.mMessages = messages;
+        lastItemClicked = -1;
     }
 
     @Override
@@ -36,6 +39,10 @@ public class MessageAdapter extends BaseAdapter {
     @Override
     public Object getItem(int position) {
         return mMessages.get(position);
+    }
+
+    public void positionClicked(int position){
+
     }
 
     @Override
@@ -50,13 +57,18 @@ public class MessageAdapter extends BaseAdapter {
                 holder.message = (TextView) convertView.findViewById(R.id.message_text);
                 holder.timestamp = (TextView)convertView.findViewById(R.id.msgTimestamp);
             }
-            else if(message.isAudio){
-                convertView = LayoutInflater.from(mContext).inflate(R.layout.message_row, parent, false);
-                holder.message = (TextView) convertView.findViewById(R.id.message_text);
-                holder.timestamp = (TextView)convertView.findViewById(R.id.msgTimestamp);
+            if(message.isAudio){
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.message_audio_row, parent, false);
+                holder.message = (TextView) convertView.findViewById(R.id.message_audio_text);
+                holder.timestamp = (TextView)convertView.findViewById(R.id.msgAudioTimestamp);
+                if(position == lastItemClicked){
+                    ImageView temp = (ImageView)convertView.findViewById(R.id.message_audio_play);
+                    temp.setImageResource(R.drawable.message_audio_pause);
+                }
             }
 
-            convertView.setTag(holder);
+            if(convertView!= null)
+                convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
 
