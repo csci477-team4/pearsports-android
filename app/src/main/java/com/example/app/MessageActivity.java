@@ -69,6 +69,9 @@ public class MessageActivity extends ListActivity {
         messages.add(new Message("Yeah?", false));
         messages.add(new Message("Absolutely!", true));*/
 
+        SharedPreferences.Editor edit = pref.edit();
+        edit.putString("trainee_id", trainee_id);
+        edit.apply();
 
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -81,6 +84,7 @@ public class MessageActivity extends ListActivity {
                 switch (tabPos) {
                     case 0:
                         Intent w = new Intent(MessageActivity.this, WorkoutHistoryActivity.class);
+                        w.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
                         w.putExtra("trainee_id", trainee_id);
                         w.putExtra("name", sender);
                         startActivity(w);
@@ -89,6 +93,7 @@ public class MessageActivity extends ListActivity {
                         break;
                     case 2:
                         Intent t = new Intent(MessageActivity.this, TraineeDetailActivity.class);
+                        t.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
                         t.putExtra("trainee_id", trainee_id);
                         t.putExtra("name", sender);
                         startActivity(t);

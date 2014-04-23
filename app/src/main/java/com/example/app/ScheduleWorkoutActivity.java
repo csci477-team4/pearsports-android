@@ -87,6 +87,12 @@ public class ScheduleWorkoutActivity extends Activity {
         });
     }
 
+    public void onBackPressed() {
+        Intent intent = new Intent(ScheduleWorkoutActivity.this, SportActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

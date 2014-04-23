@@ -45,15 +45,13 @@ public class TraineeDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mItem = TraineeContent.TRAINEE_MAP.get(getArguments().getString(ARG_ITEM_ID));
-
-//        if (getArguments().containsKey(ARG_ITEM_ID)) {
-//            // Load the dummy name specified by the fragment
-//            // arguments. In a real-world scenario, use a Loader
-//            // to load name from a name provider.
-//            //mItem is a TraineeItem
-//            mItem = TraineeContent.TRAINEE_MAP.get(getArguments().getString(ARG_ITEM_ID));
-//        }
+        if (getArguments().containsKey(ARG_ITEM_ID)) {
+            // Load the dummy name specified by the fragment
+            // arguments. In a real-world scenario, use a Loader
+            // to load name from a name provider.
+            //mItem is a TraineeItem
+            mItem = TraineeContent.TRAINEE_MAP.get(getArguments().getString(ARG_ITEM_ID));
+        }
     }
 
     @Override

@@ -139,6 +139,12 @@ public class SportActivity extends Activity {
         });
     }
 
+    public void onBackPressed() {
+        Intent intent = new Intent(SportActivity.this, WorkoutHistoryActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

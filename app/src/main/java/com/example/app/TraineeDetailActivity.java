@@ -60,6 +60,7 @@ public class TraineeDetailActivity extends FragmentActivity {
         name = intent.getStringExtra("name");
         this.setTitle(name);
 
+
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
@@ -71,12 +72,14 @@ public class TraineeDetailActivity extends FragmentActivity {
                 switch (tabPos) {
                     case 0:
                         Intent w = new Intent(TraineeDetailActivity.this, WorkoutHistoryActivity.class);
+                        w.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
                         w.putExtra("trainee_id", trainee_id);
                         w.putExtra("name", name);
                         startActivity(w);
                         break;
                     case 1:
                         Intent m = new Intent(TraineeDetailActivity.this, MessageActivity.class);
+                        m.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
                         m.putExtra("trainee_id", trainee_id);
                         m.putExtra("name", name);
                         startActivity(m);

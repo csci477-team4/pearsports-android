@@ -88,6 +88,10 @@ public class WorkoutHistoryActivity extends Activity {
         name = intent.getStringExtra("name");
         this.setTitle(name);
 
+        SharedPreferences.Editor edit = preferences.edit();
+        edit.putString("trainee_id", trainee_id);
+        edit.apply();
+
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
@@ -96,17 +100,20 @@ public class WorkoutHistoryActivity extends Activity {
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
                 // show the given tab
                 int tabPos = tab.getPosition();
+
                 switch (tabPos) {
                     case 0:
                         break;
                     case 1:
                         Intent m = new Intent(WorkoutHistoryActivity.this, MessageActivity.class);
+                        m.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
                         m.putExtra("trainee_id", trainee_id);
                         m.putExtra("name", name);
                         startActivity(m);
                         break;
                     case 2:
                         Intent t = new Intent(WorkoutHistoryActivity.this, TraineeDetailActivity.class);
+                        t.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
                         t.putExtra("trainee_id", trainee_id);
                         t.putExtra("name", name);
                         startActivity(t);

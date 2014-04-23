@@ -171,6 +171,7 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
                             long id) {
 
         Intent i = new Intent(TraineeListActivity.this, WorkoutHistoryActivity.class);
+        i.putExtra(TraineeDetailFragment.ARG_ITEM_ID, TraineeContent.TRAINEES.get(pos).id);
         i.putExtra("trainee_id", TraineeContent.TRAINEES.get(pos).id);
         i.putExtra("name", TraineeContent.TRAINEES.get(pos).name);
         startActivity(i);
