@@ -1,109 +1,85 @@
 package com.example.app;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.LinearLayout;
 
-import com.jjoe64.graphview.BarGraphView;
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.GraphViewDataInterface;
-import com.jjoe64.graphview.GraphViewSeries;
-import com.jjoe64.graphview.ValueDependentColor;
+import org.achartengine.ChartFactory;
+import org.achartengine.chart.BarChart;
+import org.achartengine.model.CategorySeries;
+import org.achartengine.model.XYMultipleSeriesDataset;
+import org.achartengine.renderer.SimpleSeriesRenderer;
+import org.achartengine.renderer.XYMultipleSeriesRenderer;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 
 public class GraphActivity extends Activity {
+    private static final int SERIES_NR = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
-
-        /* Color the bars blue */
-        GraphViewSeries.GraphViewSeriesStyle blueStyle = new GraphViewSeries.GraphViewSeriesStyle();
-        blueStyle.setValueDependentColor(new ValueDependentColor() {
-            @Override
-            public int get(GraphViewDataInterface data) {
-                return Color.rgb(0, 200, 236);
-            }
-        });
-
-        /* Color the bars red */
-        GraphViewSeries.GraphViewSeriesStyle redStyle = new GraphViewSeries.GraphViewSeriesStyle();
-        redStyle.setValueDependentColor(new ValueDependentColor() {
-            @Override
-            public int get(GraphViewDataInterface data) {
-                return Color.rgb(200, 50, 0);
-            }
-        });
-
-        /* Set title of chart by week */
-        String title = "Workout History";
-        int week = 0;
-        switch(week) {
-            case 0:
-                title = "This Week";
-                break;
-            case 1:
-                title = "Last Week";
-                break;
-            case 2:
-                title = "Two Weeks Ago";
-                break;
-        }
-
-        int num = 8;
-
-        /* Data for completed workouts */
-        GraphView.GraphViewData[] data = new GraphView.GraphViewData[4];
-        data[0] = new GraphView.GraphViewData(0, 0.0d);
-        data[1] = new GraphView.GraphViewData(1, 1.0d);
-        data[2] = new GraphView.GraphViewData(3, 3.0d);
-        data[3] = new GraphView.GraphViewData(6, 3.0d);
-        GraphViewSeries completed = new GraphViewSeries("Completed", blueStyle, data);
-
-        /* Data for missed workouts */
-        data = new GraphView.GraphViewData[5];
-        data[0] = new GraphView.GraphViewData(2, 2.0d);
-        data[1] = new GraphView.GraphViewData(4, 1.0d);
-        data[2] = new GraphView.GraphViewData(5, 2.0d);
-        data[3] = new GraphView.GraphViewData(6, 3.0d);
-        data[4] = new GraphView.GraphViewData(7, 1.0d);
-        GraphViewSeries missed = new GraphViewSeries("Missed", redStyle, data);
-
-        /* Graph Design */
-        GraphView graphView = new BarGraphView(this, title);
-//        graphView.addSeries(completed);
-        graphView.addSeries(missed);
-        graphView.addSeries(completed);
-        graphView.setVerticalLabels(new String[]{"3", "2", "1", " "});
-        graphView.setHorizontalLabels(new String[] {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"});
-
-        /* Add graph to layout */
-        LinearLayout layout = (LinearLayout) findViewById(R.id.graph_layout);
-        layout.addView(graphView);
+        XYMultipleSeriesRenderer renderer = getRenderer();
+        myChartSettings(renderer);
+        Intent intent = ChartFactory.getBarChartIntent(this, getTruitonBarDataset(), renderer, BarChart.Type.DEFAULT);
+        startActivity(intent);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.graph, menu);
-        return true;
+    private XYMultipleSeriesDataset getTruitonBarDataset() {
+        XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+        final int nr = 4;
+        Random r = new Random();
+        ArrayList<String> legendTitles = new ArrayList<String>();
+        legendTitles.add("Sales");
+        legendTitles.add("Expenses");
+        for (int i = 0; i < SERIES_NR; i++) {
+            CategorySeries series = new CategorySeries(legendTitles.get(i));
+            for (int k = 0; k < nr; k++) {
+                series.add(100 + r.nextInt() % 100);
+            }
+            dataset.addSeries(series.toXYSeries());
+        }
+        return dataset;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    public XYMultipleSeriesRenderer getRenderer() {
+        XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
+        renderer.setAxisTitleTextSize(16);
+        renderer.setChartTitleTextSize(20);
+        renderer.setLabelsTextSize(15);
+        renderer.setLegendTextSize(15);
+        renderer.setMargins(new int[] { 30, 40, 15, 0 });
+        SimpleSeriesRenderer r = new SimpleSeriesRenderer();
+        r.setColor(Color.BLUE);
+        renderer.addSeriesRenderer(r);
+        r = new SimpleSeriesRenderer();
+        r.setColor(Color.RED);
+        renderer.addSeriesRenderer(r);
+        return renderer;
+    }
+
+    private void myChartSettings(XYMultipleSeriesRenderer renderer) {
+        renderer.setChartTitle("Truiton's Performance by AChartEngine BarChart");
+        renderer.setXAxisMin(0.5);
+        renderer.setXAxisMax(10.5);
+        renderer.setYAxisMin(0);
+        renderer.setYAxisMax(210);
+        renderer.addXTextLabel(1, "2010");
+        renderer.addXTextLabel(2, "2011");
+        renderer.addXTextLabel(3, "2012");
+        renderer.addXTextLabel(4, "2013");
+        renderer.setYLabelsAlign(Paint.Align.RIGHT);
+        renderer.setBarSpacing(0.5);
+        renderer.setXTitle("Years");
+        renderer.setYTitle("Performance");
+        renderer.setShowGrid(true);
+        renderer.setGridColor(Color.GRAY);
+        renderer.setXLabels(0); // sets the number of integer labels to appear
     }
 
 }
