@@ -18,6 +18,7 @@ public class Message {
     boolean isStatusMessage;
     boolean isAudio;
     boolean isText;
+    boolean isPlayingAudio;
 
     /**
      * Constructor to make a Message object
@@ -40,6 +41,7 @@ public class Message {
         this.isStatusMessage = status;
         this.isAudio = false;
         this.isText = false;
+        this.isPlayingAudio = false;
     }
 
     public void setType(String type, String filename){

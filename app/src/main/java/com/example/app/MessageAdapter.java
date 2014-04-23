@@ -62,8 +62,22 @@ public class MessageAdapter extends BaseAdapter {
                 holder.message = (TextView) convertView.findViewById(R.id.message_audio_text);
                 holder.timestamp = (TextView)convertView.findViewById(R.id.msgAudioTimestamp);
                 if(position == lastItemClicked){
+                    Log.w("MessageAdapter", "Entered position last item clicked code");
                     ImageView temp = (ImageView)convertView.findViewById(R.id.message_audio_play);
                     temp.setImageResource(R.drawable.message_audio_pause);
+                    parent.childDrawableStateChanged(temp);
+                }
+                if(message.isPlayingAudio){
+                    Log.w("MessageAdapter", "Entered position last item clicked code");
+                    ImageView temp = (ImageView)convertView.findViewById(R.id.message_audio_play);
+                    temp.setImageResource(R.drawable.message_audio_pause);
+                    parent.childDrawableStateChanged(temp);
+                }
+                if(!message.isPlayingAudio) {
+                    Log.w("MessageAdapter", "Entered position last item clicked code");
+                    ImageView temp = (ImageView) convertView.findViewById(R.id.message_audio_play);
+                    temp.setImageResource(R.drawable.message_audio_play);
+                    parent.childDrawableStateChanged(temp);
                 }
             }
 
@@ -72,7 +86,12 @@ public class MessageAdapter extends BaseAdapter {
         } else
             holder = (ViewHolder) convertView.getTag();
 
-        holder.message.setText(message.filename);
+        if(message.isAudio){
+            holder.message.setText(message.filename);
+        }
+        else{
+            holder.message.setText(message.getMessage());
+        }
         holder.timestamp.setText(message.getTimestamp());
 
         LayoutParams messagelp = (LayoutParams) holder.message.getLayoutParams();
