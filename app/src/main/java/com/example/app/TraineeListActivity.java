@@ -57,6 +57,7 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
         token = preferences.getString("token",null);
         listTrainees = TraineeContent.TRAINEES;
         refresh();
+
     }
 
     public void refresh() {
@@ -170,7 +171,7 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
     public void onItemClick(AdapterView<?> parent, View view, int pos,
                             long id) {
 
-        Intent i = new Intent(TraineeListActivity.this, WorkoutHistoryActivity.class);
+        Intent i = new Intent(TraineeListActivity.this, GraphActivity.class);
         i.putExtra(TraineeDetailFragment.ARG_ITEM_ID, TraineeContent.TRAINEES.get(pos).id);
         i.putExtra("trainee_id", TraineeContent.TRAINEES.get(pos).id);
         i.putExtra("name", TraineeContent.TRAINEES.get(pos).name);
