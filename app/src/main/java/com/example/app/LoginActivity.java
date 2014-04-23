@@ -92,7 +92,7 @@ public class LoginActivity extends Activity {
         TextView mForgotPassword = (TextView) findViewById(R.id.text_forgotPassword);
         mForgotPassword.setText(content);
 
-        String create = "Create Account";
+        String create = "Request Account";
         SpannableString content2 = new SpannableString(create);
         content2.setSpan(new UnderlineSpan(), 0, create.length(), 0);
         TextView mCreateAccount = (TextView) findViewById(R.id.text_createAccount);

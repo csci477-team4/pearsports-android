@@ -16,7 +16,8 @@
         android:layout_height="50dp"
         android:orientation="horizontal"
         android:layout_weight="1"
-        android:paddingLeft="20dp">
+        android:paddingLeft="20dp"
+        android:id="@+id/header">
 
         <ImageView
             android:layout_width="50dp"
@@ -62,8 +63,9 @@
     <ScrollView
         android:id="@+id/workout_history_scroll"
         android:layout_width="match_parent"
-        android:layout_height="370dp"
+        android:layout_height="300dp"
         android:layout_marginTop="65dp"
+        android:layout_alignTop="@+id/header"
         android:fillViewport="false">
 
         <LinearLayout
@@ -84,7 +86,8 @@
         android:layout_alignRight="@+id/schedule_workout"
         android:layout_alignEnd="@+id/schedule_workout"
         android:gravity="center"
-        android:layout_marginBottom="5dp">
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="20dp">
 
         <Button
             android:layout_width="150dp"

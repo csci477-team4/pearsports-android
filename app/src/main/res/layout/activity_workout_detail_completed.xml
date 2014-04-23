@@ -54,17 +54,14 @@
 
                 <TextView
                     android:id="@+id/workout_detail_name"
-                    android:textAllCaps="false"
                     android:textSize="30dp"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:textIsSelectable="false"
                     android:text="Workout Title"
                     android:fontFamily="Avenir"
-                    android:textColor="@color/white"
-                    android:capitalize="words"
-                    android:textStyle="bold"
-                    android:gravity="left|top" />
+                    android:gravity="left|top"
+                    style="@style/title"/>
 
                 <ScrollView
                     android:layout_width="match_parent"
@@ -105,12 +102,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceListItem"
                     android:text="Results"
                     android:paddingLeft="20dp"
+                    android:textSize="20dp"
                     android:fontFamily="Avenir"
-                    android:textColor="@color/theme_dark"
-                    android:shadowColor="@color/theme_dark"
+                    android:textColor="@color/offblack"
+                    android:shadowColor="@color/offblack"
                     android:textStyle="bold" />
 
                 <View
@@ -178,7 +175,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:src="@drawable/running_history" />
+                    android:src="@drawable/heart_rate_map" />
 
                 <ImageView
                     android:layout_width="fill_parent"
@@ -186,7 +183,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:src="@drawable/swimming_history" />
+                    android:src="@drawable/heart_rate_map" />
 
                 <TextView
                     android:layout_width="wrap_content"
