@@ -3,7 +3,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/fragment_trainee_detail_layout"
         android:layout_width="fill_parent"
-        android:layout_height="match_parent"
+        android:layout_height="fill_parent"
         android:orientation="vertical"
         android:paddingTop="40dp"
         android:fillViewport="false"
@@ -12,14 +12,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_weight="1"
         android:paddingLeft="20dp">
 
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:id="@+id/image_trainee"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
@@ -206,46 +205,11 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
         android:text="Allergic to nuts, high blood pressure"
-        android:id="@+id/weight_text"
+        android:id="@+id/notes_text"
         android:paddingLeft="20dp"
         android:paddingTop="2dp"
         android:paddingBottom="5dp"
         android:fontFamily="Avenir"
         android:textColor="#ffffff" />
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal"
-        android:layout_weight="1"
-        android:gravity="center|bottom">
-        <Button
-            android:layout_width="118dp"
-            android:layout_height="40dp"
-            android:id="@+id/detail_fragment_text_activity_button"
-            android:clickable="true"
-            android:text="Text"
-            android:enabled="true"
-            android:focusable="true"
-            style="@style/blue_button" />
-        <Button
-            android:layout_width="118dp"
-            android:layout_height="40dp"
-            android:id="@+id/detail_fragment_audio_activity_button"
-            android:clickable="true"
-            android:text="Audio"
-            android:focusable="true"
-            android:enabled="true"
-            style="@style/blue_button" />
-        <Button
-            android:layout_width="118dp"
-            android:layout_height="40dp"
-            android:id="@+id/detail_fragment_workout_activity_button"
-            android:clickable="true"
-            android:text="Workout"
-            android:enabled="true"
-            android:focusable="true"
-            style="@style/blue_button" />
-    </LinearLayout>
 </LinearLayout>

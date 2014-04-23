@@ -1,6 +1,8 @@
 package com.example.app;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -68,11 +70,65 @@ public class MessageActivity extends ListActivity {
         messages.add(new Message("Absolutely!", true));*/
 
 
+        final ActionBar actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        // Create a tab listener that is called when the user changes tabs.
+        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // show the given tab
+                int tabPos = tab.getPosition();
+                switch (tabPos) {
+                    case 0:
+                        Intent w = new Intent(MessageActivity.this, WorkoutHistoryActivity.class);
+                        w.putExtra("trainee_id", trainee_id);
+                        w.putExtra("name", sender);
+                        startActivity(w);
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        Intent t = new Intent(MessageActivity.this, TraineeDetailActivity.class);
+                        t.putExtra("trainee_id", trainee_id);
+                        t.putExtra("name", sender);
+                        startActivity(t);
+                        break;
+                }
+            }
+
+            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // hide the given tab
+            }
+
+            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // probably ignore this event
+            }
+        };
+
+        actionBar.addTab(actionBar.newTab()
+                .setText("Workouts")
+                .setTabListener(tabListener), 0, false);
+
+        actionBar.addTab(actionBar.newTab()
+                .setText("Messages")
+                .setTabListener(tabListener), 1, true);
+
+        actionBar.addTab(actionBar.newTab()
+                .setText("Contact")
+                .setTabListener(tabListener), 2, false);
+
+
         adapter = new MessageAdapter(this, messages);
         setListAdapter(adapter);
 
         /*addNewMessage(new Message("What should I try tomorrow?", false));*/
         new GetMessages().execute();
+    }
+
+    public void onBackPressed() {
+        Intent intent = new Intent(MessageActivity.this, TraineeListActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void sendMessage(View v) {

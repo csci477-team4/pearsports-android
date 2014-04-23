@@ -1,6 +1,8 @@
 package com.example.app;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -40,6 +42,8 @@ public class WorkoutHistoryActivity extends Activity {
     private JSONArray resultArray = null;
     private String traineeID;
     private String token;
+    private String name;
+    private String trainee_id;
     private TraineeContent.TraineeItem mItem;
 
     private String workoutID; // this is for onClick only
@@ -78,8 +82,65 @@ public class WorkoutHistoryActivity extends Activity {
         /* defaulting to 3/9/2014 (1394345840) to 3/22/2014 (1395469040) interval */
         //TraineeContent.resetTraineeContent();
         new GetWorkoutSchedule().execute((long)1394345840, (long)1395469040);
+
+        Intent intent = getIntent();
+        trainee_id = intent.getStringExtra("trainee_id");
+        name = intent.getStringExtra("name");
+        this.setTitle(name);
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        // Create a tab listener that is called when the user changes tabs.
+        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // show the given tab
+                int tabPos = tab.getPosition();
+                switch (tabPos) {
+                    case 0:
+                        break;
+                    case 1:
+                        Intent m = new Intent(WorkoutHistoryActivity.this, MessageActivity.class);
+                        m.putExtra("trainee_id", trainee_id);
+                        m.putExtra("name", name);
+                        startActivity(m);
+                        break;
+                    case 2:
+                        Intent t = new Intent(WorkoutHistoryActivity.this, TraineeDetailActivity.class);
+                        t.putExtra("trainee_id", trainee_id);
+                        t.putExtra("name", name);
+                        startActivity(t);
+                        break;
+                }
+            }
+
+            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // hide the given tab
+            }
+
+            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // probably ignore this event
+            }
+        };
+
+        actionBar.addTab(actionBar.newTab()
+                .setText("Workouts")
+                .setTabListener(tabListener), 0, true);
+
+        actionBar.addTab(actionBar.newTab()
+                .setText("Messages")
+                .setTabListener(tabListener), 1, false);
+
+        actionBar.addTab(actionBar.newTab()
+                .setText("Contact")
+                .setTabListener(tabListener), 2, false);
     }
 
+    public void onBackPressed() {
+        Intent intent = new Intent(WorkoutHistoryActivity.this, TraineeListActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
