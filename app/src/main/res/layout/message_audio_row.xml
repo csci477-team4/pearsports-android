@@ -14,6 +14,15 @@
         android:orientation="horizontal"
         >
 
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/message_audio_play"
+            android:layout_weight="3"
+            android:layout_gravity="left"
+            android:focusable="false"
+            android:src="@drawable/ic_action_play" />
+
     <TextView
         android:id="@+id/message_audio_text"
         android:layout_margin="5sp"
@@ -23,20 +32,12 @@
         android:shadowColor="@color/textShadow"
         android:shadowDx="1"
         android:shadowDy="1"
-        android:text="Medium Text"
+        android:text=""
         android:textColor="@color/textColor"
         android:textSize="15sp"
-
+        android:layout_gravity="right"
         android:layout_height="wrap_content" />
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="35dp"
-        android:id="@+id/message_audio_play"
-        android:layout_weight="3"
-        android:layout_gravity="right"
-        android:focusable="false"
-        android:src="@drawable/ic_action_play" />
     </LinearLayout>
 
     <TextView

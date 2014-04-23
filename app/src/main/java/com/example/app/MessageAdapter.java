@@ -83,7 +83,7 @@ public class MessageAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
 
         if(message.isAudio){
-            holder.message.setText(message.filename);
+            holder.message.setText(" ");
         }
         else{
             holder.message.setText(message.getMessage());
