@@ -92,6 +92,10 @@
             android:name="com.example.app.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
+        <activity
+            android:name="com.example.app.TraineeActivity"
+            android:label="@string/title_activity_trainee" >
+        </activity>
     </application>
 
 </manifest>

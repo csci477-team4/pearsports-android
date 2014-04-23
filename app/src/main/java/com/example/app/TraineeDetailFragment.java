@@ -1,6 +1,5 @@
 package com.example.app;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -79,36 +78,6 @@ public class TraineeDetailFragment extends Fragment {
             trainee_image.setImageDrawable(drawable);
         }
 
-        rootView.findViewById(R.id.detail_fragment_text_activity_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getActivity(), MessageActivity.class);
-                i.putExtra("trainee_id",mItem.id);
-                i.putExtra("name", mItem.name);
-                startActivity(i);
-            }
-        });
-
-        rootView.findViewById(R.id.detail_fragment_audio_activity_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                
-                Intent i = new Intent(getActivity(), RecordAudioActivity.class);
-                i.putExtra("trainee_id",mItem.id);
-                i.putExtra("name", mItem.name);
-                startActivity(i);
-            }
-        });
-
-        rootView.findViewById(R.id.detail_fragment_workout_activity_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getActivity(), SportActivity.class);
-                i.putExtra("trainee_id",mItem.id);
-                i.putExtra("name", mItem.name);
-                startActivity(i);
-            }
-        });
         return rootView;
     }
 

@@ -1,5 +1,7 @@
 package com.example.app;
 
+import android.app.ActionBar;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,6 +21,9 @@ import android.view.MenuItem;
  * more than a {@link TraineeDetailFragment}.
  */
 public class TraineeDetailActivity extends FragmentActivity {
+
+    private String trainee_id;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +54,68 @@ public class TraineeDetailActivity extends FragmentActivity {
                     .add(R.id.activity_trainee_detail_layout, fragment)
                     .commit();
         }
+
+        Intent intent = getIntent();
+        trainee_id = intent.getStringExtra("trainee_id");
+        name = intent.getStringExtra("name");
+        this.setTitle(name);
+
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        // Create a tab listener that is called when the user changes tabs.
+        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // show the given tab
+                int tabPos = tab.getPosition();
+                switch (tabPos) {
+                    case 0:
+                        Intent w = new Intent(TraineeDetailActivity.this, WorkoutHistoryActivity.class);
+                        w.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
+                        w.putExtra("trainee_id", trainee_id);
+                        w.putExtra("name", name);
+                        startActivity(w);
+                        break;
+                    case 1:
+                        Intent m = new Intent(TraineeDetailActivity.this, MessageActivity.class);
+                        m.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
+                        m.putExtra("trainee_id", trainee_id);
+                        m.putExtra("name", name);
+                        startActivity(m);
+                        break;
+                    case 2:
+                        break;
+                }
+            }
+
+            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // hide the given tab
+            }
+
+            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // probably ignore this event
+            }
+        };
+
+        actionBar.addTab(actionBar.newTab()
+                .setText("Workouts")
+                .setTabListener(tabListener), 0, false);
+
+        actionBar.addTab(actionBar.newTab()
+                .setText("Messages")
+                .setTabListener(tabListener), 1, false);
+
+        actionBar.addTab(actionBar.newTab()
+                .setText("Contact")
+                .setTabListener(tabListener), 2, true);
 }
+
+    public void onBackPressed() {
+        Intent intent = new Intent(TraineeDetailActivity.this, TraineeListActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
