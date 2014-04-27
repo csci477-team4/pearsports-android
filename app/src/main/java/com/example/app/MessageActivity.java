@@ -229,11 +229,9 @@ public class MessageActivity extends ListActivity {
         Log.w("Row Clicked", "row: " + position);
         if (messages.get(position).isAudio) {
             Log.w("Audio Clicked", "Audio" + position);
-            //View row = (View)getListView().getItemAtPosition(position);
-            //ImageView buttonImg = (ImageView)row.findViewById(R.id.message_audio_play);
-            //buttonImg.setImageResource(R.drawable.ic_action_pause);
+
             audioPlayStopClick(position);
-            adapter.positionClicked(position);
+            //adapter.positionClicked(position);
             adapter.notifyDataSetChanged();
         }
     }
@@ -243,6 +241,7 @@ public class MessageActivity extends ListActivity {
         if (!boolAudioPlaying) {
             messages.get(linkPosition).isPlayingAudio = true;
             adapter = new MessageAdapter(this, messages);
+            getListView().setAdapter(null);
             getListView().setAdapter(adapter);
             adapter.notifyDataSetChanged();
             getListView().setSelection(linkPosition);
@@ -254,6 +253,7 @@ public class MessageActivity extends ListActivity {
                 boolAudioPlaying = false;
                 messages.get(linkPosition).isPlayingAudio = false;
                 adapter = new MessageAdapter(this, messages);
+                getListView().setAdapter(null);
                 getListView().setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 getListView().setSelection(linkPosition);
