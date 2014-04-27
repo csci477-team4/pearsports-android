@@ -119,7 +119,7 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
 
     public GraphicalView createGraph() {
         String[] titles = new String[] { "Completed", "Missed","Scheduled" };
-        List<double[]> values = new ArrayList<double[]>();
+        List<int[]> values = new ArrayList<int[]>();
         String graph_title = null;
         int week = 0;
 
@@ -136,9 +136,9 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         }
 
         //values.add(new double[] { S, M, T, W, T, F, S});
-        values.add(new double[] { 3, 0, 0, 2, 3, 0, 0}); // completed
-        values.add(new double[] { 2, 0, 2, 1, 2, 2, 0}); // missed
-        values.add(new double[] { 1, 1, 0, 0, 0, 1, 2}); // scheduled
+        values.add(new int[] { 5, 6, 0, 2, 3, 0, 0}); // completed
+        values.add(new int[] { 2, 0, 2, 1, 2, 2, 0}); // missed
+        values.add(new int[] { 1, 1, 0, 0, 0, 1, 2}); // scheduled
         int[] colors = new int[] { Color.parseColor("#00C8EC"), Color.parseColor("#CC0000"),Color.parseColor("#99CC00") };
         XYMultipleSeriesRenderer renderer = buildBarRenderer(colors);
         renderer.setOrientation(XYMultipleSeriesRenderer.Orientation.HORIZONTAL);
@@ -191,12 +191,12 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         }
         return renderer;
     }
-    protected XYMultipleSeriesDataset buildBarDataset(String[] titles, List<double[]> values) {
+    protected XYMultipleSeriesDataset buildBarDataset(String[] titles, List<int[]> values) {
         XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
         int length = titles.length;
         for (int i = 0; i < length; i++) {
             CategorySeries series = new CategorySeries(titles[i]);
-            double[] v = values.get(i);
+            int[] v = values.get(i);
             int seriesLength = v.length;
             for (int k = 0; k < seriesLength; k++) {
                 series.add(v[k]);

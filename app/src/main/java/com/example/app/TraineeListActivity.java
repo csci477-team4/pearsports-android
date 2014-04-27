@@ -22,6 +22,11 @@ import com.example.app.trainee.TraineeContent;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,25 +36,46 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 public class TraineeListActivity extends Activity implements OnItemClickListener {
 
-    public static final String[] names = new String[] { "John",
-            "Daniel", "Shay", "Marc", "Vahe", "Tanya", "Poojan", "Garima" };
+    public static final String[] names = new String[]{"John",
+            "Daniel", "Shay", "Marc", "Vahe", "Tanya", "Poojan", "Garima"};
 
     public static final Integer arrows = R.drawable.right_arrow;
 
-    public static final Integer[] trainees = { R.drawable.trainee_1,
+    public static final Integer[] trainees = {R.drawable.trainee_1,
             R.drawable.trainee_2, R.drawable.trainee_3, R.drawable.trainee_4,
             R.drawable.trainee_5, R.drawable.trainee_6, R.drawable.trainee_7,
             R.drawable.trainee_8};
 
     ListView listView;
     List<RowItem> rowItems;
+
+    private int[] completed = new int[7];
+    private int[] incomplete = new int[7];
+    private int[] marked_complete = new int[7];
+    private int[] scheduled = new int[7];
+
+    private JSONObject workoutsObject = null;
+    private JSONObject resultsObject = null;
+    private JSONArray workoutArray = null;
+    private JSONArray resultArray = null;
+    private TraineeContent.TraineeItem mItem;
+    private String workoutID;
+    private String traineeID;
+
+    private long weekStartMillis;
+    private long weekEndMillis;
+    private int currentWeek; // 0 is current week, -1 is last week, 1 is next week
 
     private TraineeContent traineeContent = TraineeContent.getInstance();
     private JSONObject trainee_list = null;
@@ -65,9 +91,9 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
         setContentView(R.layout.activity_main);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        token = preferences.getString("token",null);
+        token = preferences.getString("token", null);
 
-        if(isOnline()) {
+        if (isOnline()) {
             Log.d("TraineeListActivity::onCreate >> ", "Online. Refresh.");
             refresh();
         } else {
@@ -87,6 +113,14 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
     public void executeAsyncTasks() {
         new GetTraineeList().execute(token);
         new GetStats().execute();
+
+        DateTime dateTime = new DateTime(); // now
+        DateTime weekStart = dateTime.weekOfWeekyear().roundFloorCopy();
+        DateTime weekEnd = dateTime.weekOfWeekyear().roundCeilingCopy();
+        weekStartMillis = weekStart.getMillis() / 1000;
+        weekEndMillis = weekEnd.getMillis() / 1000;
+        currentWeek = 0;
+        new GetWorkoutSchedule().execute(weekStartMillis, weekEndMillis);
     }
 
     @Override
@@ -120,8 +154,100 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
         return super.onOptionsItemSelected(item);
     }
 
-    private class GetTraineeList extends AsyncTask<String,Void,TraineeContent>
-    {
+    private class GetWorkoutSchedule extends AsyncTask<Long, Void, TraineeContent> {
+        @Override
+        protected TraineeContent doInBackground(Long... params) {
+            if (isOnline()) {
+                List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                parameters.add(new BasicNameValuePair("trainee_id", preferences.getString("trainee_id", "")));
+
+                try {
+                    JSONObject scheduleJSON = APIHandler.sendAPIRequestWithAuth("workout_schedule" +
+                            params[0].toString() + "/" + params[1].toString(), APIHandler.GET, token, "", parameters);
+
+                    if (scheduleJSON != null) {
+                        try {
+                            workoutsObject = scheduleJSON.getJSONObject("workout_data").getJSONObject("workouts");
+                            int workoutsCount = workoutsObject.getInt("count");
+                            workoutArray = workoutsObject.getJSONArray("data");
+
+                            resultsObject = scheduleJSON.getJSONObject("workout_data").getJSONObject("results");
+                            int resultsCount = resultsObject.getInt("count");
+                            resultArray = resultsObject.getJSONArray("data");
+
+                            // incomplete or marked_complete workouts (no results)
+                            for (int i = 0; i < workoutsCount; i++) {
+                                JSONObject workoutJSON = workoutArray.getJSONObject(i);
+
+                                String status = workoutJSON.getString("status");
+                                String scheduled_at = workoutJSON.getString("scheduled_at");
+
+                                int day = ISOStringToDay(scheduled_at);
+                                long time = ISOStringToEpoch(scheduled_at.substring(0, 10));
+                                String nowString = GetToday();
+                                long now = ISOStringToEpoch(nowString);
+
+                                if (time >= now) {
+                                    scheduled[day] = scheduled[day] + 1;
+                                } else if (status.equals("marked_complete")) {
+                                    marked_complete[day] = marked_complete[day] + 1;
+                                } else if (status.equals("incomplete")) {
+                                    incomplete[day] = incomplete[day] + 1;
+                                } else {
+                                    Log.e("TraineeListActivity::GetWorkoutSchedule >> ", "Invalid workout status.");
+                                }
+                            }
+
+                            // completed workouts with results
+                            for (int i = 0; i < resultsCount; i++) {
+                                JSONObject resultJSON = resultArray.getJSONObject(i);
+
+                                String status = resultJSON.getString("status");
+                                String scheduled_at = resultJSON.getString("scheduled_at");
+                                int day = ISOStringToDay(scheduled_at);
+
+                                if (status.equals("completed")) {
+                                    completed[day] = completed[day] + 1;
+                                } else {
+                                    Log.e("TraineeListActivity::GetWorkoutSchedule >> ", "Invalid workout status.");
+                                }
+
+                            }
+                        } catch (JSONException e) {
+                            Log.e("TraineeListActivity::GetWorkoutSchedule : ", "JSONException: " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Log.e("APIHandler", "No data from specified URL");
+                    }
+                } catch (IOException e) {
+                    Log.d("TraineeListActivity::GetWorkoutSchedule::IOException >> ", e.getMessage());
+                    e.printStackTrace();
+                }
+
+                String comp = "";
+                String incomp = "";
+                String mark = "";
+                String sched = "";
+                for(int i=0; i<7; i++) {
+                    comp = comp + " " + completed[i];
+                    incomp = incomp + " " + incomplete[i];
+                    mark = mark + " " + marked_complete[i];
+                    sched = sched + " " + scheduled[i];
+                }
+                Log.d("*****TraineeListActivity********", comp);
+                Log.d("*****TraineeListActivity********", incomp);
+                Log.d("*****TraineeListActivity********", mark);
+                Log.d("*****TraineeListActivity********", sched);
+            } else {
+                Log.d("TraineeListActivity::GetWorkoutSchedule >> ", "Not online.");
+            }
+            return traineeContent;
+        }
+    }
+
+    private class GetTraineeList extends AsyncTask<String, Void, TraineeContent> {
         @Override
         protected TraineeContent doInBackground(String... params) {
             if (isOnline()) {
@@ -216,8 +342,7 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
         startActivity(i);
     }
 
-    private class GetStats extends AsyncTask<Void,Void,TraineeContent>
-    {
+    private class GetStats extends AsyncTask<Void, Void, TraineeContent> {
         @Override
         protected TraineeContent doInBackground(Void... params) {
             if (isOnline()) {
@@ -270,7 +395,9 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
         }
     }
 
-    /*** I/O HELPERS ***/
+    /**
+     * I/O HELPERS **
+     */
 
     private void writeTraineeContent() {
         // serialize TraineeContent
@@ -290,6 +417,52 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
         }
     }
 
+    private String ISOStringToString(String iso) {
+        if (!iso.equals("null")) {
+            DateTimeFormatter parser = ISODateTimeFormat.dateTimeNoMillis();
+            DateTime dt = parser.parseDateTime(iso);
+            DateTimeFormatter formatter = DateTimeFormat.shortDateTime();
+            //Log.d("ISOStringToString >>", "iso: "+iso+", formatted: " + formatter.print(dt));
+            return formatter.print(dt);
+        }
+        return "null";
+    }
+
+    private int ISOStringToDay(String iso) {
+        if (!iso.equals("null")) {
+            DateTimeFormatter parser = ISODateTimeFormat.dateTimeNoMillis();
+            DateTime dt = parser.parseDateTime(iso);
+            DateTimeFormatter fmt = DateTimeFormat.forPattern("e");
+
+            int day = Integer.parseInt(fmt.print(dt));
+            if(day == 7)
+                day = 0;
+
+            return day;
+        }
+        return -1;
+    }
+
+    private long ISOStringToEpoch(String iso) {
+        if (!iso.equals("null")) {
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = new Date();
+            try {
+                date = df.parse(iso);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return date.getTime();
+        }
+        return -1;
+    }
+
+    private String GetToday() {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        return df.format(date);
+    }
+
     private boolean loadTraineeContent() {
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(getFilesDir() + "trainee_content.txt")));
@@ -305,10 +478,10 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
         }
     }
 
-    private boolean isOnline()	{
-        ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
-        if(ni != null && ni.isConnected())
+        if (ni != null && ni.isConnected())
             return true;
         TraineeListActivity.this.runOnUiThread(new Runnable() {
             public void run() {
