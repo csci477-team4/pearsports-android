@@ -72,10 +72,10 @@ public class TraineeContent implements Serializable {
         private ArrayList<Workout> weekWorkouts;
         private HashMap<String,Workout> workoutMap;
 
-        private int[] incomplete;
-        private int[] complete;
-        private int[] marked_complete;
-        private int[] scheduled;
+        private int[] incomplete = new int[7];
+        private int[] complete = new int[7];
+        private int[] marked_complete = new int[7];
+        private int[] scheduled = new int[7];
 
         public TraineeItem(String id, String name) {
             this.id = id;
@@ -84,6 +84,13 @@ public class TraineeContent implements Serializable {
             traineeInfo = new HashMap<String, String>(8);
             traineeInfo.put("id", id);
             traineeInfo.put("name", name);
+
+            for (int i=0; i<7; i++) {
+                incomplete[i] = 0;
+                complete[i] = 0;
+                marked_complete[i] = 0;
+                scheduled[i] = 0;
+            }
 
             stats = new Stats();
             workouts = new ArrayList<Workout>();
@@ -154,6 +161,22 @@ public class TraineeContent implements Serializable {
         public void setScheduled(int [] s) {
             this.scheduled = s;
         }
+
+        public void setIncompleteIndex(int pos, int value) { this.incomplete[pos] = value; }
+
+        public void setCompletedIndex(int pos, int value) { this.complete[pos] = value; }
+
+        public void setMarkedIndex(int pos, int value) { this.marked_complete[pos] = value; }
+
+        public void setScheduledIndex(int pos, int value) { this.scheduled[pos] = value; }
+
+        public int getIncompleteIndex(int pos) { return incomplete[pos]; }
+
+        public int getCompletedIndex(int pos) { return complete[pos]; }
+
+        public int getMarkedIndex(int pos) { return marked_complete[pos]; }
+
+        public int getScheduledIndex(int pos) { return scheduled[pos]; }
 
         /**
          *
