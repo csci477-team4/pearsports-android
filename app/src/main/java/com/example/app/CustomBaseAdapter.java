@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -88,7 +89,10 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.imageTrainee.setImageResource(rowItem.getTraineeId());
+
+        int imageResource = context.getResources().getIdentifier(rowItem.getPicPath(), null, context.getPackageName());
+        Drawable drawable = context.getResources().getDrawable(imageResource);
+        holder.imageTrainee.setImageDrawable(drawable);
         holder.imageArrow.setImageResource(rowItem.getRightArrow());
         holder.txtName.setText(rowItem.getTraineeName());
 

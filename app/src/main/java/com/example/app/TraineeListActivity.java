@@ -255,15 +255,11 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
                             info.put("notes", trainee_info.get("notes").toString());
                             info.put("photo_url", trainee_info.get("photo_url").toString());
 
-                            // TODO: change this - hardcoded.
-                            if (trainee.name.equals("KR")) {
-                                info.put("image", "drawable/trainee_1");
-                            } else if (trainee.name.equals("Jamie")) {
-                                info.put("image", "drawable/trainee_2");
-                            } else if (trainee.name.equals("Joe R")) {
-                                info.put("image", "drawable/trainee_3");
-                            } else if (trainee.name.equals("eric")) {
-                                info.put("image", "drawable/trainee_4");
+                            if(trainee_info.get("photo_url").toString() != null) {
+                                info.put("image", "drawable/default_prof");
+                            }
+                            else {
+                                info.put("image", "drawable/default_prof");
                             }
 
                             traineeContent.addItem(trainee);
@@ -318,7 +314,7 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
             }
 
             for (int i = 0; i < listTrainees.size(); i++) {
-                RowItem item = new RowItem(trainees[i], arrows, listTrainees.get(i).getInfoMap().get("name"),
+                RowItem item = new RowItem(listTrainees.get(i).getInfoMap().get("image"), arrows, listTrainees.get(i).getInfoMap().get("name"),
                         listTrainees.get(i).getIncomplete(), listTrainees.get(i).getComplete(),
                         listTrainees.get(i).getMarked_Complete(), listTrainees.get(i).getScheduled());
 

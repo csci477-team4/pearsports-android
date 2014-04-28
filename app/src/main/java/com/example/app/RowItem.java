@@ -4,7 +4,7 @@ package com.example.app;
  * Created by tcparker on 3/25/14.
  */
 public class RowItem {
-    private int traineeId;
+    private String picPath;
     private int rightArrow;
     private String traineeName;
     private int[] incomplete = new int[7];
@@ -12,8 +12,8 @@ public class RowItem {
     private int[] marked = new int[7];
     private int[] scheduled = new int[7];
 
-    public RowItem(int traineeId, int rightArrow, String traineeName, int[] incomplete, int[] complete, int[] marked, int[] scheduled) {
-        this.traineeId = traineeId;
+    public RowItem(String picPath, int rightArrow, String traineeName, int[] incomplete, int[] complete, int[] marked, int[] scheduled) {
+        this.picPath = picPath;
         this.rightArrow = rightArrow;
         this.traineeName = traineeName;
         this.incomplete = incomplete;
@@ -21,11 +21,11 @@ public class RowItem {
         this.marked = marked;
         this.scheduled = scheduled;
     }
-    public int getTraineeId() {
-        return traineeId;
+    public String getPicPath() {
+        return picPath;
     }
-    public void setTraineeId(int traineeId) {
-        this.traineeId = traineeId;
+    public void setPicPath(String picPath) {
+        this.picPath = picPath;
     }
     public int getRightArrow() {
         return rightArrow;
