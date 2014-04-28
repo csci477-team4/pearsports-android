@@ -1,6 +1,5 @@
 package com.example.app;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -77,9 +76,7 @@ public class TraineeDetailFragment extends Fragment {
 
             // dynamically display the trainee image
             ImageView trainee_image = (ImageView) rootView.findViewById(R.id.image_trainee);
-            int imageResource = getResources().getIdentifier(mItem.getInfoMap().get("image"), null, getActivity().getPackageName());
-            Drawable drawable = getResources().getDrawable(imageResource);
-            trainee_image.setImageDrawable(drawable);
+            trainee_image.setImageDrawable(mItem.getProfile());
         }
 
         return rootView;

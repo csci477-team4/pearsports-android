@@ -6,7 +6,6 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -88,9 +87,7 @@ public class WorkoutHistoryActivity extends Activity {
         ((TextView) findViewById(R.id.workout_history_email)).setText(mItem.getInfoMap().get("email"));
 
         ImageView trainee_image = (ImageView) findViewById(R.id.image_trainee);
-        int imageResource = getResources().getIdentifier(mItem.getInfoMap().get("image"), null, getPackageName());
-        Drawable drawable = getResources().getDrawable(imageResource);
-        trainee_image.setImageDrawable(drawable);
+        trainee_image.setImageDrawable(mItem.getProfile());
 
         Button b = (Button) findViewById(R.id.schedule_workout);
         b.setOnClickListener(new View.OnClickListener() {
