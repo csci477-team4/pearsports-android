@@ -44,14 +44,13 @@ public class ScheduleWorkoutActivity extends Activity {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         token = preferences.getString("token",null);
-        traineeID = preferences.getString("trainee_id", null);
 
         Bundle b = getIntent().getExtras();
-        final String workout_name = b.getString("workout_name");  //name of workout
+        traineeID = b.getString("trainee_id");
         sku = b.getString("sku");    //sku ID of workout
         name = b.getString("name");
 
-        ((TextView) findViewById(R.id.workout_name)).setText(workout_name);
+        ((TextView) findViewById(R.id.workout_name)).setText(name);
 
         final DatePicker datePicker = (DatePicker) findViewById(R.id.datePickerStart);
 

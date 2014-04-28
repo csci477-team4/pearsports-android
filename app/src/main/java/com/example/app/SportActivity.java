@@ -1,35 +1,45 @@
 package com.example.app;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
-public class SportActivity extends Activity {
+public class SportActivity extends Activity implements AdapterView.OnItemClickListener {
 
-    public static final String[] img = new String[]{
-            "w1.png", "w2.png", "w3.png", "w4.png", "w5.png",
-            "w6.png", "w7.png", "w8.png", "w9.png", "w10.png",
-            "w11.png", "w12.png", "w13.png", "w14.png", "w15.png"};
-
-
-    private ArrayAdapter<String> listAdapter;
     private String trainee_id;
     private String token;
     private String name;
+
+    private JSONArray sku_list = null;
+    private String title;
+    private String sku;
+
+    ListView listView;
+    List<WorkoutItem> workouts = new ArrayList<WorkoutItem>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,124 +51,69 @@ public class SportActivity extends Activity {
         token = intent.getStringExtra("token");
         name = intent.getStringExtra("name");
 
-        final String[] workouts = new String[]{"Endurance Ride 73min",
-                "Pyramid Indoor Cycle",
-                "Fat-Burn 1",
-                "Post Run Strength Mini",
-                "Interval Advanced Run ",
-                "Speed Treadmill",
-                "Tempo Treadmill",
-                "Fat-Burn 3",
-                "Fat-Burn 2",
-                "Sprint Triathlon Brick",
-                "Iron Triathlon Brick",
-                "Functional Strength ",
-                "Bike Trainer 1",
-                "Endurance Ride",
-                "Super SlimTone Bands 3",
-                "Robert Reames - Super SlimTone Bands 2",
-                "Super SlimTone Gym 3",
-                "Time Saver Super Blast 1",
-                "Super SlimTone Gym 1",
-                "Super SlimTone Gym 2",
-                "Time Saver Super Blast 2",
-                "Interval Walk Run Climb",
-                "Super SlimTone Bands 1",
-                "Short Interval Special",
-                "Post Cardio Flexibility",
-                "Injury Prevention",
-                "Lunchtime Power Walk",
-                "The 5 min Warmup",
-                "Cardio Band Blast 2",
-                "Endurance Ride 110min",
-                "Endurance Ride 83min",
-                "Cardio Band Blast 1",
-                "Endurance Ride 95min",
-                "Endurance Ride 100min",
-                "Endurance Ride 70min",
-                "Endurance Ride 75min",
-                "Endurance Ride 77min",
-                "Endurance + Hill Run",
-                "Endurance Ride 90min",
-                "Pyramid + Hill Run",
-                "Hi-Intensity Interval 1",
-                "HIIT 30 Thirties",
-                "Tread 'N' Shred Advanced 1",
-                "Tread'N'Shred Moderate 1",
-                "Functional Strength Circuit",
-                "Tred'N'Shred Beginner 1"};
+        new GetWorkouts().execute();
+    }
 
-        final String[] sku = new String[]{"CFN030014-00M",
-                "CFN01001D-00M",
-                "CFN01000E-00M",
-                "CFN020024-00M",
-                "CFN030006-00M",
-                "CFN020003-00M",
-                "CFN020004-00M",
-                "CFN01000G-00M",
-                "CFN01000F-00M",
-                "CFN01000Z-00M",
-                "CFN01000Y-00M",
-                "CFN030005-00M",
-                "CFN030007-00M",
-                "CFN030008-00M",
-                "CFN050040-00M",
-                "CFN050041-00M",
-                "CFN050032-00M",
-                "CFN050014-00M",
-                "CFN050030-00M",
-                "CFN050031-00M",
-                "CFN050015-00M",
-                "CFN050016-00M",
-                "CFN050036-00M",
-                "CFN050017-00M",
-                "CFN050011-00M",
-                "CFN01008M-00M",
-                "CFN090003-00M",
-                "CFN090008-00M",
-                "CFN090002-00M",
-                "CFN030012-00M",
-                "CFN030017-00M",
-                "CFN090001-00M",
-                "CFN030019-00M",
-                "CFN030011-00M",
-                "CFN030013-00M",
-                "CFN030015-00M",
-                "CFN030016-00M",
-                "CFN030010-00M",
-                "CFN030018-00M",
-                "CFN030021-00M",
-                "CFN01000H-00M",
-                "CFN080003-00M",
-                "CFN150003-00M",
-                "CFN150002-00M",
-                "CFN01001C-00M",
-                "CFN150001-00M"};
+    private class GetWorkouts extends AsyncTask<String,Void,List<WorkoutItem>>
+    {
+        @Override
+        protected List<WorkoutItem> doInBackground(String... params) {
+            if (isOnline()) {
+                try {
+                    JSONObject jsonObj = APIHandler.sendAPIRequestWithAuth("sku_list", APIHandler.GET, token, "");
 
-        ListView myList = (ListView) findViewById(R.id.list_workouts);
+                    if (jsonObj != null) {
+                        try {
+                            sku_list = jsonObj.getJSONArray("sku_list");
 
-        ArrayList<String> listWorkouts = new ArrayList<String>();
-        listWorkouts.addAll(Arrays.asList(workouts));
+                            for (int i = 0; i < sku_list.length(); i++) {
+                                JSONObject skuJSON = sku_list.getJSONObject(i);
 
-        ArrayList<String> listSku = new ArrayList<String>();
-        listSku.addAll(Arrays.asList(sku));
+                                sku = skuJSON.getString("sku");
+                                title = skuJSON.getString("title");
+                                Drawable d = getDrawable();
 
-        listAdapter = new ArrayAdapter<String>(this, R.layout.image_text_row, listWorkouts);
-        myList.setAdapter(listAdapter);
+                                WorkoutItem wi = new WorkoutItem(d, title, sku);
+                                workouts.add(wi);
+                            }
 
-        myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> av, View view, int i, long l) {
-                Intent intent = new Intent(SportActivity.this, ScheduleWorkoutActivity.class);
-                intent.putExtra("workout_name", workouts[i]);
-                intent.putExtra("sku", sku[i]);
-                intent.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
-                intent.putExtra("trainee_id", trainee_id);
-                intent.putExtra("name", name);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                finish();
+                        } catch (JSONException e) {
+                            Log.e("TraineeListFragment::GetTraineeList : ", "JSONException: " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Log.e("APIHandler", "No data from specified URL");
+                    }
+                } catch (IOException e) {
+                    Log.d("TraineeListFragment::GetTraineeList::IOException >> ", e.getMessage());
+                    e.printStackTrace();
+                }
+            } else {
+                Log.d("TraineeListFragment::GetTraineeList >> ", "Not online.");
             }
-        });
+            return workouts;
+        }
+
+        @Override
+        protected void onPostExecute(final List<WorkoutItem> w) {
+
+            WorkoutAdapter adapter = new WorkoutAdapter(SportActivity.this, w);
+
+            listView = (ListView) findViewById(R.id.list);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(SportActivity.this);
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent i = new Intent(SportActivity.this, ScheduleWorkoutActivity.class);
+        i.putExtra("trainee_id", trainee_id);
+        i.putExtra("token", token);
+        i.putExtra("name", workouts.get(position).getName());
+        i.putExtra("sku", workouts.get(position).getSku());
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
     }
 
     public void onBackPressed() {
@@ -273,6 +228,19 @@ public class SportActivity extends Activity {
 
         imageResource = getResources().getIdentifier("drawable/w1", null, getPackageName());
         return getResources().getDrawable(imageResource);
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        if (ni != null && ni.isConnected())
+            return true;
+        SportActivity.this.runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(SportActivity.this, "Device is offline.", Toast.LENGTH_LONG).show();
+            }
+        });
+        return false;
     }
 }
 
