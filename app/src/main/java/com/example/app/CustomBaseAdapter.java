@@ -93,7 +93,12 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         ra.setTag(new Integer(position));
         ra.setOnClickListener(this);
 
-        GraphicalView gv = createGraph();
+        int[] incomplete = rowItems.get(position).getIncomplete();
+        int[] complete = rowItems.get(position).getComplete();
+        int[] marked = rowItems.get(position).getMarked();
+        int[] scheduled = rowItems.get(position).getScheduled();
+
+        GraphicalView gv = createGraph(incomplete, complete, marked, scheduled);
         RelativeLayout rl = (RelativeLayout) convertView.findViewById(R.id.graph_layout);
         rl.addView(gv);
 
@@ -117,7 +122,7 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         v.getContext().startActivity(i);
     }
 
-    public GraphicalView createGraph() {
+    public GraphicalView createGraph(int[] incomplete, int[] complete, int[] marked, int[] scheduled) {
         String[] titles = new String[] { "Completed", "Missed","Scheduled" };
         List<int[]> values = new ArrayList<int[]>();
         String graph_title = null;
@@ -135,11 +140,28 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
                 break;
         }
 
+        String i = "";
+        String c = "";
+        String m = "";
+        String s = "";
+
+        for(int j=0; j<7; j++) {
+            i = i + incomplete[j];
+            c = c + complete[j];
+            m = m + marked[j];
+            s = s + scheduled[j];
+        }
+
+        Log.d("********CUSTOM*********", i);
+        Log.d("********CUSTOM*********", c);
+        Log.d("********CUSTOM*********", m);
+        Log.d("********CUSTOM*********", s);
+
         //values.add(new double[] { S, M, T, W, T, F, S});
-        values.add(new int[] { 5, 6, 0, 2, 3, 0, 0}); // completed
-        values.add(new int[] { 2, 0, 2, 1, 2, 2, 0}); // missed
-        values.add(new int[] { 1, 1, 0, 0, 0, 1, 2}); // scheduled
-        int[] colors = new int[] { Color.parseColor("#00C8EC"), Color.parseColor("#CC0000"),Color.parseColor("#99CC00") };
+        values.add(complete); // completed
+        values.add(scheduled); // scheduled
+        values.add(incomplete); // missed
+        int[] colors = new int[] { Color.parseColor("#00C8EC"), Color.parseColor("#CC0000"), Color.parseColor("#99CC00")};
         XYMultipleSeriesRenderer renderer = buildBarRenderer(colors);
         renderer.setOrientation(XYMultipleSeriesRenderer.Orientation.HORIZONTAL);
         setChartSettings(renderer, graph_title, "", "# Workouts", 0.5,
@@ -157,8 +179,8 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         renderer.addYTextLabel(2, "2");
         renderer.addYTextLabel(3, "3");
         int length = renderer.getSeriesRendererCount();
-        for (int i = 0; i < length; i++) {
-            SimpleSeriesRenderer seriesRenderer = renderer.getSeriesRendererAt(i);
+        for (int j = 0; j < length; j++) {
+            SimpleSeriesRenderer seriesRenderer = renderer.getSeriesRendererAt(j);
             seriesRenderer.setDisplayChartValues(false);
         }
 

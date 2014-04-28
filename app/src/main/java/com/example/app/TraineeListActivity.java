@@ -69,9 +69,6 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
     private JSONObject resultsObject = null;
     private JSONArray workoutArray = null;
     private JSONArray resultArray = null;
-    private TraineeContent.TraineeItem mItem;
-    private String workoutID;
-    private String traineeID;
 
     private long weekStartMillis;
     private long weekEndMillis;
@@ -226,24 +223,29 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
                     e.printStackTrace();
                 }
 
-                String comp = "";
-                String incomp = "";
-                String mark = "";
-                String sched = "";
-                for(int i=0; i<7; i++) {
-                    comp = comp + " " + completed[i];
-                    incomp = incomp + " " + incomplete[i];
-                    mark = mark + " " + marked_complete[i];
-                    sched = sched + " " + scheduled[i];
-                }
-                Log.d("*****TraineeListActivity********", comp);
-                Log.d("*****TraineeListActivity********", incomp);
-                Log.d("*****TraineeListActivity********", mark);
-                Log.d("*****TraineeListActivity********", sched);
             } else {
                 Log.d("TraineeListActivity::GetWorkoutSchedule >> ", "Not online.");
             }
             return traineeContent;
+        }
+
+        @Override
+        protected void onPostExecute(final TraineeContent tc) {
+            rowItems = new ArrayList<RowItem>();
+            Log.d("TraineeListActivity::onPostExecute >> ", "printing trainee list.");
+            traineeContent = tc;
+            listTrainees = traineeContent.TRAINEES;
+            traineeContent.printTraineeList();
+            for (int i = 0; i < listTrainees.size(); i++) {
+                RowItem item = new RowItem(trainees[i], arrows, listTrainees.get(i).getInfoMap().get("name"), incomplete, completed, marked_complete, scheduled);
+                rowItems.add(item);
+            }
+
+            CustomBaseAdapter adapter = new CustomBaseAdapter(TraineeListActivity.this, rowItems);
+
+            listView = (ListView) findViewById(R.id.list);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(TraineeListActivity.this);
         }
     }
 
@@ -258,45 +260,44 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
 
                     //Log.d("Response: ", ">>> " + jsonObj);
 
-                    if (jsonObj != null) {
-                        try {
-                            trainee_list = jsonObj.getJSONObject("trainee_list");
+                    if (jsonObj != null) try {
+                        trainee_list = jsonObj.getJSONObject("trainee_list");
 
-                            for (Iterator<String> keys = trainee_list.keys(); keys.hasNext(); ) {
-                                String id = keys.next();
-                                trainee_info = trainee_list.getJSONObject(id); // map of trainee info
-                                TraineeContent.TraineeItem trainee = traineeContent.new TraineeItem(id, trainee_info.get("screen_name").toString());
+                        for (Iterator<String> keys = trainee_list.keys(); keys.hasNext(); ) {
+                            String id = keys.next();
+                            trainee_info = trainee_list.getJSONObject(id); // map of trainee info
+                            TraineeContent.TraineeItem trainee = traineeContent.new TraineeItem(id, trainee_info.get("screen_name").toString());
 
-                                HashMap<String, String> info = trainee.getInfoMap();
-                                info.put("email", trainee_info.get("email").toString());
-                                info.put("dob", trainee_info.get("dob").toString());
-                                info.put("gender", trainee_info.get("gender").toString());
-                                info.put("age", trainee_info.get("age").toString());
-                                info.put("height", trainee_info.get("height").toString());
-                                info.put("weight", trainee_info.get("weight").toString());
-                                info.put("notes", trainee_info.get("notes").toString());
-                                info.put("photo_url", trainee_info.get("photo_url").toString());
+                            HashMap<String, String> info = trainee.getInfoMap();
+                            info.put("email", trainee_info.get("email").toString());
+                            info.put("dob", trainee_info.get("dob").toString());
+                            info.put("gender", trainee_info.get("gender").toString());
+                            info.put("age", trainee_info.get("age").toString());
+                            info.put("height", trainee_info.get("height").toString());
+                            info.put("weight", trainee_info.get("weight").toString());
+                            info.put("notes", trainee_info.get("notes").toString());
+                            info.put("photo_url", trainee_info.get("photo_url").toString());
 
-                                // TODO: change this - hardcoded.
-                                if (trainee.name.equals("KR")) {
-                                    info.put("image", "drawable/trainee_1");
-                                } else if (trainee.name.equals("Jamie")) {
-                                    info.put("image", "drawable/trainee_2");
-                                } else if (trainee.name.equals("Joe R")) {
-                                    info.put("image", "drawable/trainee_3");
-                                } else if (trainee.name.equals("eric")) {
-                                    info.put("image", "drawable/trainee_4");
-                                }
-
-                                traineeContent.addItem(trainee);
+                            // TODO: change this - hardcoded.
+                            if (trainee.name.equals("KR")) {
+                                info.put("image", "drawable/trainee_1");
+                            } else if (trainee.name.equals("Jamie")) {
+                                info.put("image", "drawable/trainee_2");
+                            } else if (trainee.name.equals("Joe R")) {
+                                info.put("image", "drawable/trainee_3");
+                            } else if (trainee.name.equals("eric")) {
+                                info.put("image", "drawable/trainee_4");
                             }
-                            writeTraineeContent();
-                        } catch (JSONException e) {
-                            Log.e("TraineeListActivity::GetTraineeList : ", "JSONException: " + e.getMessage());
-                            e.printStackTrace();
-                            loadTraineeContent();
+
+                            traineeContent.addItem(trainee);
                         }
-                    } else {
+                        writeTraineeContent();
+                    } catch (JSONException e) {
+                        Log.e("TraineeListActivity::GetTraineeList : ", "JSONException: " + e.getMessage());
+                        e.printStackTrace();
+                        loadTraineeContent();
+                    }
+                    else {
                         Log.e("APIHandler", "No data from specified URL");
                         loadTraineeContent();
                     }
@@ -320,7 +321,7 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
             listTrainees = traineeContent.TRAINEES;
             traineeContent.printTraineeList();
             for (int i = 0; i < listTrainees.size(); i++) {
-                RowItem item = new RowItem(trainees[i], arrows, listTrainees.get(i).getInfoMap().get("name"));
+                RowItem item = new RowItem(trainees[i], arrows, listTrainees.get(i).getInfoMap().get("name"), incomplete, completed, marked_complete, scheduled);
                 rowItems.add(item);
             }
 
@@ -415,17 +416,6 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
         } else {
             Log.d("TraineeListActivity::writeTraineeContent >> ", "Not online, will not save.");
         }
-    }
-
-    private String ISOStringToString(String iso) {
-        if (!iso.equals("null")) {
-            DateTimeFormatter parser = ISODateTimeFormat.dateTimeNoMillis();
-            DateTime dt = parser.parseDateTime(iso);
-            DateTimeFormatter formatter = DateTimeFormat.shortDateTime();
-            //Log.d("ISOStringToString >>", "iso: "+iso+", formatted: " + formatter.print(dt));
-            return formatter.print(dt);
-        }
-        return "null";
     }
 
     private int ISOStringToDay(String iso) {
