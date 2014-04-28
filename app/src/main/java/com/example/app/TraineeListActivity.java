@@ -54,15 +54,7 @@ import java.util.List;
 
 public class TraineeListActivity extends Activity implements OnItemClickListener {
 
-    public static final String[] names = new String[]{"John",
-            "Daniel", "Shay", "Marc", "Vahe", "Tanya", "Poojan", "Garima"};
-
     public static final Integer arrows = R.drawable.right_arrow;
-
-    public static final Integer[] trainees = {R.drawable.trainee_1,
-            R.drawable.trainee_2, R.drawable.trainee_3, R.drawable.trainee_4,
-            R.drawable.trainee_5, R.drawable.trainee_6, R.drawable.trainee_7,
-            R.drawable.trainee_8};
 
     ListView listView;
     List<RowItem> rowItems;

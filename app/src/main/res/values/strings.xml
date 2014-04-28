@@ -20,9 +20,9 @@
     <string name="title_activity_difficulty">DifficultyActivity</string>
     <string name="title_activity_">ActivityActivity</string>
     <string name="title_activity_sport">Workout List</string>
-    <string name="title_activity_record_audio">RecordAudioActivity</string>
-    <string name="title_activity_settings">SettingsActivity</string>
-    <string name="title_activity_trainee">TraineeActivity</string>
-    <string name="title_activity_graph">GraphActivity</string>
+    <string name="title_activity_record_audio">Send Recording</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_trainee">Trainee</string>
+    <string name="title_activity_graph">Graph</string>
 
 </resources>
