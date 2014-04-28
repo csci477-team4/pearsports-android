@@ -70,6 +70,8 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
     private JSONArray workoutArray = null;
     private JSONArray resultArray = null;
 
+    private String traineeID;
+
     private long weekStartMillis;
     private long weekEndMillis;
     private int currentWeek; // 0 is current week, -1 is last week, 1 is next week
@@ -110,14 +112,6 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
     public void executeAsyncTasks() {
         new GetTraineeList().execute(token);
         new GetStats().execute();
-
-        DateTime dateTime = new DateTime(); // now
-        DateTime weekStart = dateTime.weekOfWeekyear().roundFloorCopy();
-        DateTime weekEnd = dateTime.weekOfWeekyear().roundCeilingCopy();
-        weekStartMillis = weekStart.getMillis() / 1000;
-        weekEndMillis = weekEnd.getMillis() / 1000;
-        currentWeek = 0;
-        new GetWorkoutSchedule().execute(weekStartMillis, weekEndMillis);
     }
 
     @Override
@@ -151,13 +145,14 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
         return super.onOptionsItemSelected(item);
     }
 
-    private class GetWorkoutSchedule extends AsyncTask<Long, Void, TraineeContent> {
+    private class GetWorkoutSchedule extends AsyncTask<String, Void, TraineeContent> {
         @Override
-        protected TraineeContent doInBackground(Long... params) {
+        protected TraineeContent doInBackground(String... params) {
             if (isOnline()) {
+                resetData();
                 List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                parameters.add(new BasicNameValuePair("trainee_id", preferences.getString("trainee_id", "")));
+                traineeID = params[2].toString();
+                parameters.add(new BasicNameValuePair("trainee_id", params[2].toString()));
 
                 try {
                     JSONObject scheduleJSON = APIHandler.sendAPIRequestWithAuth("workout_schedule" +
@@ -231,6 +226,26 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
 
         @Override
         protected void onPostExecute(final TraineeContent tc) {
+
+            Log.e("********CUSTOM*********", traineeID);
+            String in = "";
+            String c = "";
+            String m = "";
+            String s = "";
+
+            for(int j=0; j<7; j++) {
+                in = in + incomplete[j];
+                c = c + completed[j];
+                m = m + marked_complete[j];
+                s = s + scheduled[j];
+            }
+
+            Log.d("********CUSTOM*********", in);
+            Log.d("********CUSTOM*********", c);
+            Log.d("********CUSTOM*********", m);
+            Log.d("********CUSTOM*********", s);
+
+
             rowItems = new ArrayList<RowItem>();
             Log.d("TraineeListActivity::onPostExecute >> ", "printing trainee list.");
             traineeContent = tc;
@@ -266,6 +281,13 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
                         for (Iterator<String> keys = trainee_list.keys(); keys.hasNext(); ) {
                             String id = keys.next();
                             trainee_info = trainee_list.getJSONObject(id); // map of trainee info
+
+                            DateTime dateTime = new DateTime(); // now
+                            DateTime weekStart = dateTime.weekOfWeekyear().roundFloorCopy();
+                            DateTime weekEnd = dateTime.weekOfWeekyear().roundCeilingCopy();
+                            weekStartMillis = weekStart.getMillis() / 1000;
+                            weekEndMillis = weekEnd.getMillis() / 1000;
+                            new GetWorkoutSchedule().execute(String.valueOf(weekStartMillis), String.valueOf(weekEndMillis), id);
                             TraineeContent.TraineeItem trainee = traineeContent.new TraineeItem(id, trainee_info.get("screen_name").toString());
 
                             HashMap<String, String> info = trainee.getInfoMap();
@@ -315,21 +337,6 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
 
         @Override
         protected void onPostExecute(final TraineeContent tc) {
-            rowItems = new ArrayList<RowItem>();
-            Log.d("TraineeListActivity::onPostExecute >> ", "printing trainee list.");
-            traineeContent = tc;
-            listTrainees = traineeContent.TRAINEES;
-            traineeContent.printTraineeList();
-            for (int i = 0; i < listTrainees.size(); i++) {
-                RowItem item = new RowItem(trainees[i], arrows, listTrainees.get(i).getInfoMap().get("name"), incomplete, completed, marked_complete, scheduled);
-                rowItems.add(item);
-            }
-
-            CustomBaseAdapter adapter = new CustomBaseAdapter(TraineeListActivity.this, rowItems);
-
-            listView = (ListView) findViewById(R.id.list);
-            listView.setAdapter(adapter);
-            listView.setOnItemClickListener(TraineeListActivity.this);
         }
     }
 
@@ -479,6 +486,15 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
             }
         });
         return false;
+    }
+
+    private void resetData() {
+        for (int i = 0; i < 7; i++) {
+            completed[i] = 0;
+            incomplete[i] = 0;
+            marked_complete[i] = 0;
+            scheduled[i] = 0;
+        }
     }
 
 }

@@ -140,22 +140,22 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
                 break;
         }
 
-        String i = "";
-        String c = "";
-        String m = "";
-        String s = "";
-
-        for(int j=0; j<7; j++) {
-            i = i + incomplete[j];
-            c = c + complete[j];
-            m = m + marked[j];
-            s = s + scheduled[j];
-        }
-
-        Log.d("********CUSTOM*********", i);
-        Log.d("********CUSTOM*********", c);
-        Log.d("********CUSTOM*********", m);
-        Log.d("********CUSTOM*********", s);
+//        String i = "";
+//        String c = "";
+//        String m = "";
+//        String s = "";
+//
+//        for(int j=0; j<7; j++) {
+//            i = i + incomplete[j];
+//            c = c + complete[j];
+//            m = m + marked[j];
+//            s = s + scheduled[j];
+//        }
+//
+//        Log.d("********CUSTOM*********", i);
+//        Log.d("********CUSTOM*********", c);
+//        Log.d("********CUSTOM*********", m);
+//        Log.d("********CUSTOM*********", s);
 
         //values.add(new double[] { S, M, T, W, T, F, S});
         values.add(complete); // completed

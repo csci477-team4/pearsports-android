@@ -72,6 +72,11 @@ public class TraineeContent implements Serializable {
         private ArrayList<Workout> weekWorkouts;
         private HashMap<String,Workout> workoutMap;
 
+        private int[] incomplete;
+        private int[] complete;
+        private int[] marked_complete;
+        private int[] scheduled;
+
         public TraineeItem(String id, String name) {
             this.id = id;
             this.name = name;
@@ -116,6 +121,22 @@ public class TraineeContent implements Serializable {
 
         public void printStats() {
             Log.d("TRAINEE STATS: ", stats.getStatsMap().toString());
+        }
+
+        public int[] getIncomplete() {
+            return incomplete;
+        }
+
+        public int[] getComplete() {
+            return complete;
+        }
+
+        public int[] getMarked_Complete() {
+            return marked_complete;
+        }
+
+        public int[] getScheduled() {
+            return scheduled;
         }
 
         /**
