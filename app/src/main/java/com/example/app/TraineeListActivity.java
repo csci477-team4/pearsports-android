@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -34,8 +38,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -253,12 +260,19 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
                             info.put("height", trainee_info.get("height").toString());
                             info.put("weight", trainee_info.get("weight").toString());
                             info.put("notes", trainee_info.get("notes").toString());
-                            info.put("photo_url", trainee_info.get("photo_url").toString());
 
-                            if(trainee_info.get("photo_url").toString() != null) {
+                            String photo_url = trainee_info.get("photo_url").toString();
+                            info.put("photo_url", photo_url);
+
+                            if(photo_url != null) {
+                                Drawable drawable = loadImageFromWeb(photo_url);
+                                trainee.setProfile(drawable);
                                 info.put("image", "drawable/default_prof");
                             }
                             else {
+                                int imageResource = getResources().getIdentifier("drawable/default_prof", null, getPackageName());
+                                Drawable drawable = getResources().getDrawable(imageResource);
+                                trainee.setProfile(drawable);
                                 info.put("image", "drawable/default_prof");
                             }
 
@@ -314,7 +328,8 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
             }
 
             for (int i = 0; i < listTrainees.size(); i++) {
-                RowItem item = new RowItem(listTrainees.get(i).getInfoMap().get("image"), arrows, listTrainees.get(i).getInfoMap().get("name"),
+                RowItem item = new RowItem(listTrainees.get(i).getProfile(),
+                        arrows, listTrainees.get(i).getInfoMap().get("name"),
                         listTrainees.get(i).getIncomplete(), listTrainees.get(i).getComplete(),
                         listTrainees.get(i).getMarked_Complete(), listTrainees.get(i).getScheduled());
 
@@ -496,6 +511,28 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
         }
 
         return s;
+    }
+
+    public static Drawable drawableFromUrl(String url) throws IOException {
+        Bitmap x;
+
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.connect();
+        InputStream input = connection.getInputStream();
+
+        x = BitmapFactory.decodeStream(input);
+        return new BitmapDrawable(x);
+    }
+
+    public Drawable loadImageFromWeb(String url) {
+        try {
+            InputStream is = (InputStream) new URL(url).getContent();
+            Drawable d = Drawable.createFromStream(is, "src name");
+            return d;
+        } catch (Exception e) {
+            System.out.println("Exc=" + e);
+            return null;
+        }
     }
 
 }

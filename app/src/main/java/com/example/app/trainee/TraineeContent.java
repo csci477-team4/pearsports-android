@@ -1,5 +1,6 @@
 package com.example.app.trainee;
 
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import java.io.Serializable;
@@ -65,6 +66,8 @@ public class TraineeContent implements Serializable {
         public String id;
         public String name;
 
+        private Drawable profile;
+
         private HashMap<String,String> traineeInfo;
         private Stats stats;
 
@@ -101,6 +104,10 @@ public class TraineeContent implements Serializable {
         public String toString() {
             return name;
         }
+
+        public Drawable getProfile() { return profile; }
+
+        public void setProfile(Drawable profile) { this.profile = profile; }
 
         public HashMap<String,String> getInfoMap(){
             return traineeInfo;
