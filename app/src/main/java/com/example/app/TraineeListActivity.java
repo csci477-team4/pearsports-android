@@ -60,6 +60,10 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
     ListView listView;
     List<RowItem> rowItems;
 
+    List<int[]> complete_data = new ArrayList<int[]>();
+    List<int[]> incomplete_data = new ArrayList<int[]>();
+    List<int[]> marked_complete_data = new ArrayList<int[]>();
+    List<int[]> scheduled_data = new ArrayList<int[]>();
     private int[] completed = new int[7];
     private int[] incomplete = new int[7];
     private int[] marked_complete = new int[7];
@@ -83,6 +87,15 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
     private JSONObject trainee_stats = null;
     private List<TraineeContent.TraineeItem> listTrainees;
     private String token;
+
+    private class Workout_Data {
+        private int[] completed = new int[7];
+        private int[] incomplete = new int[7];
+        private int[] marked_complete = new int[7];
+        private int[] scheduled = new int[7];
+    }
+
+    List<Workout_Data> workout_data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,46 +234,16 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
             } else {
                 Log.d("TraineeListActivity::GetWorkoutSchedule >> ", "Not online.");
             }
+
             return traineeContent;
         }
 
         @Override
         protected void onPostExecute(final TraineeContent tc) {
-
-            Log.e("********CUSTOM*********", traineeID);
-            String in = "";
-            String c = "";
-            String m = "";
-            String s = "";
-
-            for(int j=0; j<7; j++) {
-                in = in + incomplete[j];
-                c = c + completed[j];
-                m = m + marked_complete[j];
-                s = s + scheduled[j];
-            }
-
-            Log.d("********CUSTOM*********", in);
-            Log.d("********CUSTOM*********", c);
-            Log.d("********CUSTOM*********", m);
-            Log.d("********CUSTOM*********", s);
-
-
-            rowItems = new ArrayList<RowItem>();
-            Log.d("TraineeListActivity::onPostExecute >> ", "printing trainee list.");
-            traineeContent = tc;
-            listTrainees = traineeContent.TRAINEES;
-            traineeContent.printTraineeList();
-            for (int i = 0; i < listTrainees.size(); i++) {
-                RowItem item = new RowItem(trainees[i], arrows, listTrainees.get(i).getInfoMap().get("name"), incomplete, completed, marked_complete, scheduled);
-                rowItems.add(item);
-            }
-
-            CustomBaseAdapter adapter = new CustomBaseAdapter(TraineeListActivity.this, rowItems);
-
-            listView = (ListView) findViewById(R.id.list);
-            listView.setAdapter(adapter);
-            listView.setOnItemClickListener(TraineeListActivity.this);
+            Log.e("****ARRAY****", arrayToString(incomplete));
+            Log.e("****ARRAY****", arrayToString(completed));
+            Log.e("****ARRAY****", arrayToString(marked_complete));
+            Log.e("****ARRAY****", arrayToString(scheduled));
         }
     }
 
@@ -277,6 +260,7 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
 
                     if (jsonObj != null) try {
                         trainee_list = jsonObj.getJSONObject("trainee_list");
+                        workout_data = new ArrayList<Workout_Data>();
 
                         for (Iterator<String> keys = trainee_list.keys(); keys.hasNext(); ) {
                             String id = keys.next();
@@ -287,8 +271,108 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
                             DateTime weekEnd = dateTime.weekOfWeekyear().roundCeilingCopy();
                             weekStartMillis = weekStart.getMillis() / 1000;
                             weekEndMillis = weekEnd.getMillis() / 1000;
-                            new GetWorkoutSchedule().execute(String.valueOf(weekStartMillis), String.valueOf(weekEndMillis), id);
+                            // data = getWorkoutData(weekStartMillis, weekEndMillis, id);
+                            //new GetWorkoutSchedule().execute(String.valueOf(weekStartMillis), String.valueOf(weekEndMillis), id);
                             TraineeContent.TraineeItem trainee = traineeContent.new TraineeItem(id, trainee_info.get("screen_name").toString());
+
+                                resetData();
+                                List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+                                parameters.add(new BasicNameValuePair("trainee_id", id));
+
+                                try {
+                                    JSONObject scheduleJSON = APIHandler.sendAPIRequestWithAuth("workout_schedule" +
+                                            String.valueOf(weekStartMillis) + "/" + String.valueOf(weekEndMillis), APIHandler.GET, token, "", parameters);
+
+                                    if (scheduleJSON != null) {
+                                        try {
+                                            workoutsObject = scheduleJSON.getJSONObject("workout_data").getJSONObject("workouts");
+                                            int workoutsCount = workoutsObject.getInt("count");
+                                            workoutArray = workoutsObject.getJSONArray("data");
+
+                                            resultsObject = scheduleJSON.getJSONObject("workout_data").getJSONObject("results");
+                                            int resultsCount = resultsObject.getInt("count");
+                                            resultArray = resultsObject.getJSONArray("data");
+
+                                            // incomplete or marked_complete workouts (no results)
+                                            for (int i = 0; i < workoutsCount; i++) {
+                                                JSONObject workoutJSON = workoutArray.getJSONObject(i);
+
+                                                String status = workoutJSON.getString("status");
+                                                String scheduled_at = workoutJSON.getString("scheduled_at");
+
+                                                int day = ISOStringToDay(scheduled_at);
+                                                long time = ISOStringToEpoch(scheduled_at.substring(0, 10));
+                                                String nowString = GetToday();
+                                                long now = ISOStringToEpoch(nowString);
+
+                                                if (time >= now) {
+                                                    scheduled[day] = scheduled[day] + 1;
+                                                } else if (status.equals("marked_complete")) {
+                                                    marked_complete[day] = marked_complete[day] + 1;
+                                                } else if (status.equals("incomplete")) {
+                                                    incomplete[day] = incomplete[day] + 1;
+                                                } else {
+                                                    Log.e("TraineeListActivity::GetWorkoutSchedule >> ", "Invalid workout status.");
+                                                }
+                                            }
+
+                                            // completed workouts with results
+                                            for (int i = 0; i < resultsCount; i++) {
+                                                JSONObject resultJSON = resultArray.getJSONObject(i);
+
+                                                String status = resultJSON.getString("status");
+                                                String scheduled_at = resultJSON.getString("scheduled_at");
+                                                int day = ISOStringToDay(scheduled_at);
+
+                                                if (status.equals("completed")) {
+                                                    completed[day] = completed[day] + 1;
+                                                } else {
+                                                    Log.e("TraineeListActivity::GetWorkoutSchedule >> ", "Invalid workout status.");
+                                                }
+
+                                            }
+                                        } catch (JSONException e) {
+                                            Log.e("TraineeListActivity::GetWorkoutSchedule : ", "JSONException: " + e.getMessage());
+                                            e.printStackTrace();
+                                        }
+                                    } else {
+                                        Log.e("APIHandler", "No data from specified URL");
+                                    }
+                                } catch (IOException e) {
+                                    Log.d("TraineeListActivity::GetWorkoutSchedule::IOException >> ", e.getMessage());
+                                    e.printStackTrace();
+                                }
+
+                            Log.e("***TRAINEE***", id);
+                            //printAll();
+                            Workout_Data wd = new Workout_Data();
+                            wd.incomplete = incomplete;
+                            wd.completed = completed;
+                            wd.marked_complete = marked_complete;
+                            wd.scheduled = scheduled;
+                            workout_data.add(wd);
+                            //printWorkoutData();
+
+//                            Log.d("****INCOMP****", arrayToString(incomplete));
+//                            Log.d("****COMP****", arrayToString(completed));
+//                            Log.d("****MARKED****", arrayToString(marked_complete));
+//                            Log.d("****SCHED****", arrayToString(scheduled));
+
+                            incomplete_data.add(incomplete);
+                            complete_data.add(completed);
+                            marked_complete_data.add(marked_complete);
+                            scheduled_data.add(scheduled);
+
+                            trainee.setIncomplete(incomplete);
+                            trainee.setComplete(completed);
+                            trainee.setMarked_Complete(marked_complete);
+                            trainee.setScheduled(scheduled);
+
+                            Log.d("INCOMP", arrayToString(trainee.getIncomplete()));
+                            Log.d("COMP", arrayToString(trainee.getComplete()));
+                            Log.d("MARK", arrayToString(trainee.getMarked_Complete()));
+                            Log.d("SCHED", arrayToString(trainee.getScheduled()));
+
 
                             HashMap<String, String> info = trainee.getInfoMap();
                             info.put("email", trainee_info.get("email").toString());
@@ -337,6 +421,42 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
 
         @Override
         protected void onPostExecute(final TraineeContent tc) {
+
+            //printAll();
+            //printWorkoutData();
+
+            rowItems = new ArrayList<RowItem>();
+            Log.d("TraineeListActivity::onPostExecute >> ", "printing trainee list.");
+            traineeContent = tc;
+            listTrainees = traineeContent.TRAINEES;
+            traineeContent.printTraineeList();
+            for (int i = 0; i < listTrainees.size(); i++) {
+
+                Log.d("INCOMP", arrayToString(listTrainees.get(i).getIncomplete()));
+                Log.d("COMP", arrayToString(listTrainees.get(i).getComplete()));
+                Log.d("MARK", arrayToString(listTrainees.get(i).getMarked_Complete()));
+                Log.d("SCHED", arrayToString(listTrainees.get(i).getScheduled()));
+
+//                Log.e("****INCOMP****", arrayToString(incomplete_data.get(i)));
+//                Log.d("****COMP****", arrayToString(complete_data.get(i)));
+//                Log.d("****MARKED****", arrayToString(marked_complete_data.get(i)));
+//                Log.d("****SCHED****", arrayToString(scheduled_data.get(i)));
+
+//                RowItem item = new RowItem(trainees[i], arrows, listTrainees.get(i).getInfoMap().get("name"),
+//                        listTrainees.get(i).getIncomplete(), listTrainees.get(i).getComplete(),
+//                        listTrainees.get(i).getMarked_Complete(), listTrainees.get(i).getScheduled());
+
+                RowItem item = new RowItem(trainees[i], arrows, listTrainees.get(i).getInfoMap().get("name"),
+                        incomplete_data.get(i), complete_data.get(i),
+                        marked_complete_data.get(i), scheduled_data.get(i));
+                rowItems.add(item);
+            }
+
+            CustomBaseAdapter adapter = new CustomBaseAdapter(TraineeListActivity.this, rowItems);
+
+            listView = (ListView) findViewById(R.id.list);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(TraineeListActivity.this);
         }
     }
 
@@ -494,6 +614,44 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
             incomplete[i] = 0;
             marked_complete[i] = 0;
             scheduled[i] = 0;
+        }
+    }
+
+    private String arrayToString(int[] array) {
+        String s = "";
+
+        for(int i=0; i<array.length; i++) {
+            s = s + array[i];
+        }
+
+        return s;
+    }
+
+    private void printAll() {
+
+        for(int i=0; i<complete_data.size(); i++) {
+            Log.d("COMPLETE DATA: ", arrayToString(complete_data.get(i)));
+        }
+
+        for(int i=0; i<incomplete_data.size(); i++) {
+            Log.d("INCOMP DATA: ", arrayToString(incomplete_data.get(i)));
+        }
+
+        for(int i=0; i<marked_complete_data.size(); i++) {
+            Log.d("MARKED DATA: ", arrayToString(marked_complete_data.get(i)));
+        }
+
+        for(int i=0; i<scheduled_data.size(); i++) {
+            Log.d("SCHEDULED DATA: ", arrayToString(scheduled_data.get(i)));
+        }
+    }
+
+    private void printWorkoutData() {
+        for(int i=0; i<workout_data.size(); i++) {
+            Log.d("COMPLETE DATA: ", arrayToString(workout_data.get(i).completed));
+            Log.d("INCOMP DATA: ", arrayToString(workout_data.get(i).incomplete));
+            Log.d("MARKED DATA: ", arrayToString(workout_data.get(i).marked_complete));
+            Log.d("SCHEDULED DATA: ", arrayToString(workout_data.get(i).scheduled));
         }
     }
 

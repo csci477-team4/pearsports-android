@@ -43,4 +43,8 @@ public class RowItem {
     public int[] getComplete() { return complete; }
     public int[] getMarked() { return marked; }
     public int[] getScheduled() { return scheduled; }
+    public int getIncomplete(int pos) { return incomplete[pos]; }
+    public int getComplete(int pos) { return complete[pos]; }
+    public int getMarked(int pos) { return marked[pos]; }
+    public int getScheduled(int pos) { return scheduled[pos]; }
 }

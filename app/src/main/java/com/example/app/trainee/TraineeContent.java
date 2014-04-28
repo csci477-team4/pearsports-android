@@ -139,6 +139,22 @@ public class TraineeContent implements Serializable {
             return scheduled;
         }
 
+        public void setIncomplete(int[] i) {
+            this.incomplete = i;
+        }
+
+        public void setComplete(int[] c) {
+            this.complete = c;
+        }
+
+        public void setMarked_Complete(int[] m) {
+            this.marked_complete = m;
+        }
+
+        public void setScheduled(int [] s) {
+            this.scheduled = s;
+        }
+
         /**
          *
          */

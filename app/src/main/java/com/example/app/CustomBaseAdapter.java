@@ -54,6 +54,7 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         ImageView imageTrainee;
         ImageView imageArrow;
         TextView txtName;
+        GraphicalView graph;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -61,19 +62,36 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
 
         LayoutInflater mInflater = (LayoutInflater)
                 context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+
+        RowItem rowItem = (RowItem) getItem(position);
+
+//        Log.d("********INCOM*********", arrayToString(rowItem.getIncomplete()));
+//        Log.d("********COMP*********", arrayToString(rowItem.getComplete()));
+//        Log.d("********MARKED*********", arrayToString(rowItem.getMarked()));
+//        Log.d("********SCHED*********", arrayToString(rowItem.getScheduled()));
+
+        int[] incomplete = rowItem.getIncomplete();
+        int[] complete = rowItem.getComplete();
+        int[] marked = rowItem.getMarked();
+        int[] scheduled = rowItem.getScheduled();
+
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.trainee_row, null);
             holder = new ViewHolder();
             holder.imageTrainee = (ImageView) convertView.findViewById(R.id.trainee_pic);
             holder.imageArrow = (ImageView) convertView.findViewById(R.id.right_arrow);
             holder.txtName = (TextView) convertView.findViewById(R.id.trainee_name);
+
+            GraphicalView gv = createGraph(incomplete, complete, marked, scheduled);
+            holder.graph = gv;
+            RelativeLayout rl = (RelativeLayout) convertView.findViewById(R.id.graph_layout);
+            rl.addView(gv);
+
             convertView.setTag(holder);
         }
         else {
             holder = (ViewHolder) convertView.getTag();
         }
-
-        RowItem rowItem = (RowItem) getItem(position);
 
         holder.imageTrainee.setImageResource(rowItem.getTraineeId());
         holder.imageArrow.setImageResource(rowItem.getRightArrow());
@@ -92,15 +110,6 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         ImageView ra = (ImageView) v.findViewById(R.id.right_arrow);
         ra.setTag(new Integer(position));
         ra.setOnClickListener(this);
-
-        int[] incomplete = rowItems.get(position).getIncomplete();
-        int[] complete = rowItems.get(position).getComplete();
-        int[] marked = rowItems.get(position).getMarked();
-        int[] scheduled = rowItems.get(position).getScheduled();
-
-        GraphicalView gv = createGraph(incomplete, complete, marked, scheduled);
-        RelativeLayout rl = (RelativeLayout) convertView.findViewById(R.id.graph_layout);
-        rl.addView(gv);
 
         return convertView;
     }
@@ -139,23 +148,6 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
                 graph_title = "Two Weeks Ago";
                 break;
         }
-
-//        String i = "";
-//        String c = "";
-//        String m = "";
-//        String s = "";
-//
-//        for(int j=0; j<7; j++) {
-//            i = i + incomplete[j];
-//            c = c + complete[j];
-//            m = m + marked[j];
-//            s = s + scheduled[j];
-//        }
-//
-//        Log.d("********CUSTOM*********", i);
-//        Log.d("********CUSTOM*********", c);
-//        Log.d("********CUSTOM*********", m);
-//        Log.d("********CUSTOM*********", s);
 
         //values.add(new double[] { S, M, T, W, T, F, S});
         values.add(complete); // completed
@@ -270,5 +262,15 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
             ex.printStackTrace();
             return false;
         }
+    }
+
+    private String arrayToString(int[] array) {
+        String s = "";
+
+        for(int i=0; i<array.length; i++) {
+            s = s + array[i];
+        }
+
+        return s;
     }
 }
