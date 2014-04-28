@@ -54,6 +54,7 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         ImageView imageTrainee;
         ImageView imageArrow;
         TextView txtName;
+        GraphicalView graph;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -61,19 +62,36 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
 
         LayoutInflater mInflater = (LayoutInflater)
                 context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+
+        RowItem rowItem = (RowItem) getItem(position);
+
+//        Log.d("********INCOM*********", arrayToString(rowItem.getIncomplete()));
+//        Log.d("********COMP*********", arrayToString(rowItem.getComplete()));
+//        Log.d("********MARKED*********", arrayToString(rowItem.getMarked()));
+//        Log.d("********SCHED*********", arrayToString(rowItem.getScheduled()));
+
+        int[] incomplete = rowItem.getIncomplete();
+        int[] complete = rowItem.getComplete();
+        int[] marked = rowItem.getMarked();
+        int[] scheduled = rowItem.getScheduled();
+
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.trainee_row, null);
             holder = new ViewHolder();
             holder.imageTrainee = (ImageView) convertView.findViewById(R.id.trainee_pic);
             holder.imageArrow = (ImageView) convertView.findViewById(R.id.right_arrow);
             holder.txtName = (TextView) convertView.findViewById(R.id.trainee_name);
+
+            GraphicalView gv = createGraph(incomplete, complete, marked, scheduled);
+            holder.graph = gv;
+            RelativeLayout rl = (RelativeLayout) convertView.findViewById(R.id.graph_layout);
+            rl.addView(gv);
+
             convertView.setTag(holder);
         }
         else {
             holder = (ViewHolder) convertView.getTag();
         }
-
-        RowItem rowItem = (RowItem) getItem(position);
 
         holder.imageTrainee.setImageResource(rowItem.getTraineeId());
         holder.imageArrow.setImageResource(rowItem.getRightArrow());
@@ -92,10 +110,6 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         ImageView ra = (ImageView) v.findViewById(R.id.right_arrow);
         ra.setTag(new Integer(position));
         ra.setOnClickListener(this);
-
-        GraphicalView gv = createGraph();
-        RelativeLayout rl = (RelativeLayout) convertView.findViewById(R.id.graph_layout);
-        rl.addView(gv);
 
         return convertView;
     }
@@ -117,9 +131,9 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         v.getContext().startActivity(i);
     }
 
-    public GraphicalView createGraph() {
+    public GraphicalView createGraph(int[] incomplete, int[] complete, int[] marked, int[] scheduled) {
         String[] titles = new String[] { "Completed", "Missed","Scheduled" };
-        List<double[]> values = new ArrayList<double[]>();
+        List<int[]> values = new ArrayList<int[]>();
         String graph_title = null;
         int week = 0;
 
@@ -136,10 +150,10 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         }
 
         //values.add(new double[] { S, M, T, W, T, F, S});
-        values.add(new double[] { 3, 0, 0, 2, 3, 0, 0}); // completed
-        values.add(new double[] { 2, 0, 2, 1, 2, 2, 0}); // missed
-        values.add(new double[] { 1, 1, 0, 0, 0, 1, 2}); // scheduled
-        int[] colors = new int[] { Color.parseColor("#00C8EC"), Color.parseColor("#CC0000"),Color.parseColor("#99CC00") };
+        values.add(complete); // completed
+        values.add(scheduled); // scheduled
+        values.add(incomplete); // missed
+        int[] colors = new int[] { Color.parseColor("#00C8EC"), Color.parseColor("#CC0000"), Color.parseColor("#99CC00")};
         XYMultipleSeriesRenderer renderer = buildBarRenderer(colors);
         renderer.setOrientation(XYMultipleSeriesRenderer.Orientation.HORIZONTAL);
         setChartSettings(renderer, graph_title, "", "# Workouts", 0.5,
@@ -157,8 +171,8 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         renderer.addYTextLabel(2, "2");
         renderer.addYTextLabel(3, "3");
         int length = renderer.getSeriesRendererCount();
-        for (int i = 0; i < length; i++) {
-            SimpleSeriesRenderer seriesRenderer = renderer.getSeriesRendererAt(i);
+        for (int j = 0; j < length; j++) {
+            SimpleSeriesRenderer seriesRenderer = renderer.getSeriesRendererAt(j);
             seriesRenderer.setDisplayChartValues(false);
         }
 
@@ -191,12 +205,12 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         }
         return renderer;
     }
-    protected XYMultipleSeriesDataset buildBarDataset(String[] titles, List<double[]> values) {
+    protected XYMultipleSeriesDataset buildBarDataset(String[] titles, List<int[]> values) {
         XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
         int length = titles.length;
         for (int i = 0; i < length; i++) {
             CategorySeries series = new CategorySeries(titles[i]);
-            double[] v = values.get(i);
+            int[] v = values.get(i);
             int seriesLength = v.length;
             for (int k = 0; k < seriesLength; k++) {
                 series.add(v[k]);
@@ -248,5 +262,15 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
             ex.printStackTrace();
             return false;
         }
+    }
+
+    private String arrayToString(int[] array) {
+        String s = "";
+
+        for(int i=0; i<array.length; i++) {
+            s = s + array[i];
+        }
+
+        return s;
     }
 }
