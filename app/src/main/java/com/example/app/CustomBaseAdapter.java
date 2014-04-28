@@ -146,8 +146,8 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
 
         //values.add(new double[] { S, M, T, W, T, F, S});
         values.add(complete); // completed
-        values.add(scheduled); // scheduled
         values.add(incomplete); // missed
+        values.add(scheduled); // scheduled
         int[] colors = new int[] { Color.parseColor("#00EB23"), Color.parseColor("#D11F00"), Color.parseColor("#00C8EC")};
         XYMultipleSeriesRenderer renderer = buildBarRenderer(colors);
         renderer.setOrientation(XYMultipleSeriesRenderer.Orientation.HORIZONTAL);

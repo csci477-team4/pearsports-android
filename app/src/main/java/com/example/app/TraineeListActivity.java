@@ -200,7 +200,7 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
                                                 String nowString = GetToday();
                                                 long now = ISOStringToEpoch(nowString);
 
-                                                if (time >= now) {
+                                                if (time > now) {
                                                     scheduled[day] = scheduled[day] + 1;
                                                     trainee.setScheduledIndex(day, trainee.getScheduledIndex(day) + 1);
                                                 } else if (status.equals("marked_complete")) {
@@ -295,8 +295,26 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
             traineeContent = tc;
             listTrainees = traineeContent.TRAINEES;
             traineeContent.printTraineeList();
-            for (int i = 0; i < listTrainees.size(); i++) {
 
+            // add scheduled to incomplete
+            for (int j = 0; j < listTrainees.size(); j++) {
+                for (int k = 0; k < 7; k++) {
+                    listTrainees.get(j).setIncompleteIndex(k,
+                            listTrainees.get(j).getScheduledIndex(k) +
+                            listTrainees.get(j).getIncompleteIndex(k));
+                }
+            }
+
+            // add incomplete to complete
+            for (int m = 0; m < listTrainees.size(); m++) {
+                for (int n = 0; n < 7; n++) {
+                    listTrainees.get(m).setCompletedIndex(n,
+                            listTrainees.get(m).getIncompleteIndex(n) +
+                                    listTrainees.get(m).getCompletedIndex(n));
+                }
+            }
+
+            for (int i = 0; i < listTrainees.size(); i++) {
                 RowItem item = new RowItem(trainees[i], arrows, listTrainees.get(i).getInfoMap().get("name"),
                         listTrainees.get(i).getIncomplete(), listTrainees.get(i).getComplete(),
                         listTrainees.get(i).getMarked_Complete(), listTrainees.get(i).getScheduled());
@@ -467,6 +485,16 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
             marked_complete[i] = 0;
             scheduled[i] = 0;
         }
+    }
+
+    private String arrayToString(int[] array) {
+        String s = "";
+
+        for(int i=0; i<array.length; i++) {
+            s = s + array[i];
+        }
+
+        return s;
     }
 
 }
