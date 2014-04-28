@@ -26,11 +26,32 @@
         android:layout_marginRight="20dp"
         android:background="@color/pearsports" />
 
-    <ListView
+    <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="@color/dgray" >
+
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceListItem"
+        android:text="Accept New Trainees"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:id="@+id/lv_settings" />
+        android:layout_marginRight="25dp"
+        android:fontFamily="Avenir"
+        android:textColor="@color/white"
+        android:shadowColor="@color/lgray"
+        android:textStyle="bold"
+        android:textSize="20dp"/>
+
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:id="@+id/status" />
+
+        </LinearLayout>
 
 </LinearLayout>

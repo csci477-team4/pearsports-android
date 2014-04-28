@@ -140,6 +140,7 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
         }
         if (id == R.id.action_settings) {
             Intent i = new Intent(TraineeListActivity.this, SettingsActivity.class);
+            i.putExtra("token", token);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);
