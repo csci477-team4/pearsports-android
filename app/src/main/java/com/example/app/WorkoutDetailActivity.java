@@ -10,6 +10,7 @@ import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.app.trainee.TraineeContent;
@@ -28,6 +29,7 @@ public class WorkoutDetailActivity extends Activity {
     private TraineeContent.TraineeItem mItem;
     private TraineeContent traineeContent = TraineeContent.getInstance();
     private String workoutID;
+    private String token;
     private Workout workout; // the current workout
 
     @Override
@@ -41,6 +43,7 @@ public class WorkoutDetailActivity extends Activity {
         loadTraineeContent();
         mItem = traineeContent.TRAINEE_MAP.get(traineeID);
         workoutID = getIntent().getStringExtra("workout_id");
+        token = getIntent().getStringExtra("token");
         workout = mItem.getWorkoutMap().get(workoutID);
 
         if (workout.getWorkoutMap().get("status").equals("completed")) {
@@ -64,12 +67,8 @@ public class WorkoutDetailActivity extends Activity {
             ((TextView) findViewById(R.id.workout_detail_incomplete_description)).setText(Html.fromHtml(workout.getWorkoutMap().get("description_html")));
         }
 
-
-        // TODO: change this to display the activity icon
-//        ImageView trainee_image = (ImageView) findViewById(R.id.workout_detail_activity_icon);
-//        int imageResource = getResources().getIdentifier(mItem.getInfoMap().get("image"), null, getPackageName());
-//        Drawable drawable = getResources().getDrawable(imageResource);
-//        trainee_image.setImageDrawable(drawable);
+        ImageView trainee_image = (ImageView) findViewById(R.id.workout_detail_activity_icon);
+        trainee_image.setImageDrawable(mItem.getProfile());
     }
 
     @Override
@@ -88,6 +87,8 @@ public class WorkoutDetailActivity extends Activity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(WorkoutDetailActivity.this, SettingsActivity.class);
+            i.putExtra("token", token);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
         if (id == android.R.id.home) {
@@ -109,6 +110,7 @@ public class WorkoutDetailActivity extends Activity {
             edit.apply();
 
             Intent i = new Intent(WorkoutDetailActivity.this, LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);

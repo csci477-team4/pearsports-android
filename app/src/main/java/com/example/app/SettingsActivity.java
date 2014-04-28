@@ -3,22 +3,29 @@ package com.example.app;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.CompoundButton;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class SettingsActivity extends Activity {
+import java.io.IOException;
+
+public class SettingsActivity extends Activity implements CompoundButton.OnCheckedChangeListener {
 
     private ArrayAdapter<String> listAdapter;
+
+    private String token;
+
+    private String status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,34 +33,110 @@ public class SettingsActivity extends Activity {
         setContentView(R.layout.activity_settings);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final String[] account_settings = new String[]{
-                "Reset Password",
-                "Available for Trainee Matching"
-        };
+        Intent intent = getIntent();
+        token = intent.getStringExtra("token");
 
-        ListView myList = (ListView) findViewById(R.id.lv_settings);
+        ToggleButton tb = (ToggleButton) findViewById(R.id.status);
+        if (tb != null) {
+            tb.setOnCheckedChangeListener(SettingsActivity.this);
+        }
 
-        ArrayList<String> listWorkouts = new ArrayList<String>();
-        listWorkouts.addAll( Arrays.asList(account_settings) );
+        new GetStatus().execute();
 
-        listAdapter = new ArrayAdapter<String>(this, R.layout.simple_row, listWorkouts);
-        myList.setAdapter(listAdapter);
+    }
 
-        myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> av, View view, int i, long l) {
-                switch(i) {
-                    case 0:
-                        //Reset Password API Call
-                        Toast.makeText(SettingsActivity.this, "Reset Password", Toast.LENGTH_LONG).show();
-                        break;
-                    case 1:
-                        //Available for Trainee Matching API Call
-                        Toast.makeText(SettingsActivity.this, "Trainee Matching", Toast.LENGTH_LONG).show();
-                        break;
+    private class GetStatus extends AsyncTask<Long,Void,Boolean> {
 
+        protected Boolean doInBackground(Long... params) {
+            ToggleButton tb = (ToggleButton) findViewById(R.id.status);
+            boolean current = tb.isChecked();
+            String current_status;
+            try {
+                JSONObject jsonObj = APIHandler.sendAPIRequestWithAuth("trainer/status", APIHandler.GET, token, "");
+                current_status = jsonObj.getJSONObject("trainer").getString("status");
+
+                if (current_status.equals("available"))
+                    current = true;
+                else if (current_status.equals("not_available"))
+                    current = false;
+                else {
+                    Log.e("SettingsActivity >> ", "Unable to determine if trainer is available or not.");
+                    current = false;
                 }
+            } catch (IOException e) {
+                Log.e("SettingsActivity::IOException >> ", e.getMessage());
+                e.printStackTrace();
+            } catch (JSONException j) {
+                Log.e("SettingsActivity::JSONException >> ", j.getMessage());
+                j.printStackTrace();
             }
-        });
+            return current;
+        }
+
+        protected void onPostExecute(final Boolean success) {
+            ToggleButton tb = (ToggleButton) findViewById(R.id.status);
+
+            if (success)
+                tb.setChecked(true);
+            else
+                tb.setChecked(false);
+        }
+    }
+
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+        if(isChecked) {
+            status = "available";
+            new SetStatus().execute();
+        }
+        else {
+            status = "not_available";
+            new SetStatus().execute();
+        }
+    }
+
+    private class SetStatus extends AsyncTask<Long,Void,Boolean> {
+
+        protected Boolean doInBackground(Long... params) {
+            ToggleButton tb = (ToggleButton) findViewById(R.id.status);
+            boolean current = tb.isChecked();
+
+            try {
+                JSONObject scheduleJSON = APIHandler.sendAPIRequestWithAuth("trainer/status/" + status, APIHandler.POST, token, "");
+
+                if (scheduleJSON != null) {
+                    try {
+                        if (scheduleJSON.getString("status").equals(200)) {
+                            if (scheduleJSON.getString("message").equals("status is now available"))
+                                current = true;
+                            else
+                                current = false;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }  catch (IOException e ) {
+                Log.e("SettingsActivity::IOException >> ", e.getMessage());
+                e.printStackTrace();
+            }
+            return current;
+        }
+
+        protected void onPostExecute(final Boolean success) {
+            ToggleButton tb = (ToggleButton) findViewById(R.id.status);
+
+            if (success) {
+                Toast.makeText(SettingsActivity.this, "You are available for new trainees.", Toast.LENGTH_SHORT).show();
+                tb.setChecked(true);
+            }
+            else {
+                Toast.makeText(SettingsActivity.this, "You are unavailable for new trainees.", Toast.LENGTH_SHORT).show();
+                tb.setChecked(false);
+            }
+        }
     }
 
     @Override
@@ -84,6 +167,7 @@ public class SettingsActivity extends Activity {
             edit.apply();
 
             Intent i = new Intent(SettingsActivity.this, LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);

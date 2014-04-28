@@ -24,6 +24,7 @@ public class TraineeDetailActivity extends FragmentActivity {
 
     private String trainee_id;
     private String name;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class TraineeDetailActivity extends FragmentActivity {
         Intent intent = getIntent();
         trainee_id = intent.getStringExtra("trainee_id");
         name = intent.getStringExtra("name");
+        token = intent.getStringExtra("token");
         this.setTitle(name);
 
 
@@ -75,6 +77,7 @@ public class TraineeDetailActivity extends FragmentActivity {
                         w.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
                         w.putExtra("trainee_id", trainee_id);
                         w.putExtra("name", name);
+                        w.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(w);
                         break;
                     case 1:
@@ -82,6 +85,7 @@ public class TraineeDetailActivity extends FragmentActivity {
                         m.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
                         m.putExtra("trainee_id", trainee_id);
                         m.putExtra("name", name);
+                        m.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(m);
                         break;
                     case 2:
@@ -116,6 +120,7 @@ public class TraineeDetailActivity extends FragmentActivity {
 
     public void onBackPressed() {
         Intent intent = new Intent(TraineeDetailActivity.this, TraineeListActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
     }
@@ -142,10 +147,13 @@ public class TraineeDetailActivity extends FragmentActivity {
             edit.apply();
 
             Intent i = new Intent(TraineeDetailActivity.this, LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
         if (id == R.id.action_settings) {
             Intent i = new Intent(TraineeDetailActivity.this, SettingsActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            i.putExtra("token", token);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);

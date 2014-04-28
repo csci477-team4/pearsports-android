@@ -21,7 +21,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:id="@+id/workout_completed_activity_icon"
-            android:src="@drawable/hiking"
+            android:src="@drawable/running"
             android:layout_gravity="center_horizontal"/>
         <TextView
             android:layout_width="fill_parent"

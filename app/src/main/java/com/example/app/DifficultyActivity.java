@@ -20,6 +20,7 @@ public class DifficultyActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(DifficultyActivity.this, ScheduleWorkoutActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
             }
         });
@@ -29,6 +30,7 @@ public class DifficultyActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(DifficultyActivity.this, ScheduleWorkoutActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
             }
         });
@@ -38,6 +40,7 @@ public class DifficultyActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(DifficultyActivity.this, ScheduleWorkoutActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
             }
         });

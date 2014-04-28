@@ -116,6 +116,7 @@ public class MessageActivity extends ListActivity {
                         w.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
                         w.putExtra("trainee_id", trainee_id);
                         w.putExtra("name", sender);
+                        w.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(w);
                         break;
                     case 1:
@@ -125,6 +126,7 @@ public class MessageActivity extends ListActivity {
                         t.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
                         t.putExtra("trainee_id", trainee_id);
                         t.putExtra("name", sender);
+                        t.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(t);
                         break;
                 }
@@ -287,6 +289,7 @@ public class MessageActivity extends ListActivity {
 
     public void onBackPressed() {
         Intent intent = new Intent(MessageActivity.this, TraineeListActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
     }
@@ -324,6 +327,7 @@ public class MessageActivity extends ListActivity {
         Intent i = new Intent((Activity) this, RecordAudioActivity.class);
         i.putExtra("trainee_id", trainee_id);
         i.putExtra("name", sender);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
     }
 
@@ -379,10 +383,13 @@ public class MessageActivity extends ListActivity {
             edit.apply();
 
             Intent i = new Intent(MessageActivity.this, LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
         if (id == R.id.action_settings) {
             Intent i = new Intent(MessageActivity.this, SettingsActivity.class);
+            i.putExtra("token", token);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);

@@ -1,5 +1,6 @@
 package com.example.app.trainee;
 
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import java.io.Serializable;
@@ -65,6 +66,8 @@ public class TraineeContent implements Serializable {
         public String id;
         public String name;
 
+        private Drawable profile;
+
         private HashMap<String,String> traineeInfo;
         private Stats stats;
 
@@ -101,6 +104,10 @@ public class TraineeContent implements Serializable {
         public String toString() {
             return name;
         }
+
+        public Drawable getProfile() { return profile; }
+
+        public void setProfile(Drawable profile) { this.profile = profile; }
 
         public HashMap<String,String> getInfoMap(){
             return traineeInfo;
@@ -144,22 +151,6 @@ public class TraineeContent implements Serializable {
 
         public int[] getScheduled() {
             return scheduled;
-        }
-
-        public void setIncomplete(int[] i) {
-            this.incomplete = i;
-        }
-
-        public void setComplete(int[] c) {
-            this.complete = c;
-        }
-
-        public void setMarked_Complete(int[] m) {
-            this.marked_complete = m;
-        }
-
-        public void setScheduled(int [] s) {
-            this.scheduled = s;
         }
 
         public void setIncompleteIndex(int pos, int value) { this.incomplete[pos] = value; }

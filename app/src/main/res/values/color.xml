@@ -2,6 +2,7 @@
 <resources>
 
     <color name="pearsports">#00ACEC</color>
+    <color name="pearsports_dark">#0074a0</color>
     <color name="pearsports_med">#00C8EC</color>
     <color name="pearsports_light">#B2EEF9</color>
     <color name="theme_dark">#414141</color>

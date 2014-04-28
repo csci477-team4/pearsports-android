@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,7 +33,9 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,12 +86,11 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
             rl.addView(gv);
 
             convertView.setTag(holder);
-        }
-        else {
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.imageTrainee.setImageResource(rowItem.getTraineeId());
+        holder.imageTrainee.setImageDrawable(rowItem.getProfile());
         holder.imageArrow.setImageResource(rowItem.getRightArrow());
         holder.txtName.setText(rowItem.getTraineeName());
 
@@ -123,16 +125,17 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         i.putExtra(TraineeDetailFragment.ARG_ITEM_ID, traineeContent.TRAINEES.get(pos).id);
         i.putExtra("trainee_id", traineeContent.TRAINEES.get(pos).id);
         i.putExtra("name", traineeContent.TRAINEES.get(pos).name);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         v.getContext().startActivity(i);
     }
 
     public GraphicalView createGraph(int[] incomplete, int[] complete, int[] marked, int[] scheduled) {
-        String[] titles = new String[] { "Completed", "Missed","Scheduled" };
+        String[] titles = new String[]{"Completed", "Missed", "Scheduled"};
         List<int[]> values = new ArrayList<int[]>();
         String graph_title = null;
         int week = 0;
 
-        switch(week) {
+        switch (week) {
             case 0:
                 graph_title = "This Week";
                 break;
@@ -146,9 +149,9 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
 
         //values.add(new double[] { S, M, T, W, T, F, S});
         values.add(complete); // completed
-        values.add(scheduled); // scheduled
         values.add(incomplete); // missed
-        int[] colors = new int[] { Color.parseColor("#00EB23"), Color.parseColor("#D11F00"), Color.parseColor("#00C8EC")};
+        values.add(scheduled); // scheduled
+        int[] colors = new int[]{Color.parseColor("#00EB23"), Color.parseColor("#D11F00"), Color.parseColor("#00C8EC")};
         XYMultipleSeriesRenderer renderer = buildBarRenderer(colors);
         renderer.setOrientation(XYMultipleSeriesRenderer.Orientation.HORIZONTAL);
         setChartSettings(renderer, graph_title, "", "# Workouts", 0.5,
@@ -175,6 +178,7 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         final GraphicalView grfv = ChartFactory.getBarChartView(context, buildBarDataset(titles, values), renderer, BarChart.Type.STACKED);
         return grfv;
     }
+
     protected XYMultipleSeriesRenderer buildBarRenderer(int[] colors) {
         XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
         renderer.setAxisTitleTextSize(20);
@@ -186,7 +190,7 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
 
         renderer.setMarginsColor(Color.parseColor("#565656"));
         renderer.setXLabelsColor(Color.WHITE);
-        renderer.setYLabelsColor(0,Color.WHITE);
+        renderer.setYLabelsColor(0, Color.WHITE);
 
         renderer.setApplyBackgroundColor(true);
         renderer.setBackgroundColor(Color.parseColor("#565656"));
@@ -200,6 +204,7 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         }
         return renderer;
     }
+
     protected XYMultipleSeriesDataset buildBarDataset(String[] titles, List<int[]> values) {
         XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
         int length = titles.length;
@@ -214,6 +219,7 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         }
         return dataset;
     }
+
     protected void setChartSettings(XYMultipleSeriesRenderer renderer, String title, String xTitle,
                                     String yTitle, double xMin, double xMax, double yMin, double yMax, int axesColor,
                                     int labelsColor) {
@@ -225,7 +231,7 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         renderer.setXAxisMax(xMax);
         renderer.setYAxisMin(yMin);
         renderer.setYAxisMax(yMax);
-        renderer.setMargins(new int[] { 35, 65, 10, 15 });
+        renderer.setMargins(new int[]{35, 65, 10, 15});
         renderer.setAxesColor(axesColor);
         renderer.setLabelsColor(labelsColor);
     }
@@ -262,10 +268,21 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
     private String arrayToString(int[] array) {
         String s = "";
 
-        for(int i=0; i<array.length; i++) {
+        for (int i = 0; i < array.length; i++) {
             s = s + array[i];
         }
 
         return s;
+    }
+
+    private Drawable loadImageFromWeb(String url) {
+        try {
+            InputStream is = (InputStream) new URL(url).getContent();
+            Drawable d = Drawable.createFromStream(is, "src name");
+            return d;
+        } catch (Exception e) {
+            System.out.println("Exc=" + e);
+            return null;
+        }
     }
 }

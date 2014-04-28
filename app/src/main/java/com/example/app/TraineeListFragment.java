@@ -236,15 +236,11 @@ public class TraineeListFragment extends ListFragment {
                                 info.put("notes", trainee_info.get("notes").toString());
                                 info.put("photo_url", trainee_info.get("photo_url").toString());
 
-                                // TODO: change this - hardcoded.
-                                if (trainee.name.equals("KR")) {
-                                    info.put("image", "drawable/trainee_1");
-                                } else if (trainee.name.equals("Jamie")) {
-                                    info.put("image", "drawable/trainee_2");
-                                } else if (trainee.name.equals("Joe R")) {
-                                    info.put("image", "drawable/trainee_3");
-                                } else if (trainee.name.equals("eric")) {
-                                    info.put("image", "drawable/trainee_4");
+                                if(trainee_info.get("photo_url").toString() != null) {
+                                    info.put("image", "drawable/default_prof");
+                                }
+                                else {
+                                    info.put("image", "drawable/default_prof");
                                 }
 
                                 traineeContent.addItem(trainee);
@@ -284,6 +280,7 @@ public class TraineeListFragment extends ListFragment {
                         public void onClick(View v) {
                             Intent intent = new Intent(getActivity().getBaseContext(), TraineeDetailActivity.class);
                             intent.putExtra("trainee_id", id);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
                         }
                     };

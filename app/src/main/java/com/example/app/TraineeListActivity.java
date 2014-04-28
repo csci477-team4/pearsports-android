@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -34,8 +38,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -136,10 +143,13 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
             edit.apply();
 
             Intent i = new Intent(TraineeListActivity.this, LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
         if (id == R.id.action_settings) {
             Intent i = new Intent(TraineeListActivity.this, SettingsActivity.class);
+            i.putExtra("token", token);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);
@@ -200,7 +210,7 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
                                                 String nowString = GetToday();
                                                 long now = ISOStringToEpoch(nowString);
 
-                                                if (time >= now) {
+                                                if (time > now) {
                                                     scheduled[day] = scheduled[day] + 1;
                                                     trainee.setScheduledIndex(day, trainee.getScheduledIndex(day) + 1);
                                                 } else if (status.equals("marked_complete")) {
@@ -250,17 +260,20 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
                             info.put("height", trainee_info.get("height").toString());
                             info.put("weight", trainee_info.get("weight").toString());
                             info.put("notes", trainee_info.get("notes").toString());
-                            info.put("photo_url", trainee_info.get("photo_url").toString());
 
-                            // TODO: change this - hardcoded.
-                            if (trainee.name.equals("KR")) {
-                                info.put("image", "drawable/trainee_1");
-                            } else if (trainee.name.equals("Jamie")) {
-                                info.put("image", "drawable/trainee_2");
-                            } else if (trainee.name.equals("Joe R")) {
-                                info.put("image", "drawable/trainee_3");
-                            } else if (trainee.name.equals("eric")) {
-                                info.put("image", "drawable/trainee_4");
+                            String photo_url = trainee_info.get("photo_url").toString();
+                            info.put("photo_url", photo_url);
+
+                            if(photo_url != null) {
+                                Drawable drawable = loadImageFromWeb(photo_url);
+                                trainee.setProfile(drawable);
+                                info.put("image", "drawable/default_prof");
+                            }
+                            else {
+                                int imageResource = getResources().getIdentifier("drawable/default_prof", null, getPackageName());
+                                Drawable drawable = getResources().getDrawable(imageResource);
+                                trainee.setProfile(drawable);
+                                info.put("image", "drawable/default_prof");
                             }
 
                             traineeContent.addItem(trainee);
@@ -295,9 +308,28 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
             traineeContent = tc;
             listTrainees = traineeContent.TRAINEES;
             traineeContent.printTraineeList();
-            for (int i = 0; i < listTrainees.size(); i++) {
 
-                RowItem item = new RowItem(trainees[i], arrows, listTrainees.get(i).getInfoMap().get("name"),
+            // add scheduled to incomplete
+            for (int j = 0; j < listTrainees.size(); j++) {
+                for (int k = 0; k < 7; k++) {
+                    listTrainees.get(j).setIncompleteIndex(k,
+                            listTrainees.get(j).getScheduledIndex(k) +
+                            listTrainees.get(j).getIncompleteIndex(k));
+                }
+            }
+
+            // add incomplete to complete
+            for (int m = 0; m < listTrainees.size(); m++) {
+                for (int n = 0; n < 7; n++) {
+                    listTrainees.get(m).setCompletedIndex(n,
+                            listTrainees.get(m).getIncompleteIndex(n) +
+                                    listTrainees.get(m).getCompletedIndex(n));
+                }
+            }
+
+            for (int i = 0; i < listTrainees.size(); i++) {
+                RowItem item = new RowItem(listTrainees.get(i).getProfile(),
+                        arrows, listTrainees.get(i).getInfoMap().get("name"),
                         listTrainees.get(i).getIncomplete(), listTrainees.get(i).getComplete(),
                         listTrainees.get(i).getMarked_Complete(), listTrainees.get(i).getScheduled());
 
@@ -319,6 +351,8 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
         i.putExtra(TraineeDetailFragment.ARG_ITEM_ID, traineeContent.TRAINEES.get(pos).id);
         i.putExtra("trainee_id", traineeContent.TRAINEES.get(pos).id);
         i.putExtra("name", traineeContent.TRAINEES.get(pos).name);
+        i.putExtra("token", token);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
     }
 
@@ -466,6 +500,38 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
             incomplete[i] = 0;
             marked_complete[i] = 0;
             scheduled[i] = 0;
+        }
+    }
+
+    private String arrayToString(int[] array) {
+        String s = "";
+
+        for(int i=0; i<array.length; i++) {
+            s = s + array[i];
+        }
+
+        return s;
+    }
+
+    public static Drawable drawableFromUrl(String url) throws IOException {
+        Bitmap x;
+
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.connect();
+        InputStream input = connection.getInputStream();
+
+        x = BitmapFactory.decodeStream(input);
+        return new BitmapDrawable(x);
+    }
+
+    public Drawable loadImageFromWeb(String url) {
+        try {
+            InputStream is = (InputStream) new URL(url).getContent();
+            Drawable d = Drawable.createFromStream(is, "src name");
+            return d;
+        } catch (Exception e) {
+            System.out.println("Exc=" + e);
+            return null;
         }
     }
 

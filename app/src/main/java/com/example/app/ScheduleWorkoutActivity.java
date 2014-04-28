@@ -84,6 +84,7 @@ public class ScheduleWorkoutActivity extends Activity {
 
                 // Switch back to trainee's workout history
                 Intent i = new Intent(ScheduleWorkoutActivity.this, TraineeListActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
                 finish();
             }
@@ -95,6 +96,7 @@ public class ScheduleWorkoutActivity extends Activity {
         intent.putExtra(TraineeDetailFragment.ARG_ITEM_ID, traineeID);
         intent.putExtra("trainee_id", traineeID);
         intent.putExtra("name", name);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
     }
@@ -116,6 +118,8 @@ public class ScheduleWorkoutActivity extends Activity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(ScheduleWorkoutActivity.this, SettingsActivity.class);
+            i.putExtra("token", token);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
         if (id == android.R.id.home) {
@@ -137,6 +141,7 @@ public class ScheduleWorkoutActivity extends Activity {
             edit.apply();
 
             Intent i = new Intent(ScheduleWorkoutActivity.this, LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);

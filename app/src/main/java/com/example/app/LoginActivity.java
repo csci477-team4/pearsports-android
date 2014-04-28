@@ -395,6 +395,7 @@ public class LoginActivity extends Activity {
 
                 Intent i = new Intent(LoginActivity.this, TraineeListActivity.class);
                 i.putExtra("token", mToken);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
                 finish();
             } else {
