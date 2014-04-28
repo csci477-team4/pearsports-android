@@ -145,95 +145,6 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
         return super.onOptionsItemSelected(item);
     }
 
-    private class GetWorkoutSchedule extends AsyncTask<String, Void, TraineeContent> {
-        @Override
-        protected TraineeContent doInBackground(String... params) {
-            if (isOnline()) {
-                resetData();
-                List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-                traineeID = params[2].toString();
-                parameters.add(new BasicNameValuePair("trainee_id", params[2].toString()));
-
-                try {
-                    JSONObject scheduleJSON = APIHandler.sendAPIRequestWithAuth("workout_schedule" +
-                            params[0].toString() + "/" + params[1].toString(), APIHandler.GET, token, "", parameters);
-
-                    if (scheduleJSON != null) {
-                        try {
-                            workoutsObject = scheduleJSON.getJSONObject("workout_data").getJSONObject("workouts");
-                            int workoutsCount = workoutsObject.getInt("count");
-                            workoutArray = workoutsObject.getJSONArray("data");
-
-                            resultsObject = scheduleJSON.getJSONObject("workout_data").getJSONObject("results");
-                            int resultsCount = resultsObject.getInt("count");
-                            resultArray = resultsObject.getJSONArray("data");
-
-                            // incomplete or marked_complete workouts (no results)
-                            for (int i = 0; i < workoutsCount; i++) {
-                                JSONObject workoutJSON = workoutArray.getJSONObject(i);
-
-                                String status = workoutJSON.getString("status");
-                                String scheduled_at = workoutJSON.getString("scheduled_at");
-
-                                int day = ISOStringToDay(scheduled_at);
-                                long time = ISOStringToEpoch(scheduled_at.substring(0, 10));
-                                String nowString = GetToday();
-                                long now = ISOStringToEpoch(nowString);
-
-                                if (time >= now) {
-                                    scheduled[day] = scheduled[day] + 1;
-                                } else if (status.equals("marked_complete")) {
-                                    marked_complete[day] = marked_complete[day] + 1;
-                                } else if (status.equals("incomplete")) {
-                                    incomplete[day] = incomplete[day] + 1;
-                                } else {
-                                    Log.e("TraineeListActivity::GetWorkoutSchedule >> ", "Invalid workout status.");
-                                }
-                            }
-
-                            // completed workouts with results
-                            for (int i = 0; i < resultsCount; i++) {
-                                JSONObject resultJSON = resultArray.getJSONObject(i);
-
-                                String status = resultJSON.getString("status");
-                                String scheduled_at = resultJSON.getString("scheduled_at");
-                                int day = ISOStringToDay(scheduled_at);
-
-                                if (status.equals("completed")) {
-                                    completed[day] = completed[day] + 1;
-                                } else {
-                                    Log.e("TraineeListActivity::GetWorkoutSchedule >> ", "Invalid workout status.");
-                                }
-
-                            }
-                        } catch (JSONException e) {
-                            Log.e("TraineeListActivity::GetWorkoutSchedule : ", "JSONException: " + e.getMessage());
-                            e.printStackTrace();
-                        }
-                    } else {
-                        Log.e("APIHandler", "No data from specified URL");
-                    }
-                } catch (IOException e) {
-                    Log.d("TraineeListActivity::GetWorkoutSchedule::IOException >> ", e.getMessage());
-                    e.printStackTrace();
-                }
-
-            } else {
-                Log.d("TraineeListActivity::GetWorkoutSchedule >> ", "Not online.");
-            }
-
-            return traineeContent;
-        }
-
-        @Override
-        protected void onPostExecute(final TraineeContent tc) {
-            Log.e("****ARRAY****", arrayToString(incomplete));
-            Log.e("****ARRAY****", arrayToString(completed));
-            Log.e("****ARRAY****", arrayToString(marked_complete));
-            Log.e("****ARRAY****", arrayToString(scheduled));
-        }
-    }
-
     private class GetTraineeList extends AsyncTask<String, Void, TraineeContent> {
         @Override
         protected TraineeContent doInBackground(String... params) {
@@ -257,8 +168,6 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
                             DateTime weekEnd = dateTime.weekOfWeekyear().roundCeilingCopy();
                             weekStartMillis = weekStart.getMillis() / 1000;
                             weekEndMillis = weekEnd.getMillis() / 1000;
-                            // data = getWorkoutData(weekStartMillis, weekEndMillis, id);
-                            //new GetWorkoutSchedule().execute(String.valueOf(weekStartMillis), String.valueOf(weekEndMillis), id);
                             TraineeContent.TraineeItem trainee = traineeContent.new TraineeItem(id, trainee_info.get("screen_name").toString());
 
                                 resetData();
@@ -558,16 +467,6 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
             marked_complete[i] = 0;
             scheduled[i] = 0;
         }
-    }
-
-    private String arrayToString(int[] array) {
-        String s = "";
-
-        for(int i=0; i<array.length; i++) {
-            s = s + array[i];
-        }
-
-        return s;
     }
 
 }

@@ -65,11 +65,6 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
 
         RowItem rowItem = (RowItem) getItem(position);
 
-//        Log.d("********INCOM*********", arrayToString(rowItem.getIncomplete()));
-//        Log.d("********COMP*********", arrayToString(rowItem.getComplete()));
-//        Log.d("********MARKED*********", arrayToString(rowItem.getMarked()));
-//        Log.d("********SCHED*********", arrayToString(rowItem.getScheduled()));
-
         int[] incomplete = rowItem.getIncomplete();
         int[] complete = rowItem.getComplete();
         int[] marked = rowItem.getMarked();
@@ -153,7 +148,7 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         values.add(complete); // completed
         values.add(scheduled); // scheduled
         values.add(incomplete); // missed
-        int[] colors = new int[] { Color.parseColor("#00C8EC"), Color.parseColor("#CC0000"), Color.parseColor("#99CC00")};
+        int[] colors = new int[] { Color.parseColor("#00EB23"), Color.parseColor("#D11F00"), Color.parseColor("#00C8EC")};
         XYMultipleSeriesRenderer renderer = buildBarRenderer(colors);
         renderer.setOrientation(XYMultipleSeriesRenderer.Orientation.HORIZONTAL);
         setChartSettings(renderer, graph_title, "", "# Workouts", 0.5,
@@ -230,7 +225,7 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         renderer.setXAxisMax(xMax);
         renderer.setYAxisMin(yMin);
         renderer.setYAxisMax(yMax);
-        renderer.setMargins(new int[] { 25, 65, 10, 15 });
+        renderer.setMargins(new int[] { 35, 65, 10, 15 });
         renderer.setAxesColor(axesColor);
         renderer.setLabelsColor(labelsColor);
     }
