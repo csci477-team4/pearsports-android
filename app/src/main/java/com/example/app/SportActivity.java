@@ -143,6 +143,7 @@ public class SportActivity extends Activity {
                 intent.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
                 intent.putExtra("trainee_id", trainee_id);
                 intent.putExtra("name", name);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
             }
@@ -154,6 +155,7 @@ public class SportActivity extends Activity {
         intent.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
         intent.putExtra("trainee_id", trainee_id);
         intent.putExtra("name", name);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
     }
@@ -192,11 +194,13 @@ public class SportActivity extends Activity {
             edit.apply();
 
             Intent i = new Intent(SportActivity.this, LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
         if (id == R.id.action_settings) {
             Intent i = new Intent(SportActivity.this, SettingsActivity.class);
             i.putExtra("token", token);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);

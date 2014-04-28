@@ -123,6 +123,7 @@ public class CustomBaseAdapter extends BaseAdapter implements View.OnClickListen
         i.putExtra(TraineeDetailFragment.ARG_ITEM_ID, traineeContent.TRAINEES.get(pos).id);
         i.putExtra("trainee_id", traineeContent.TRAINEES.get(pos).id);
         i.putExtra("name", traineeContent.TRAINEES.get(pos).name);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         v.getContext().startActivity(i);
     }
 

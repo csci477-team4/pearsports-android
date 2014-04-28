@@ -136,11 +136,13 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
             edit.apply();
 
             Intent i = new Intent(TraineeListActivity.this, LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
         if (id == R.id.action_settings) {
             Intent i = new Intent(TraineeListActivity.this, SettingsActivity.class);
             i.putExtra("token", token);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);
@@ -339,6 +341,7 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
         i.putExtra("trainee_id", traineeContent.TRAINEES.get(pos).id);
         i.putExtra("name", traineeContent.TRAINEES.get(pos).name);
         i.putExtra("token", token);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
     }
 

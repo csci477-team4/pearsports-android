@@ -284,6 +284,7 @@ public class TraineeListFragment extends ListFragment {
                         public void onClick(View v) {
                             Intent intent = new Intent(getActivity().getBaseContext(), TraineeDetailActivity.class);
                             intent.putExtra("trainee_id", id);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
                         }
                     };

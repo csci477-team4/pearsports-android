@@ -167,6 +167,7 @@ public class SettingsActivity extends Activity implements CompoundButton.OnCheck
             edit.apply();
 
             Intent i = new Intent(SettingsActivity.this, LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);

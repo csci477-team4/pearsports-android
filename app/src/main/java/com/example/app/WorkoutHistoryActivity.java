@@ -101,6 +101,7 @@ public class WorkoutHistoryActivity extends Activity {
                 i.putExtra("trainee_id", trainee_id);
                 i.putExtra("token", token);
                 i.putExtra("name", name);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
                 finish();
             }
@@ -167,6 +168,7 @@ public class WorkoutHistoryActivity extends Activity {
                         m.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
                         m.putExtra("trainee_id", trainee_id);
                         m.putExtra("name", name);
+                        m.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(m);
                         break;
                     case 2:
@@ -174,6 +176,7 @@ public class WorkoutHistoryActivity extends Activity {
                         t.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
                         t.putExtra("trainee_id", trainee_id);
                         t.putExtra("name", name);
+                        t.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(t);
                         break;
                 }
@@ -206,6 +209,7 @@ public class WorkoutHistoryActivity extends Activity {
 
     public void onBackPressed() {
         Intent intent = new Intent(WorkoutHistoryActivity.this, TraineeListActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
     }
@@ -227,6 +231,7 @@ public class WorkoutHistoryActivity extends Activity {
         if (id == R.id.action_settings) {
             Intent i = new Intent(WorkoutHistoryActivity.this, SettingsActivity.class);
             i.putExtra("token", token);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
         if (id == android.R.id.home) {
@@ -248,6 +253,7 @@ public class WorkoutHistoryActivity extends Activity {
             edit.apply();
 
             Intent i = new Intent(WorkoutHistoryActivity.this, LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);
@@ -499,6 +505,7 @@ public class WorkoutHistoryActivity extends Activity {
                         Intent intent = new Intent(WorkoutHistoryActivity.this,WorkoutDetailActivity.class);
                         intent.putExtra("workout_id", id);
                         intent.putExtra("token", token);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     }
                 };

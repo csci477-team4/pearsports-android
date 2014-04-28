@@ -222,6 +222,7 @@ public class RecordAudioActivity extends Activity {
         if (id == R.id.action_settings) {
             Intent i = new Intent(RecordAudioActivity.this, SettingsActivity.class);
             i.putExtra("token", token);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
         if (id == R.id.action_logout) {
@@ -232,6 +233,7 @@ public class RecordAudioActivity extends Activity {
             edit.apply();
 
             Intent i = new Intent(RecordAudioActivity.this, LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);

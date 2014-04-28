@@ -91,6 +91,7 @@ public class WorkoutDetailActivity extends Activity {
         if (id == R.id.action_settings) {
             Intent i = new Intent(WorkoutDetailActivity.this, SettingsActivity.class);
             i.putExtra("token", token);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
         if (id == android.R.id.home) {
@@ -112,6 +113,7 @@ public class WorkoutDetailActivity extends Activity {
             edit.apply();
 
             Intent i = new Intent(WorkoutDetailActivity.this, LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);
