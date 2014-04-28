@@ -20,6 +20,7 @@ public class SportActivity extends Activity {
 
     private ArrayAdapter<String> listAdapter;
     private String trainee_id;
+    private String token;
     private String name;
 
     @Override
@@ -29,6 +30,7 @@ public class SportActivity extends Activity {
 
         Intent intent = getIntent();
         trainee_id = intent.getStringExtra("trainee_id");
+        token = intent.getStringExtra("token");
         name = intent.getStringExtra("name");
 
         final String[] workouts = new String[] { "Endurance Ride 73min",
@@ -171,9 +173,6 @@ public class SportActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
         if (id == android.R.id.home) {
             // This ID represents the Home or Up button. In the case of this
             // activity, the Up button is shown. Use NavUtils to allow users
@@ -197,6 +196,7 @@ public class SportActivity extends Activity {
         }
         if (id == R.id.action_settings) {
             Intent i = new Intent(SportActivity.this, SettingsActivity.class);
+            i.putExtra("token", token);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);

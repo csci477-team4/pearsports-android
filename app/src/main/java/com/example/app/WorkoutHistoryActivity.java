@@ -99,6 +99,7 @@ public class WorkoutHistoryActivity extends Activity {
                 Intent i = new Intent(WorkoutHistoryActivity.this, SportActivity.class);
                 i.putExtra(TraineeDetailFragment.ARG_ITEM_ID, trainee_id);
                 i.putExtra("trainee_id", trainee_id);
+                i.putExtra("token", token);
                 i.putExtra("name", name);
                 startActivity(i);
                 finish();
@@ -225,6 +226,7 @@ public class WorkoutHistoryActivity extends Activity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(WorkoutHistoryActivity.this, SettingsActivity.class);
+            i.putExtra("token", token);
             startActivity(i);
         }
         if (id == android.R.id.home) {
@@ -496,6 +498,7 @@ public class WorkoutHistoryActivity extends Activity {
                     public void onClick(View v) {
                         Intent intent = new Intent(WorkoutHistoryActivity.this,WorkoutDetailActivity.class);
                         intent.putExtra("workout_id", id);
+                        intent.putExtra("token", token);
                         startActivity(intent);
                     }
                 };

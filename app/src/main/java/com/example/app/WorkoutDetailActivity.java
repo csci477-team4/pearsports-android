@@ -28,6 +28,7 @@ public class WorkoutDetailActivity extends Activity {
     private TraineeContent.TraineeItem mItem;
     private TraineeContent traineeContent = TraineeContent.getInstance();
     private String workoutID;
+    private String token;
     private Workout workout; // the current workout
 
     @Override
@@ -41,6 +42,7 @@ public class WorkoutDetailActivity extends Activity {
         loadTraineeContent();
         mItem = traineeContent.TRAINEE_MAP.get(traineeID);
         workoutID = getIntent().getStringExtra("workout_id");
+        token = getIntent().getStringExtra("token");
         workout = mItem.getWorkoutMap().get(workoutID);
 
         if (workout.getWorkoutMap().get("status").equals("completed")) {
@@ -88,6 +90,7 @@ public class WorkoutDetailActivity extends Activity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(WorkoutDetailActivity.this, SettingsActivity.class);
+            i.putExtra("token", token);
             startActivity(i);
         }
         if (id == android.R.id.home) {

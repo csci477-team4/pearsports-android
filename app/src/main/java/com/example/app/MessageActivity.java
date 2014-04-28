@@ -383,6 +383,7 @@ public class MessageActivity extends ListActivity {
         }
         if (id == R.id.action_settings) {
             Intent i = new Intent(MessageActivity.this, SettingsActivity.class);
+            i.putExtra("token", token);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);

@@ -39,6 +39,8 @@ public class RecordAudioActivity extends Activity {
     private SeekBar seek;
     private Handler mHandler;
 
+    private String token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -219,6 +221,7 @@ public class RecordAudioActivity extends Activity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(RecordAudioActivity.this, SettingsActivity.class);
+            i.putExtra("token", token);
             startActivity(i);
         }
         if (id == R.id.action_logout) {
@@ -259,6 +262,7 @@ public class RecordAudioActivity extends Activity {
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String traineeId = pref.getString("trainee_id", "");
             String key = pref.getString("token", "");
+            token = key;
 
             runOnUiThread(new Runnable() {
                 @Override

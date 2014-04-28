@@ -24,6 +24,7 @@ public class TraineeDetailActivity extends FragmentActivity {
 
     private String trainee_id;
     private String name;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class TraineeDetailActivity extends FragmentActivity {
         Intent intent = getIntent();
         trainee_id = intent.getStringExtra("trainee_id");
         name = intent.getStringExtra("name");
+        token = intent.getStringExtra("token");
         this.setTitle(name);
 
 
@@ -146,6 +148,7 @@ public class TraineeDetailActivity extends FragmentActivity {
         }
         if (id == R.id.action_settings) {
             Intent i = new Intent(TraineeDetailActivity.this, SettingsActivity.class);
+            i.putExtra("token", token);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);

@@ -116,6 +116,7 @@ public class ScheduleWorkoutActivity extends Activity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(ScheduleWorkoutActivity.this, SettingsActivity.class);
+            i.putExtra("token", token);
             startActivity(i);
         }
         if (id == android.R.id.home) {

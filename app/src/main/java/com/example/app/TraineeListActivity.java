@@ -338,6 +338,7 @@ public class TraineeListActivity extends Activity implements OnItemClickListener
         i.putExtra(TraineeDetailFragment.ARG_ITEM_ID, traineeContent.TRAINEES.get(pos).id);
         i.putExtra("trainee_id", traineeContent.TRAINEES.get(pos).id);
         i.putExtra("name", traineeContent.TRAINEES.get(pos).name);
+        i.putExtra("token", token);
         startActivity(i);
     }
 
