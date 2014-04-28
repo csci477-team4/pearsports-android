@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +37,8 @@ public class ScheduleWorkoutActivity extends Activity {
     protected String sku;
     protected long epoch_start;
     protected long epoch_end;
+
+    private CheckBox sun, mon, tue, wed, thu, fri, sat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +81,38 @@ public class ScheduleWorkoutActivity extends Activity {
                 epoch_end = epoch_start + 1800000;
                 //TODO: epoch_end assumes workout is 30min long, should get duration
 
-                // API Call to post workout
-                new SendWorkout().execute();
+
+                sun = (CheckBox) findViewById(R.id.checkSun);
+                mon = (CheckBox) findViewById(R.id.checkMon);
+                tue = (CheckBox) findViewById(R.id.checkTue);
+                wed = (CheckBox) findViewById(R.id.checkWed);
+                thu = (CheckBox) findViewById(R.id.checkThu);
+                fri = (CheckBox) findViewById(R.id.checkFri);
+                sat = (CheckBox) findViewById(R.id.checkSat);
+
+                List<Integer> list_days = new ArrayList<Integer>();
+
+                if(sun.isChecked())
+                    list_days.add(0);
+                if(mon.isChecked())
+                    list_days.add(1);
+                if(tue.isChecked())
+                    list_days.add(2);
+                if(wed.isChecked())
+                    list_days.add(3);
+                if(thu.isChecked())
+                    list_days.add(4);
+                if(fri.isChecked())
+                    list_days.add(5);
+                if(sat.isChecked())
+                    list_days.add(6);
+
+                if(list_days.size() >= 2) {
+                    new SendPlan().execute(list_days);
+                }
+                else {
+                    new SendWorkout().execute();
+                }
 
                 // Switch back to trainee's workout history
                 Intent i = new Intent(ScheduleWorkoutActivity.this, TraineeListActivity.class);
@@ -183,6 +216,57 @@ public class ScheduleWorkoutActivity extends Activity {
                 Toast.makeText(ScheduleWorkoutActivity.this, "Unable to send workout to trainee.", Toast.LENGTH_LONG).show();
 
         }
+    }
+
+    private class SendPlan extends AsyncTask<List<Integer>,Void,Boolean> {
+
+        protected Boolean doInBackground(List<Integer>... params) {
+            List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+            parameters.add(new BasicNameValuePair("trainee_id", traineeID));
+            parameters.add(new BasicNameValuePair("start", String.valueOf(epoch_end)));
+
+            String days = "[";
+            for (int i = 0; i < params[0].size(); i++) {
+                if(i == 0)
+                    days = days + params[0].get(i) + ", ";
+                else if (i == 1)
+                    days = days + params[0].get(i);
+                else
+                    days = days + ", " + params[0].get(i);
+            }
+            days = days + "]";
+            Log.e("***SCHEDULE***", days);
+            parameters.add(new BasicNameValuePair("weekdays", days));
+
+            try {
+                JSONObject scheduleJSON = APIHandler.sendAPIRequestWithAuth("plan" + "/" + sku, APIHandler.POST, token, "", parameters);
+
+                if (scheduleJSON != null) {
+                    try {
+                        if (scheduleJSON.getString("object").equals("error"))
+                            return false;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return true;
+            } catch (IOException e ) {
+                Log.e("ScheduleWorkoutActivity::IOException >> ", e.getMessage());
+                e.printStackTrace();
+            }
+            return true;
+        }
+
+        protected void onPostExecute(final Boolean success) {
+
+            if (success)
+                Toast.makeText(ScheduleWorkoutActivity.this, "Plan successfully sent to trainee.", Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(ScheduleWorkoutActivity.this, "Unable to send plan to trainee.", Toast.LENGTH_LONG).show();
+
+        }
+
+
     }
 
 }
