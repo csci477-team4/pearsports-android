@@ -37,7 +37,6 @@ public class SchedulePlanActivity extends Activity {
     private String desc;
     protected String sku;
     protected long epoch_start;
-    protected long epoch_end;
 
     private CheckBox sun, mon, tue, wed, thu, fri, sat;
 
@@ -81,9 +80,6 @@ public class SchedulePlanActivity extends Activity {
                     e.printStackTrace();
                 }
                 epoch_start = date.getTime();
-                epoch_end = epoch_start + 1800000;
-                //TODO: epoch_end assumes workout is 30min long, should get duration
-
 
                 sun = (CheckBox) findViewById(R.id.checkSun);
                 mon = (CheckBox) findViewById(R.id.checkMon);
@@ -110,12 +106,7 @@ public class SchedulePlanActivity extends Activity {
                 if(sat.isChecked())
                     list_days.add(6);
 
-                if(list_days.size() >= 2) {
-                    new SendPlan().execute(list_days);
-                }
-                else {
-                    new SendWorkout().execute();
-                }
+                new SendPlan().execute(list_days);
 
                 // Switch back to trainee's workout history
                 Intent i = new Intent(SchedulePlanActivity.this, TraineeListActivity.class);
@@ -182,51 +173,12 @@ public class SchedulePlanActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private class SendWorkout extends AsyncTask<Long,Void,Boolean> {
-
-        protected Boolean doInBackground(Long... params) {
-            List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            parameters.add(new BasicNameValuePair("trainee_id", traineeID));
-            //parameters.add(new BasicNameValuePair("sku", sku));
-            parameters.add(new BasicNameValuePair("start", String.valueOf(epoch_end)));
-            //parameters.add(new BasicNameValuePair("end", String.valueOf(epoch_end)));
-
-            try {
-                JSONObject scheduleJSON = APIHandler.sendAPIRequestWithAuth("workout" + "/" + sku, APIHandler.POST, token, "", parameters);
-
-                if (scheduleJSON != null) {
-                    try {
-                        if (scheduleJSON.getString("object").equals("error"))
-                            return false;
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                return true;
-            } catch (IOException e ) {
-                Log.e("ScheduleWorkoutActivity::IOException >> ", e.getMessage());
-                e.printStackTrace();
-            }
-            return true;
-        }
-
-        protected void onPostExecute(final Boolean success) {
-
-            if (success)
-                Toast.makeText(SchedulePlanActivity.this, "Workout successfully sent to trainee.", Toast.LENGTH_LONG).show();
-            else
-                Toast.makeText(SchedulePlanActivity.this, "Unable to send workout to trainee.", Toast.LENGTH_LONG).show();
-
-        }
-    }
-
     private class SendPlan extends AsyncTask<List<Integer>,Void,Boolean> {
 
         protected Boolean doInBackground(List<Integer>... params) {
             List<NameValuePair> parameters = new ArrayList<NameValuePair>();
             parameters.add(new BasicNameValuePair("trainee_id", traineeID));
-            parameters.add(new BasicNameValuePair("start", String.valueOf(epoch_end)));
+            parameters.add(new BasicNameValuePair("start", String.valueOf(epoch_start)));
 
             String days = "[";
             for (int i = 0; i < params[0].size(); i++) {
