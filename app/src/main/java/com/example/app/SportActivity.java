@@ -39,6 +39,7 @@ public class SportActivity extends Activity implements AdapterView.OnItemClickLi
     private JSONArray sku_list = null;
     private String title;
     private String sku;
+    private String desc;
 
     ListView listView;
     List<WorkoutItem> workouts = new ArrayList<WorkoutItem>();
@@ -78,9 +79,10 @@ public class SportActivity extends Activity implements AdapterView.OnItemClickLi
 
                                 sku = skuJSON.getString("sku");
                                 title = skuJSON.getString("title");
+                                desc = skuJSON.getString("description_short");
                                 Drawable d = getDrawable();
 
-                                WorkoutItem wi = new WorkoutItem(d, title, sku);
+                                WorkoutItem wi = new WorkoutItem(d, title, sku, desc);
                                 workouts.add(wi);
                             }
 
@@ -132,9 +134,10 @@ public class SportActivity extends Activity implements AdapterView.OnItemClickLi
 
                                 sku = skuJSON.getString("sku");
                                 title = skuJSON.getString("title");
+                                desc = skuJSON.getString("description_short");
                                 Drawable d = getDrawable();
 
-                                WorkoutItem wi = new WorkoutItem(d, title, sku);
+                                WorkoutItem wi = new WorkoutItem(d, title, sku, desc);
                                 plans.add(wi);
                             }
 

@@ -16,8 +16,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.app.trainee.TraineeContent;
-
 import java.util.List;
 
 public class WorkoutAdapter extends BaseAdapter implements View.OnClickListener {
@@ -25,10 +23,6 @@ public class WorkoutAdapter extends BaseAdapter implements View.OnClickListener 
     Context context;
     List<WorkoutItem> workouts;
     SharedPreferences pref;
-    TraineeContent traineeContent = TraineeContent.getInstance();
-
-    private String w_sku;
-    private String w_name;
 
     public WorkoutAdapter(Context context, List<WorkoutItem> workouts) {
         this.context = context;
@@ -40,6 +34,7 @@ public class WorkoutAdapter extends BaseAdapter implements View.OnClickListener 
     private class ViewHolder {
         ImageView image;
         TextView name;
+        TextView desc;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -55,6 +50,7 @@ public class WorkoutAdapter extends BaseAdapter implements View.OnClickListener 
             holder = new ViewHolder();
             holder.image = (ImageView) convertView.findViewById(R.id.pic);
             holder.name = (TextView) convertView.findViewById(R.id.name);
+            holder.desc = (TextView) convertView.findViewById(R.id.desc);
 
             convertView.setTag(holder);
         } else {
@@ -63,6 +59,7 @@ public class WorkoutAdapter extends BaseAdapter implements View.OnClickListener 
 
         holder.image.setImageDrawable(item.getPic());
         holder.name.setText(item.getName());
+        holder.desc.setText(item.getDesc());
 
         View v = convertView;
 
@@ -73,6 +70,10 @@ public class WorkoutAdapter extends BaseAdapter implements View.OnClickListener 
         TextView n = (TextView) v.findViewById(R.id.name);
         n.setTag(new Integer(position));
         n.setOnClickListener(this);
+
+        TextView d = (TextView) v.findViewById(R.id.desc);
+        d.setTag(new Integer(position));
+        d.setOnClickListener(this);
 
         return convertView;
     }
