@@ -34,6 +34,7 @@ public class ScheduleWorkoutActivity extends Activity {
     private String token;
     private String traineeID;
     private String name;
+    private String desc;
     protected String sku;
     protected long epoch_start;
     protected long epoch_end;
@@ -52,8 +53,10 @@ public class ScheduleWorkoutActivity extends Activity {
         traineeID = b.getString("trainee_id");
         sku = b.getString("sku");    //sku ID of workout
         name = b.getString("name");
+        desc = b.getString("desc");
 
         ((TextView) findViewById(R.id.workout_name)).setText(name);
+        ((TextView) findViewById(R.id.workout_desc)).setText(desc);
 
         final DatePicker datePicker = (DatePicker) findViewById(R.id.datePickerStart);
 

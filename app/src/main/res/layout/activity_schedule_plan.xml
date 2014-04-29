@@ -1,149 +1,137 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/dgray"
-    tools:context="com.example.app.SchedulePlanActivity" >
-
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingTop="20dp"
-    android:background="@color/dgray" >
+    tools:context="com.example.app.SchedulePlanActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/dgray"
+        android:orientation="vertical"
+        android:paddingTop="20dp">
 
         <TextView
+            android:id="@+id/plan_name"
+            style="@style/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/plan_name"
-            android:text="Workout"
+            android:fontFamily="Avenir"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
+            android:text="Plan" />
+
+        <TextView
+            android:id="@+id/plan_desc"
+            style="@style/subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:fontFamily="Avenir"
-            style="@style/title"/>
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="Workout" />
 
         <View
+            android:id="@+id/horizontal"
             android:layout_width="fill_parent"
             android:layout_height="2dip"
-            android:id="@+id/horizontal"
-            android:background="@color/pearsports"
-            android:layout_alignBottom="@+id/plan_name"
+            android:layout_alignBottom="@+id/workout_name"
+            android:layout_centerHorizontal="true"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_centerHorizontal="true" />
+            android:background="@color/pearsports" />
 
         <LinearLayout
-            android:layout_height="fill_parent"
             android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_height="fill_parent"
                 android:layout_width="240dp"
+                android:layout_height="fill_parent"
                 android:orientation="vertical">
 
                 <TextView
+                    style="@style/subsubtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Start Date:"
-                    android:paddingLeft="20dp"
-                    android:fontFamily="Avenir"
-                    style="@style/subsubtitle"
-                    android:layout_marginTop="5dp"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="Avenir"
+                    android:paddingLeft="20dp"
+                    android:text="Start Date:" />
 
                 <DatePicker
-                    android:layout_width="wrap_content"
-                    android:layout_height="150dp"
-                    android:scaleX="0.75"
-                    android:scaleY="0.75"
                     android:id="@+id/datePickerStart"
-                    android:calendarViewShown="false" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="End Date:"
-                    android:paddingLeft="20dp"
-                    android:fontFamily="Avenir"
-                    style="@style/subsubtitle"
-                    android:layout_marginTop="5dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-
-                <DatePicker
                     android:layout_width="wrap_content"
                     android:layout_height="150dp"
+                    android:calendarViewShown="false"
                     android:scaleX="0.75"
-                    android:scaleY="0.75"
-                    android:id="@+id/datePickerEnd"
-                    android:calendarViewShown="false" />
+                    android:scaleY="0.75" />
 
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_height="fill_parent"
                 android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:orientation="vertical">
 
                 <TextView
+                    style="@style/subsubtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Repeat:"
-                    android:fontFamily="Avenir"
-                    style="@style/subsubtitle"
-                    android:layout_marginTop="5dp"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="Avenir"
+                    android:text="Repeat:" />
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Sunday"
-            android:id="@+id/checkSun" />
+                <CheckBox
+                    android:id="@+id/checkSun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Sunday" />
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Monday"
-            android:id="@+id/checkMon" />
+                <CheckBox
+                    android:id="@+id/checkMon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Monday" />
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tuesday"
-            android:id="@+id/checkTue" />
+                <CheckBox
+                    android:id="@+id/checkTue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tuesday" />
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Wednesday"
-            android:id="@+id/checkWed" />
+                <CheckBox
+                    android:id="@+id/checkWed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Wednesday" />
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Thursday"
-            android:id="@+id/checkThu" />
+                <CheckBox
+                    android:id="@+id/checkThu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Thursday" />
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Friday"
-            android:id="@+id/checkFri" />
+                <CheckBox
+                    android:id="@+id/checkFri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Friday" />
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Saturday"
-            android:id="@+id/checkSat" />
+                <CheckBox
+                    android:id="@+id/checkSat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Saturday" />
             </LinearLayout>
         </LinearLayout>
 
@@ -151,15 +139,15 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/schedule_plan"
+        style="@style/blue_button"
         android:layout_width="fill_parent"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
-        android:id="@+id/schedule_plan"
-        android:text="Schedule Plan"
         android:clickable="true"
         android:enabled="true"
         android:focusable="true"
-        style="@style/blue_button"
-        android:gravity="center|bottom" />
+        android:gravity="center|bottom"
+        android:text="Schedule Plan" />
 
 </RelativeLayout>

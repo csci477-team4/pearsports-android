@@ -86,6 +86,7 @@ public class PlanAdapter extends BaseAdapter implements View.OnClickListener {
         i.putExtra("trainee_id", pref.getString("trainee_id", ""));
         i.putExtra("sku", workouts.get(pos).getSku());
         i.putExtra("name", workouts.get(pos).getName());
+        i.putExtra("desc", workouts.get(pos).getDesc());
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         v.getContext().startActivity(i);
     }

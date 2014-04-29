@@ -179,6 +179,7 @@ public class SportActivity extends Activity implements AdapterView.OnItemClickLi
                 i.putExtra("token", token);
                 i.putExtra("name", workouts.get(position).getName());
                 i.putExtra("sku", workouts.get(position).getSku());
+                i.putExtra("desc", workouts.get(position).getDesc());
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
                 break;
@@ -188,6 +189,7 @@ public class SportActivity extends Activity implements AdapterView.OnItemClickLi
                 intent.putExtra("token", token);
                 intent.putExtra("name", plans.get(position).getName());
                 intent.putExtra("sku", plans.get(position).getSku());
+                intent.putExtra("desc", plans.get(position).getDesc());
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 break;
