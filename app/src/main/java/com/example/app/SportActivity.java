@@ -19,6 +19,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +42,7 @@ public class SportActivity extends Activity implements AdapterView.OnItemClickLi
 
     ListView listView;
     List<WorkoutItem> workouts = new ArrayList<WorkoutItem>();
+    List<WorkoutItem> plans = new ArrayList<WorkoutItem>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,7 @@ public class SportActivity extends Activity implements AdapterView.OnItemClickLi
         name = intent.getStringExtra("name");
 
         new GetWorkouts().execute();
+        new GetPlans().execute();
     }
 
     private class GetWorkouts extends AsyncTask<String,Void,List<WorkoutItem>>
@@ -59,8 +63,11 @@ public class SportActivity extends Activity implements AdapterView.OnItemClickLi
         @Override
         protected List<WorkoutItem> doInBackground(String... params) {
             if (isOnline()) {
+                List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+                parameters.add(new BasicNameValuePair("type", "workout"));
+
                 try {
-                    JSONObject jsonObj = APIHandler.sendAPIRequestWithAuth("sku_list", APIHandler.GET, token, "");
+                    JSONObject jsonObj = APIHandler.sendAPIRequestWithAuth("sku_list", APIHandler.GET, token, "", parameters);
 
                     if (jsonObj != null) {
                         try {
@@ -99,7 +106,61 @@ public class SportActivity extends Activity implements AdapterView.OnItemClickLi
 
             WorkoutAdapter adapter = new WorkoutAdapter(SportActivity.this, w);
 
-            listView = (ListView) findViewById(R.id.list);
+            listView = (ListView) findViewById(R.id.list_workouts);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(SportActivity.this);
+        }
+    }
+
+    private class GetPlans extends AsyncTask<String,Void,List<WorkoutItem>>
+    {
+        @Override
+        protected List<WorkoutItem> doInBackground(String... params) {
+            if (isOnline()) {
+                List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+                parameters.add(new BasicNameValuePair("type", "plan"));
+
+                try {
+                    JSONObject jsonObj = APIHandler.sendAPIRequestWithAuth("sku_list", APIHandler.GET, token, "", parameters);
+
+                    if (jsonObj != null) {
+                        try {
+                            sku_list = jsonObj.getJSONArray("sku_list");
+
+                            for (int i = 0; i < sku_list.length(); i++) {
+                                JSONObject skuJSON = sku_list.getJSONObject(i);
+
+                                sku = skuJSON.getString("sku");
+                                title = skuJSON.getString("title");
+                                Drawable d = getDrawable();
+
+                                WorkoutItem wi = new WorkoutItem(d, title, sku);
+                                plans.add(wi);
+                            }
+
+                        } catch (JSONException e) {
+                            Log.e("TraineeListFragment::GetTraineeList : ", "JSONException: " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Log.e("APIHandler", "No data from specified URL");
+                    }
+                } catch (IOException e) {
+                    Log.d("TraineeListFragment::GetTraineeList::IOException >> ", e.getMessage());
+                    e.printStackTrace();
+                }
+            } else {
+                Log.d("TraineeListFragment::GetTraineeList >> ", "Not online.");
+            }
+            return plans;
+        }
+
+        @Override
+        protected void onPostExecute(final List<WorkoutItem> w) {
+
+            WorkoutAdapter adapter = new WorkoutAdapter(SportActivity.this, w);
+
+            listView = (ListView) findViewById(R.id.list_plans);
             listView.setAdapter(adapter);
             listView.setOnItemClickListener(SportActivity.this);
         }

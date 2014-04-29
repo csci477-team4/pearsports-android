@@ -19,7 +19,7 @@
     <string name="title_activity_schedule_workout">Schedule Workout</string>
     <string name="title_activity_difficulty">DifficultyActivity</string>
     <string name="title_activity_">ActivityActivity</string>
-    <string name="title_activity_sport">Workout List</string>
+    <string name="title_activity_sport">Select to Recommend</string>
     <string name="title_activity_record_audio">Send Recording</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_trainee">Trainee</string>

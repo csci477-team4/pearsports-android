@@ -4,15 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingTop="20dp"
-    android:fillViewport="false"
     android:background="@color/dgray"
     tools:context="com.example.app.SportActivity" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:background="@color/dgray" >
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select a Workout"
+        android:text="Workouts"
         android:fontFamily="Avenir"
         android:layout_marginLeft="20dp"
         style="@style/title"/>
@@ -22,18 +27,36 @@
         android:layout_height="2dip"
         android:background="@color/pearsports" />
 
-    <ScrollView
-        android:id="@+id/workouts_scroll"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignTop="@+id/all_workouts"
-        android:fillViewport="true">
-
         <ListView
-            android:id="@+id/list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </ScrollView>
-
+            android:id="@+id/list_workouts"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
 </LinearLayout>
 
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:layout_weight="1"
+    android:background="@color/dgray" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Plans"
+        android:fontFamily="Avenir"
+        android:layout_marginLeft="20dp"
+        style="@style/title"/>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:background="@color/pearsports" />
+
+        <ListView
+            android:id="@+id/list_plans"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+    </LinearLayout>
+
+</LinearLayout>
