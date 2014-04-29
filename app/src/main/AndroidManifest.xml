@@ -79,6 +79,10 @@
             android:label="@string/title_activity_schedule_workout" >
         </activity>
         <activity
+            android:name="com.example.app.SchedulePlanActivity"
+            android:label="@string/title_activity_schedule_plan" >
+        </activity>
+        <activity
             android:name="com.example.app.DifficultyActivity"
             android:label="@string/title_activity_difficulty" >
         </activity>

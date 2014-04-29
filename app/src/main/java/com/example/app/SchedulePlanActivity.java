@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ScheduleWorkoutActivity extends Activity {
+public class SchedulePlanActivity extends Activity {
 
     private String token;
     private String traineeID;
@@ -43,7 +43,7 @@ public class ScheduleWorkoutActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_schedule_workout);
+        setContentView(R.layout.activity_schedule_plan);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         token = preferences.getString("token",null);
@@ -53,11 +53,11 @@ public class ScheduleWorkoutActivity extends Activity {
         sku = b.getString("sku");    //sku ID of workout
         name = b.getString("name");
 
-        ((TextView) findViewById(R.id.workout_name)).setText(name);
+        ((TextView) findViewById(R.id.plan_name)).setText(name);
 
         final DatePicker datePicker = (DatePicker) findViewById(R.id.datePickerStart);
 
-        Button pic1 = (Button) findViewById(R.id.schedule_workout);
+        Button pic1 = (Button) findViewById(R.id.schedule_plan);
         pic1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,7 +115,7 @@ public class ScheduleWorkoutActivity extends Activity {
                 }
 
                 // Switch back to trainee's workout history
-                Intent i = new Intent(ScheduleWorkoutActivity.this, TraineeListActivity.class);
+                Intent i = new Intent(SchedulePlanActivity.this, TraineeListActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
                 finish();
@@ -124,7 +124,7 @@ public class ScheduleWorkoutActivity extends Activity {
     }
 
     public void onBackPressed() {
-        Intent intent = new Intent(ScheduleWorkoutActivity.this, SportActivity.class);
+        Intent intent = new Intent(SchedulePlanActivity.this, SportActivity.class);
         intent.putExtra(TraineeDetailFragment.ARG_ITEM_ID, traineeID);
         intent.putExtra("trainee_id", traineeID);
         intent.putExtra("name", name);
@@ -149,7 +149,7 @@ public class ScheduleWorkoutActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Intent i = new Intent(ScheduleWorkoutActivity.this, SettingsActivity.class);
+            Intent i = new Intent(SchedulePlanActivity.this, SettingsActivity.class);
             i.putExtra("token", token);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
@@ -172,7 +172,7 @@ public class ScheduleWorkoutActivity extends Activity {
             edit.remove("trainee_id");
             edit.apply();
 
-            Intent i = new Intent(ScheduleWorkoutActivity.this, LoginActivity.class);
+            Intent i = new Intent(SchedulePlanActivity.this, LoginActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
@@ -211,9 +211,9 @@ public class ScheduleWorkoutActivity extends Activity {
         protected void onPostExecute(final Boolean success) {
 
             if (success)
-                Toast.makeText(ScheduleWorkoutActivity.this, "Workout successfully sent to trainee.", Toast.LENGTH_LONG).show();
+                Toast.makeText(SchedulePlanActivity.this, "Workout successfully sent to trainee.", Toast.LENGTH_LONG).show();
             else
-                Toast.makeText(ScheduleWorkoutActivity.this, "Unable to send workout to trainee.", Toast.LENGTH_LONG).show();
+                Toast.makeText(SchedulePlanActivity.this, "Unable to send workout to trainee.", Toast.LENGTH_LONG).show();
 
         }
     }
@@ -259,9 +259,9 @@ public class ScheduleWorkoutActivity extends Activity {
         protected void onPostExecute(final Boolean success) {
 
             if (success)
-                Toast.makeText(ScheduleWorkoutActivity.this, "Plan successfully sent to trainee.", Toast.LENGTH_LONG).show();
+                Toast.makeText(SchedulePlanActivity.this, "Plan successfully sent to trainee.", Toast.LENGTH_LONG).show();
             else
-                Toast.makeText(ScheduleWorkoutActivity.this, "Unable to send plan to trainee.", Toast.LENGTH_LONG).show();
+                Toast.makeText(SchedulePlanActivity.this, "Unable to send plan to trainee.", Toast.LENGTH_LONG).show();
 
         }
 

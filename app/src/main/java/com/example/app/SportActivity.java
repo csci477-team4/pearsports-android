@@ -161,7 +161,7 @@ public class SportActivity extends Activity implements AdapterView.OnItemClickLi
         @Override
         protected void onPostExecute(final List<WorkoutItem> w) {
 
-            WorkoutAdapter adapter = new WorkoutAdapter(SportActivity.this, w);
+            PlanAdapter adapter = new PlanAdapter(SportActivity.this, w);
 
             listView = (ListView) findViewById(R.id.list_plans);
             listView.setAdapter(adapter);
@@ -171,13 +171,27 @@ public class SportActivity extends Activity implements AdapterView.OnItemClickLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent i = new Intent(SportActivity.this, ScheduleWorkoutActivity.class);
-        i.putExtra("trainee_id", trainee_id);
-        i.putExtra("token", token);
-        i.putExtra("name", workouts.get(position).getName());
-        i.putExtra("sku", workouts.get(position).getSku());
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
+
+        switch (parent.getId()) {
+            case R.id.list_workouts:
+                Intent i = new Intent(SportActivity.this, ScheduleWorkoutActivity.class);
+                i.putExtra("trainee_id", trainee_id);
+                i.putExtra("token", token);
+                i.putExtra("name", workouts.get(position).getName());
+                i.putExtra("sku", workouts.get(position).getSku());
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                break;
+            case R.id.list_plans:
+                Intent intent = new Intent(SportActivity.this, SchedulePlanActivity.class);
+                intent.putExtra("trainee_id", trainee_id);
+                intent.putExtra("token", token);
+                intent.putExtra("name", plans.get(position).getName());
+                intent.putExtra("sku", plans.get(position).getSku());
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                break;
+        }
     }
 
     public void onBackPressed() {

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/dgray"
-    tools:context="com.example.app.ScheduleWorkoutActivity" >
+    tools:context="com.example.app.SchedulePlanActivity" >
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -19,7 +19,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/workout_name"
+            android:id="@+id/plan_name"
             android:text="Workout"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
@@ -31,7 +31,7 @@
             android:layout_height="2dip"
             android:id="@+id/horizontal"
             android:background="@color/pearsports"
-            android:layout_alignBottom="@+id/workout_name"
+            android:layout_alignBottom="@+id/plan_name"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_centerHorizontal="true" />
@@ -154,8 +154,8 @@
         android:layout_width="fill_parent"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
-        android:id="@+id/schedule_workout"
-        android:text="Schedule Workout"
+        android:id="@+id/schedule_plan"
+        android:text="Schedule Plan"
         android:clickable="true"
         android:enabled="true"
         android:focusable="true"
